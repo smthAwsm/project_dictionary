@@ -16,11 +16,20 @@
         android:textColor="#bdbdbd" />
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
-        android:src="@drawable/btnGoogleSigninDarkNormal"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:id="@+id/googleLoginButton"
+        android:background="@drawable/btn_google_signin_dark_normal"
         android:layout_above="@+id/textView"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Sign in with"
+        android:id="@+id/textView2"
+        android:layout_above="@+id/googleLoginButton"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
