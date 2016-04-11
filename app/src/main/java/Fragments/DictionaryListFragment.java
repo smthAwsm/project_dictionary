@@ -24,6 +24,7 @@ public class DictionaryListFragment extends Fragment {
     ListView dictionariesListView;
 
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -34,7 +35,11 @@ public class DictionaryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.vocabulary_list_fragment, container, false);
-            return view;
+
+        return view;
     }
+
+
+
 
 }
