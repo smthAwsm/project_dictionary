@@ -3,10 +3,12 @@
     <string name="vocabularies_title">Vocabularies</string>
     <string name="no_vocabularies">No vocabularies yet... Try adding first one</string>
     <string name="number_of_vocabularies">Number of topics: </string>
+    <string name="created">Created </string>
     <string name="topics">Stores topics: </string>
     <string name="new_dic_title">New dictionary </string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel </string>
+    <string name="topics_title">Topics</string>
 
 
 </resources>
