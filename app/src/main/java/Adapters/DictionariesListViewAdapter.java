@@ -1,21 +1,15 @@
 package Adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.Activities.MainActivity;
 import com.study.xps.projectdictionary.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Models.Dictionary;
@@ -51,23 +45,23 @@ public class DictionariesListViewAdapter extends BaseAdapter {
     }
 
     public String getDictionaryName(int position) {
-        return position +"";//dictionariesList.get(position).getName();
+        return dictionariesList.get(position).getName();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
-       View gridView = inflater.inflate(R.layout.dictionary_item_layout,null);
+       View listView = inflater.inflate(R.layout.fragment_vocabulary_list_item,null);
 
-       holder.nameTextView = (TextView) gridView.findViewById(R.id.dictionaryNameText);
-       holder.dateTextView = (TextView) gridView.findViewById(R.id.dateText);
-       holder.topicsNumberTextView = (TextView) gridView.findViewById(R.id.numberTopicsText);
+       holder.nameTextView = (TextView) listView.findViewById(R.id.dictionaryNameText);
+       holder.dateTextView = (TextView) listView.findViewById(R.id.dateText);
+       holder.topicsNumberTextView = (TextView) listView.findViewById(R.id.numberTopicsText);
 
        holder.nameTextView.setText(dictionariesList.get(position).getName());
        holder.dateTextView.setText(context.getString(R.string.created) +" "+ dictionariesList.get(position).getCreationDateString());
        holder.topicsNumberTextView.setText(context.getString(R.string.topics) +" "+ position);
 
-        return gridView;
+        return listView;
     }
 
     private class Holder

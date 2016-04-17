@@ -21,7 +21,7 @@ public class Dictionary extends SugarRecord{
 
     private static final String LOG_TAG = "DATABASE LOGING";
 
-    private Long id;
+    //private Long id;
     private String dictionaryName;
     private String creationDate;
 
@@ -34,9 +34,9 @@ public class Dictionary extends SugarRecord{
         creationDate = getDate();
     }
 
-    public Long getId() {
-        return id;
-    }
+    //public Long getId() {
+    //    return id;
+    //}
     public String getName(){
         return dictionaryName;
     }

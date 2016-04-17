@@ -2,17 +2,13 @@ package com.study.xps.projectdictionary.Activities;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -23,17 +19,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.orm.SugarContext;
 import com.study.xps.projectdictionary.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.DictionariesListViewAdapter;
 import Fragments.DictionaryListFragment;
-import Fragments.NoVocabulariesFragments;
+import Fragments.NoDictionariesFragments;
 import Models.Dictionary;
-import Models.SQLiteHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = fragmentManager.beginTransaction();
 
         if(dictionariesInfo.isEmpty()) {
-            NoVocabulariesFragments noVocabulariesFragments = new NoVocabulariesFragments();
+            NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
             if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)== null)
-                fragmentTransaction.add(R.id.vocabulariesFragmentContainer, noVocabulariesFragments, EMPTY_LIST_TAG);
-                else fragmentTransaction.replace(R.id.vocabulariesFragmentContainer, noVocabulariesFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.add(R.id.vocabulariesFragmentContainer, noDictionariesFragments, EMPTY_LIST_TAG);
+                else fragmentTransaction.replace(R.id.vocabulariesFragmentContainer, noDictionariesFragments, EMPTY_LIST_TAG);
             fragmentTransaction.commit();
         } else {
             DictionaryListFragment dictionaryFragment = new DictionaryListFragment();

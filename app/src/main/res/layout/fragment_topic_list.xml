@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/topicsGridView"
+        android:numColumns="auto_fit"
+        android:columnWidth="155dp"
+        android:minHeight="200dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:layout_gravity="right" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addTopicFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_add_white"
+        app:layout_anchor="@id/topicsGridView"
+        app:layout_anchorGravity="bottom|right|end"
+        android:layout_margin="20dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

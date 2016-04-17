@@ -12,7 +12,7 @@ import com.study.xps.projectdictionary.R;
 /**
  * Created by XPS on 4/9/2016.
  */
-public class NoVocabulariesFragments extends Fragment {
+public class NoDictionariesFragments extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -21,6 +21,6 @@ public class NoVocabulariesFragments extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.empty_dictionaries_fragment,container,false);
+        return inflater.inflate(R.layout.fragment_vocabulary_empty_list,container,false);
     }
 }

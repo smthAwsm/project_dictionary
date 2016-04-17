@@ -1,7 +1,6 @@
 package Adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
-import Models.Dictionary;
+import Models.Topic;
 
 /**
  * Created by XPS on 4/12/2016.
@@ -22,12 +21,12 @@ import Models.Dictionary;
 public class TopicsGridViewAdapter extends BaseAdapter {
 
     Context context;
-    List<Integer> topicsList;
+    List<Topic> topicsList;
     LayoutInflater inflater;
 
-    public TopicsGridViewAdapter(TopicsActivity topicsActivity, List<Integer> integers){
+    public TopicsGridViewAdapter(TopicsActivity topicsActivity, List<Topic> topics){
         context = topicsActivity;
-        topicsList = integers;
+        topicsList = topics;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -49,13 +48,13 @@ public class TopicsGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
-        View gridView = inflater.inflate(R.layout.dictionary_item_layout,null);
+        View gridView = inflater.inflate(R.layout.fragment_topics_list_item,null);
 
         holder.topicImageView = (ImageView) gridView.findViewById(R.id.topicImage);
         holder.topicTextView = (TextView) gridView.findViewById(R.id.topicText);
 
         holder.topicImageView.setImageResource(R.drawable.ic_add);
-        holder.topicTextView.setText("Created: " + position);
+        holder.topicTextView.setText(topicsList.get(position).getTopicName());
 
         return gridView;
     }
