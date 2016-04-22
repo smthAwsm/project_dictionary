@@ -1,6 +1,8 @@
 package com.study.xps.projectdictionary.Activities;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -32,6 +34,7 @@ import Fragments.DictionaryListFragment;
 import Fragments.NoDictionariesFragments;
 import Fragments.TopicsGridFragment;
 import Models.Topic;
+import Dialog.NewTopicDialog;
 
 /**
  * Created by XPS on 4/12/2016.
@@ -48,7 +51,8 @@ public class TopicsActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private String dictionaryID; //TODO change to long
     private GridView topicsGrid;
-    private List<Topic> topicsInfo;
+    public List<Topic> topicsInfo;
+    public static long currentDictionaryID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +61,21 @@ public class TopicsActivity extends AppCompatActivity {
 
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(getString(R.string.topics_title));
-        getIntent().getStringExtra(DICTIONARY_TAG);
+        currentDictionaryID = getIntent().getLongExtra(DICTIONARY_TAG,0);
 
         fragmentManager = getFragmentManager();
+
+        try {
+            topicsInfo = Topic.find(Topic.class, "dictionary_ID = "+currentDictionaryID +"");
+        } catch (Exception e){
+          topicsInfo = new ArrayList<Topic>();
+        }
+
         //topicsInfo = Topic.listAll(Topic.class);
 
-        topicsInfo = new ArrayList<Topic>();
-        for (int i = 0; i< 15; i++)
-       // topicsInfo.add(new Topic(1,"asdasd",4));
+        //topicsInfo = new ArrayList<Topic>();
+        //for (int i = 0; i< 15; i++)
+        //topicsInfo.add(new Topic(1,"asdasd",4));
 
         loadAppropriateFragment();
     }
@@ -72,37 +83,59 @@ public class TopicsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)!= null)
-            addDictionaryListListeners();
-        else addEmptyListListeners();
 
-     }
+        Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
 
-    private void loadAppropriateFragment(){
-        fragmentTransaction = fragmentManager.beginTransaction();
+        if(f != null && f instanceof NoDictionariesFragments)
+            addEmptyListListeners();
 
-        if(topicsInfo.isEmpty()) {
-            NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
-            if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)== null)
-                fragmentTransaction.add(R.id.vocabulariesFragmentContainer, noDictionariesFragments, EMPTY_LIST_TAG);
-            else fragmentTransaction.replace(R.id.vocabulariesFragmentContainer, noDictionariesFragments, EMPTY_LIST_TAG);
-            fragmentTransaction.commit();
-        } else {
-            TopicsGridFragment topicsGridFragment = new TopicsGridFragment();
-            if(fragmentManager.findFragmentByTag(EMPTY_LIST_TAG)== null)
-                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,topicsGridFragment, SUCCESS_QUERY_TAG);
-                    else fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,topicsGridFragment, SUCCESS_QUERY_TAG);
-            fragmentTransaction.commit();
-        }
+        if(f != null && f instanceof TopicsGridFragment){
+            addTopicListListeners();
+            updateGridData();}
     }
 
+    public void loadAppropriateFragment(){
 
-    private void addDictionaryListListeners(){
+        if(topicsInfo.isEmpty()) {
+            Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+            if(f != null && f instanceof TopicsGridFragment){
+                NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,noDictionariesFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+            if(f == null ){
+                NoDictionariesFragments noTopicsFragments = new NoDictionariesFragments();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,noTopicsFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+        }
+        else {
+            Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+            if(f != null && f instanceof NoDictionariesFragments){
+                TopicsGridFragment topicsFragment = new TopicsGridFragment();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,topicsFragment, SUCCESS_QUERY_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+            if(f == null ){
+                TopicsGridFragment topicsFragment = new TopicsGridFragment();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,topicsFragment, SUCCESS_QUERY_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+        }
+        startActivity(new Intent(TopicsActivity.this, TransparentActivity.class));
+    }
+
+    private void addTopicListListeners(){
 
         topicsGrid = (GridView) findViewById(R.id.topicsGridView);
-        topicsGrid.setAdapter(new TopicsGridViewAdapter(this, topicsInfo));
-        ((BaseAdapter)topicsGrid.getAdapter()).notifyDataSetChanged();
-
         topicsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -122,8 +155,8 @@ public class TopicsActivity extends AppCompatActivity {
             }
         });
     }
-    private void addEmptyListListeners(){
 
+    private void addEmptyListListeners(){
         ImageView addDictionaryImage = (ImageView) findViewById(R.id.addVocabularyImage);
         TextView addDictionaryLabel = (TextView) findViewById(R.id.noVocabulariesText);
 
@@ -141,87 +174,15 @@ public class TopicsActivity extends AppCompatActivity {
         });
     }
 
-    private void createTopicDialog(){
-        Dialog addTopicDialog = new Dialog(TopicsActivity.this);
-        addTopicDialog.setTitle("Add new topic");
-        addTopicDialog.setContentView(R.layout.dialog_topic_add);
-        
-        addTopicDialog.show();
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(getString(R.string.new_dic_title));
-//
-//        final EditText input = new EditText(this);
-//        input.setInputType(InputType.TYPE_CLASS_TEXT);
-//        builder.setView(input);
-//
-//        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                String topicName = input.getText().toString();
-//                Topic newTopic = new Topic(228,topicName,R.drawable.btn_google_signin_dark_pressed); //TODO fix dicID
-//                newTopic.save();
-//
-//                topicsInfo = Topic.listAll(Topic.class);
-//
-//                loadAppropriateFragment();
-//
-//                if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)!= null)
-//                    addDictionaryListListeners();
-//
-//            }
-//        });
-//        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//        builder.show();
+    public void updateGridData(){
+        topicsGrid = (GridView) findViewById(R.id.topicsGridView);
+        topicsGrid.setAdapter(new TopicsGridViewAdapter(this, topicsInfo));
+        ((BaseAdapter)topicsGrid.getAdapter()).notifyDataSetChanged();
     }
-//
-//    private void addDictionaryListListeners(){
-//
-//        dictionariesList = (ListView) findViewById(R.id.dictionariesListView);
-//        dictionariesList.setAdapter(new DictionariesListViewAdapter(this, dictionariesInfo));
-//        ((BaseAdapter)dictionariesList.getAdapter()).notifyDataSetChanged();
-//
-//        dictionariesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                DictionariesListViewAdapter adapter = (DictionariesListViewAdapter) parent.getAdapter();
-//                Intent dictionaryTopicsIntent = new Intent(getApplicationContext(),TopicsActivity.class);
-//                dictionaryTopicsIntent.putExtra(DICTIONARY_TAG,adapter.getDictionaryName(position) );
-//                startActivity(dictionaryTopicsIntent);
-//            }
-//        });
-//
-//        FloatingActionButton addDictionaryButton = (FloatingActionButton) findViewById(R.id.addDictionaryFAB);
-//        addDictionaryButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                createDictionaryAlert();
-//            }
-//        });
-//    }
-//
-//    private void addEmptyListListeners(){
-//
-//        ImageView addDictionaryImage = (ImageView) findViewById(R.id.addVocabularyImage);
-//        TextView addDictionaryLabel = (TextView) findViewById(R.id.noVocabulariesText);
-//
-//        addDictionaryImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                createDictionaryAlert();
-//            }
-//        });
-//        addDictionaryLabel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                createDictionaryAlert();
-//            }
-//        });
-//    }
-//
+
+    private void createTopicDialog() {
+        DialogFragment topicDialog = new NewTopicDialog();
+        topicDialog.show(getFragmentManager(), "ADD_TOPIC");
+    }
+
 }

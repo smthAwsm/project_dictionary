@@ -16,23 +16,23 @@ import java.util.List;
 import Models.Topic;
 
 /**
- * Created by XPS on 4/12/2016.
+ * Created by XPS on 4/18/2016.
  */
-public class TopicsGridViewAdapter extends BaseAdapter {
+public class TopicImagesGridAdapter extends BaseAdapter {
 
     Context context;
-    List<Topic> topicsList;
+    List<Integer> imagesList;
     LayoutInflater inflater;
 
-    public TopicsGridViewAdapter(TopicsActivity topicsActivity, List<Topic> topics){
-        context = topicsActivity;
-        topicsList = topics;
+    public TopicImagesGridAdapter(Context context, List<Integer> imagesID){
+        this.context = context;
+        imagesList = imagesID;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return topicsList.size();
+        return imagesList.size();
     }
 
     @Override
@@ -48,22 +48,17 @@ public class TopicsGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
-        View gridView = inflater.inflate(R.layout.fragment_topics_list_item,null);
+        View gridViewItem = inflater.inflate(R.layout.dialog_topic_child_grid_item,null);
 
-        holder.topicImageView = (ImageView) gridView.findViewById(R.id.topicImage);
-        holder.topicTextView = (TextView) gridView.findViewById(R.id.topicText);
+        holder.topicImage = (ImageView) gridViewItem.findViewById(R.id.childGridItemImage);
+        holder.topicImage.setImageResource(imagesList.get(position));
 
-        holder.topicImageView.setImageResource((int) topicsList.get(position).getImageRecourceID());
-        holder.topicTextView.setText(topicsList.get(position).getTopicName());
-
-        return gridView;
+        return gridViewItem;
     }
 
     private class Holder
     {
-        ImageView topicImageView;
-        TextView  topicTextView;
-
+        ImageView topicImage;
     }
 
 }

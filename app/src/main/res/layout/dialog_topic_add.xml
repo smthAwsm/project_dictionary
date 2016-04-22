@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/imageView"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
-        android:src="@android:drawable/sym_def_app_icon" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_marginRight="10dp"/>
-
-    <ExpandableListView
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:id="@+id/expandableListView"
-        android:layout_below="@+id/imageView"
-        android:layout_alignStart="@+id/imageView"
-        android:layout_toRightOf="@+id/buttonAddTopic"
-        android:layout_toStartOf="@+id/buttonAddTopic" />
+        android:src="@android:drawable/ic_menu_delete" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@android:string/ok"
         android:id="@+id/buttonAddTopic"
-        android:layout_below="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentEnd="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imagesSpinner"
+        android:layout_below="@+id/imageView"
+        android:layout_alignStart="@+id/imageView"
+        android:layout_toStartOf="@+id/buttonAddTopic" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView">
+
+        <AutoCompleteTextView
+            android:id="@+id/topicNameTextBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/topic_hint"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:focusable="true"
+            android:layout_above="@+id/imagesSpinner"
+            android:layout_toEndOf="@+id/imageView" />
+    </android.support.design.widget.TextInputLayout>
+
+
+
 </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

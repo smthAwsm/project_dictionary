@@ -19,11 +19,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 
     private final String LOG_TAG = "SQLiteHelper LOG";
-//    ContentValues contentValues;
-//
+   ContentValues contentValues;
+
     public SQLiteHelper(Context context){
         super(context, "DictionariesDB", null,1);
-        //contentValues = new ContentValues();
+        contentValues = new ContentValues();
     }
 
     @Override
@@ -89,25 +89,25 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //                    break;
 //            }
 //        }
-////    public boolean tableExists(String tableName){
-////        SQLiteDatabase db = this.getWritableDatabase();
-////        try {
-////            String existQuery ="SELECT " + tableName +" FROM sqlite_master WHERE type='table'";
-////            Cursor check = db.rawQuery(existQuery,null);
-////            if (check.getColumnCount() > 0){
-////            Log.i(LOG_TAG,"TABLE " + tableName + " exists");
-////            return true;
-////            }
-////            else {
-////                Log.e(LOG_TAG,"CHECK FAILED "+tableName);
-////                return false;
-////            }
-////        }
-////        catch (Exception e){
-////            Log.e(LOG_TAG,"CHECK FAILED "+tableName +" " + e.getMessage());
-////        return false;
-////        }
-////    }
+//    public boolean tableExists(String tableName){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        try {
+//            String existQuery ="SELECT " + tableName +" FROM sqlite_master WHERE type='table'";
+//            Cursor check = db.rawQuery(existQuery,null);
+//            if (check.getColumnCount() > 0){
+//            Log.i(LOG_TAG,"TABLE " + tableName + " exists");
+//            return true;
+//            }
+//            else {
+//                Log.e(LOG_TAG,"CHECK FAILED "+tableName);
+//                return false;
+//            }
+//        }
+//        catch (Exception e){
+//            Log.e(LOG_TAG,"CHECK FAILED "+tableName +" " + e.getMessage());
+//        return false;
+//        }
+//    }
 
 
 

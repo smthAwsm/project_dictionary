@@ -1,5 +1,6 @@
 package com.study.xps.projectdictionary.Activities;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.study.xps.projectdictionary.R;
 import java.util.List;
 
 import Adapters.DictionariesListViewAdapter;
+import Adapters.TopicsGridViewAdapter;
 import Fragments.DictionaryListFragment;
 import Fragments.NoDictionariesFragments;
 import Models.Dictionary;
@@ -49,18 +52,23 @@ public class MainActivity extends AppCompatActivity {
         supportActionBar.setTitle(R.string.vocabularies_title);
 
         fragmentManager = getFragmentManager();
-
-        //Dictionary.deleteAll(Dictionary.class);
+       // Dictionary.deleteAll(Dictionary.class);
         dictionariesInfo = Dictionary.listAll(Dictionary.class);
         loadAppropriateFragment();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)!= null)
-            addDictionaryListListeners();
-        else addEmptyListListeners();
+        Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+
+        if(f != null && f instanceof NoDictionariesFragments)
+            addEmptyListListeners();
+
+        if(f != null && f instanceof DictionaryListFragment){
+         addDictionaryListListeners();
+        updateListData();}
     }
 
     @Override
@@ -70,23 +78,45 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     private void loadAppropriateFragment(){
-        fragmentTransaction = fragmentManager.beginTransaction();
 
         if(dictionariesInfo.isEmpty()) {
-            NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
-            if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)== null)
-                fragmentTransaction.add(R.id.vocabulariesFragmentContainer, noDictionariesFragments, EMPTY_LIST_TAG);
-                else fragmentTransaction.replace(R.id.vocabulariesFragmentContainer, noDictionariesFragments, EMPTY_LIST_TAG);
-            fragmentTransaction.commit();
-        } else {
-            DictionaryListFragment dictionaryFragment = new DictionaryListFragment();
-            if(fragmentManager.findFragmentByTag(EMPTY_LIST_TAG)== null)
-            fragmentTransaction.add(R.id.vocabulariesFragmentContainer,dictionaryFragment, SUCCESS_QUERY_TAG);
-            else fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,dictionaryFragment, SUCCESS_QUERY_TAG);
-            fragmentTransaction.commit();
+
+            Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+            if(f != null && f instanceof DictionaryListFragment){
+                NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,noDictionariesFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+            if(f == null ){
+                NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,noDictionariesFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
         }
+        else {
+            Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+            if(f != null && f instanceof NoDictionariesFragments){
+                DictionaryListFragment dictionariesFragment = new DictionaryListFragment();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,dictionariesFragment, SUCCESS_QUERY_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+            }
+            if(f == null ){
+                DictionaryListFragment dictionariesFragment = new DictionaryListFragment();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,dictionariesFragment, SUCCESS_QUERY_TAG);
+                fragmentTransaction.commit();
+                getSupportFragmentManager().executePendingTransactions();
+                }
+            startActivity(new Intent(MainActivity.this, TransparentActivity.class));
+        }
+
     }
 
     private void createDictionaryAlert(){
@@ -106,12 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 newDictionary.save();
 
                 dictionariesInfo = Dictionary.listAll(Dictionary.class);
-
                 loadAppropriateFragment();
-
-                if(fragmentManager.findFragmentByTag(SUCCESS_QUERY_TAG)!= null)
-                    addDictionaryListListeners();
-
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -126,15 +151,12 @@ public class MainActivity extends AppCompatActivity {
     private void addDictionaryListListeners(){
 
             dictionariesList = (ListView) findViewById(R.id.dictionariesListView);
-            dictionariesList.setAdapter(new DictionariesListViewAdapter(this, dictionariesInfo));
-            ((BaseAdapter)dictionariesList.getAdapter()).notifyDataSetChanged();
-
             dictionariesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     DictionariesListViewAdapter adapter = (DictionariesListViewAdapter) parent.getAdapter();
                     Intent dictionaryTopicsIntent = new Intent(getApplicationContext(),TopicsActivity.class);
-                    dictionaryTopicsIntent.putExtra(DICTIONARY_TAG,adapter.getDictionaryName(position) );
+                    dictionaryTopicsIntent.putExtra(DICTIONARY_TAG,dictionariesInfo.get(position).getId());
                     startActivity(dictionaryTopicsIntent);
                 }
             });
@@ -147,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
     }
-
     private void addEmptyListListeners(){
 
         ImageView addDictionaryImage = (ImageView) findViewById(R.id.addVocabularyImage);
@@ -165,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
                 createDictionaryAlert();
             }
         });
+    }
+    public void updateListData(){
+        dictionariesList = (ListView) findViewById(R.id.dictionariesListView);
+        dictionariesList.setAdapter(new DictionariesListViewAdapter(this, dictionariesInfo));
+        ((BaseAdapter)dictionariesList.getAdapter()).notifyDataSetChanged();
     }
 
 }

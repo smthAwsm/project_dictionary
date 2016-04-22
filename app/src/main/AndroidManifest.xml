@@ -30,6 +30,11 @@
             android:name=".Activities.TopicsActivity">
         </activity>
 
+        <activity
+            android:name=".Activities.TransparentActivity"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+
     </application>
 
 </manifest>
