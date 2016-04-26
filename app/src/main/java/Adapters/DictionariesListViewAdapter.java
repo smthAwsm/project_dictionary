@@ -7,11 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.study.xps.projectdictionary.Activities.MainActivity;
 import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
+import activities.DictionariesActivity;
 import Models.Dictionary;
 
 /**
@@ -23,7 +23,7 @@ public class DictionariesListViewAdapter extends BaseAdapter {
     List<Dictionary> dictionariesList;
     LayoutInflater inflater;
 
-    public DictionariesListViewAdapter(MainActivity dictionariesActivity, List<Dictionary> data){
+    public DictionariesListViewAdapter(DictionariesActivity dictionariesActivity, List<Dictionary> data){
         dictionariesList = data;
         context = dictionariesActivity;
         inflater = (LayoutInflater)context. getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -5,23 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.study.xps.projectdictionary.Activities.TopicsActivity;
 import com.study.xps.projectdictionary.R;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import Dialog.NewTopicDialog;
-import Models.Topic;
 
 /**
  * Created by XPS on 4/18/2016.
@@ -89,7 +82,7 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
 
 
 
-        TopicImagesGridAdapter adapter = new TopicImagesGridAdapter(context,integers);
+        TopicImagesGridViewAdapter adapter = new TopicImagesGridViewAdapter(context,integers);
         imagesGrid.setAdapter(adapter);
         adjustGridView();
 

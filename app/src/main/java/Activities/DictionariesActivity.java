@@ -1,4 +1,4 @@
-package com.study.xps.projectdictionary.Activities;
+package activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,18 +25,12 @@ import com.study.xps.projectdictionary.R;
 import java.util.List;
 
 import Adapters.DictionariesListViewAdapter;
-import Adapters.TopicsGridViewAdapter;
 import Fragments.DictionaryListFragment;
-import Fragments.NoDictionariesFragments;
+import Fragments.EmptyFragment;
 import Models.Dictionary;
+import Models.Tags;
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String EMPTY_LIST_TAG = "EMPTY";
-    private static final String SUCCESS_QUERY_TAG = "GOT";
-    private static final String LOG_TAG = "DATABASE LOGING";
-    private static final String DICTIONARY_TAG = "DICTIONARY";
-
+public class DictionariesActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -47,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vocabularies_layout);
+        setContentView(R.layout.fragment_container_layout);
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(R.string.vocabularies_title);
 
+        //new Word("Hello","Привіт","Хеллоу").save();
         fragmentManager = getFragmentManager();
-       // Dictionary.deleteAll(Dictionary.class);
+        //Dictionary.deleteAll(Dictionary.class);
         dictionariesInfo = Dictionary.listAll(Dictionary.class);
         loadAppropriateFragment();
 
@@ -61,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+        Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
 
-        if(f != null && f instanceof NoDictionariesFragments)
+        if(f != null && f instanceof EmptyFragment)
             addEmptyListListeners();
 
         if(f != null && f instanceof DictionaryListFragment){
@@ -82,39 +76,39 @@ public class MainActivity extends AppCompatActivity {
 
         if(dictionariesInfo.isEmpty()) {
 
-            Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
+            Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof DictionaryListFragment){
-                NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
+                EmptyFragment noDictionariesFragments = new EmptyFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,noDictionariesFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.replace(R.id.mainFragmentContainer,noDictionariesFragments, Tags.EMPTY_LIST_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
             if(f == null ){
-                NoDictionariesFragments noDictionariesFragments = new NoDictionariesFragments();
+                EmptyFragment noDictionariesFragments = new EmptyFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,noDictionariesFragments, EMPTY_LIST_TAG);
+                fragmentTransaction.add(R.id.mainFragmentContainer,noDictionariesFragments, Tags.EMPTY_LIST_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
         }
         else {
-            Fragment f = fragmentManager.findFragmentById(R.id.vocabulariesFragmentContainer);
-            if(f != null && f instanceof NoDictionariesFragments){
+            Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
+            if(f != null && f instanceof EmptyFragment){
                 DictionaryListFragment dictionariesFragment = new DictionaryListFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.vocabulariesFragmentContainer,dictionariesFragment, SUCCESS_QUERY_TAG);
+                fragmentTransaction.replace(R.id.mainFragmentContainer,dictionariesFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
             if(f == null ){
                 DictionaryListFragment dictionariesFragment = new DictionaryListFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.vocabulariesFragmentContainer,dictionariesFragment, SUCCESS_QUERY_TAG);
+                fragmentTransaction.add(R.id.mainFragmentContainer,dictionariesFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
                 }
-            startActivity(new Intent(MainActivity.this, TransparentActivity.class));
+            startActivity(new Intent(DictionariesActivity.this, TransparentActivity.class));
         }
 
     }
@@ -156,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     DictionariesListViewAdapter adapter = (DictionariesListViewAdapter) parent.getAdapter();
                     Intent dictionaryTopicsIntent = new Intent(getApplicationContext(),TopicsActivity.class);
-                    dictionaryTopicsIntent.putExtra(DICTIONARY_TAG,dictionariesInfo.get(position).getId());
+                    dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,dictionariesInfo.get(position).getId());
                     startActivity(dictionaryTopicsIntent);
                 }
             });

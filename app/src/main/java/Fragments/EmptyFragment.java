@@ -9,12 +9,10 @@ import android.view.ViewGroup;
 
 import com.study.xps.projectdictionary.R;
 
-
 /**
- * Created by XPS on 4/17/2016.
+ * Created by XPS on 4/9/2016.
  */
-public class TopicsGridFragment extends Fragment {
-
+public class EmptyFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -23,8 +21,6 @@ public class TopicsGridFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_topic_list, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_vocabulary_empty_list,container,false);
     }
-
 }

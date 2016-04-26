@@ -6,25 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.study.xps.projectdictionary.Activities.TopicsActivity;
 import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
-import Models.Topic;
-
 /**
  * Created by XPS on 4/18/2016.
  */
-public class TopicImagesGridAdapter extends BaseAdapter {
+public class TopicImagesGridViewAdapter extends BaseAdapter {
 
     Context context;
     List<Integer> imagesList;
     LayoutInflater inflater;
 
-    public TopicImagesGridAdapter(Context context, List<Integer> imagesID){
+    public TopicImagesGridViewAdapter(Context context, List<Integer> imagesID){
         this.context = context;
         imagesList = imagesID;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

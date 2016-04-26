@@ -14,12 +14,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.study.xps.projectdictionary.Activities.TopicsActivity;
 import com.study.xps.projectdictionary.R;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import activities.TopicsActivity;
 import Adapters.TopicsSpinnerAdapter;
 import Models.Topic;
 

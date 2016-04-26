@@ -1,4 +1,4 @@
-package com.study.xps.projectdictionary.Activities;
+package activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,7 +22,7 @@ public class LoginActivity extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
             }
         });
     }

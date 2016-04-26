@@ -1,6 +1,5 @@
-package com.study.xps.projectdictionary.Activities;
+package activities;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 

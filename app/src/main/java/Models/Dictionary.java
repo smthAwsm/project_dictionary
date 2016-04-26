@@ -1,9 +1,5 @@
 package Models;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.orm.SugarRecord;
 import com.orm.dsl.Table;

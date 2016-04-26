@@ -8,11 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.study.xps.projectdictionary.Activities.TopicsActivity;
+
 import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
+import activities.TopicsActivity;
 import Models.Topic;
 
 /**

@@ -15,7 +15,7 @@
         <meta-data android:name="QUERY_LOG" android:value="true" />
 
         <activity
-            android:name=".Activities.LoginActivity">
+            android:name="activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,16 +23,20 @@
         </activity>
 
         <activity
-            android:name=".Activities.MainActivity">
+            android:name="activities.DictionariesActivity">
         </activity>
 
         <activity
-            android:name=".Activities.TopicsActivity">
+            android:name="activities.TopicsActivity">
         </activity>
 
         <activity
-            android:name=".Activities.TransparentActivity"
+            android:name="activities.TransparentActivity"
             android:theme="@style/Theme.Transparent" >
+        </activity>
+
+        <activity
+            android:name="activities.WordsActivity">
         </activity>
 
     </application>
