@@ -14,5 +14,7 @@ public class Tags {
     public static final String TOPIC_NAME_TAG = "TOPIC_NAME";
     public static final String NEW_TOPIC_DIALOG = "ADD_TOPIC";
     public static final String NEW_WORD_DIALOG = "ADD_TOPIC";
+    public static final String WORD_VALUE_TAG = "GET_WORD";
+    public static final String WORD_TRANSLATE_TAG= "GET_TRANSLATE";
 
 }

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -30,17 +30,14 @@ import com.study.xps.projectdictionary.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import Adapters.WordsListViewAdapter;
-import Dialog.NewTopicDialog;
 import Dialog.NewWordDialog;
-import Fragments.DictionaryListFragment;
+import Dialog.TestStartDialog;
 import Fragments.EmptyFragment;
 import Fragments.WordsListFragment;
 import Models.Dictionary;
 import Models.Tags;
-import Models.Topic;
 import Models.Word;
 
 /**
@@ -105,9 +102,24 @@ public class WordsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.dictionaries_menu, menu);
+        inflater.inflate(R.menu.words_menu, menu);
+
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_test:
+                DialogFragment testDialog = new TestStartDialog();
+                testDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 
     public void loadAppropriateFragment(){
 

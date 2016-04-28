@@ -39,6 +39,10 @@
             android:name="activities.WordsActivity">
         </activity>
 
+        <activity
+            android:name="activities.TestingActivity">
+        </activity>
+
     </application>
 
 </manifest>

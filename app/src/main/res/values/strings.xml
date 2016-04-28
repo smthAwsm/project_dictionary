@@ -16,4 +16,9 @@
     <string name="topic_hint">Topic name</string>
     <string name="word_hint">Word</string>
     <string name="translation_hint">Translation</string>
+    <string name="testing_level">Select testing level</string>
+    <string name="level_begin">Self examine</string>
+    <string name="level_normal">Testing</string>
+    <string name="testing_advanced">Writing</string>
+    <string name="no">NO THANKS</string>
 </resources>

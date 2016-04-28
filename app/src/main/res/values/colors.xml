@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="separator">#9E9E9E</color>
     <color name="white">#FAFAFA</color>
+    <color name="empty">#EEEEEE</color>
+    <color name="background">#FBFBFB</color>
 </resources>

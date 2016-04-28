@@ -65,12 +65,6 @@ public class DictionariesActivity extends AppCompatActivity {
         updateListData();}
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.dictionaries_menu, menu);
-        return true;
-    }
 
     private void loadAppropriateFragment(){
 
