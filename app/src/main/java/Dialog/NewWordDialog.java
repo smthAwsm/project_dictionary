@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import Adapters.TopicsSpinnerAdapter;
+import Models.Tags;
 import Models.Topic;
 import Models.Word;
 import activities.TopicsActivity;
@@ -35,6 +36,8 @@ public class NewWordDialog extends DialogFragment {
     private TextView cancelButton;
     private EditText valueTextBox;
     private EditText translationTextBox;
+    private long wordID;
+    private boolean edit;
 
 
     @Nullable
@@ -42,6 +45,16 @@ public class NewWordDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //getDialog().setTitle("New topic");
+        Bundle bundle = getArguments();
+        try {
+            edit = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
+            wordID = bundle.getLong(Tags.WORD_VALUE_TAG);
+        } catch (Exception e){
+            edit = false;
+            wordID = 0;
+        }
+
+
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         final View topicDialog = inflater.inflate(R.layout.dialog_word_add,null);
 
@@ -54,8 +67,16 @@ public class NewWordDialog extends DialogFragment {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((!valueTextBox.getText().toString().equals("")) && (!translationTextBox.getText().toString().equals("")))
+                if ((!valueTextBox.getText().toString().equals("")) && (!translationTextBox.getText().toString().equals(""))){
+                        if(!edit)
                         new Word(WordsActivity.currentTopicId,valueTextBox.getText().toString(),translationTextBox.getText().toString()).save();
+                        if (edit){
+                            Word editWord = Word.findById(Word.class,wordID);
+                            editWord.setValue(valueTextBox.getText().toString());
+                            editWord.setTranslation(translationTextBox.getText().toString());
+                            editWord.save();
+                        }
+                }
                 else return;
 
                     Activity parent = getActivity();

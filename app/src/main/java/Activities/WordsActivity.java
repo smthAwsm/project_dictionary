@@ -33,6 +33,7 @@ import java.util.List;
 
 import Adapters.WordsListViewAdapter;
 import Dialog.NewWordDialog;
+import Dialog.RUDWordDialog;
 import Dialog.TestStartDialog;
 import Fragments.EmptyFragment;
 import Fragments.WordsListFragment;
@@ -210,7 +211,19 @@ public class WordsActivity extends AppCompatActivity {
             }
         });
 
-
+        wordsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                RUDWordDialog rudDialog = new RUDWordDialog();
+                Bundle bundle = new Bundle();
+                bundle.putLong(Tags.WORD_TAG, wordsInfo.get(pos).getId());
+                rudDialog.setArguments(bundle);
+                rudDialog.show(fragmentManager,"RUD");
+                Log.d("DIALOG", "TOUCHED" );
+                return true;
+            }
+        });
 
         FloatingActionButton addDictionaryButton = (FloatingActionButton) findViewById(R.id.addNewWordFAB);
         addDictionaryButton.setOnClickListener(new View.OnClickListener() {

@@ -10,8 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -25,6 +24,7 @@ import com.study.xps.projectdictionary.R;
 import java.util.List;
 
 import Adapters.DictionariesListViewAdapter;
+import Dialog.RUDDictionaryDialog;
 import Fragments.DictionaryListFragment;
 import Fragments.EmptyFragment;
 import Models.Dictionary;
@@ -32,10 +32,10 @@ import Models.Tags;
 
 public class DictionariesActivity extends AppCompatActivity {
 
-    private FragmentManager fragmentManager;
+    private  FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private ListView dictionariesList;
-    private List<Dictionary> dictionariesInfo;
+    private static List<Dictionary> dictionariesInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class DictionariesActivity extends AppCompatActivity {
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(R.string.vocabularies_title);
 
-        //new Word("Hello","Привіт","Хеллоу").save();
+
         fragmentManager = getFragmentManager();
         //Dictionary.deleteAll(Dictionary.class);
         dictionariesInfo = Dictionary.listAll(Dictionary.class);
@@ -66,7 +66,7 @@ public class DictionariesActivity extends AppCompatActivity {
     }
 
 
-    private void loadAppropriateFragment(){
+    public void loadAppropriateFragment(){
 
         if(dictionariesInfo.isEmpty()) {
 
@@ -149,6 +149,21 @@ public class DictionariesActivity extends AppCompatActivity {
                 }
             });
 
+            dictionariesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                RUDDictionaryDialog rudDialog = new RUDDictionaryDialog();
+                Bundle bundle = new Bundle();
+                bundle.putLong(Tags.DICTIONARY_TAG, dictionariesInfo.get(pos).getId());
+                rudDialog.setArguments(bundle);
+                rudDialog.show(fragmentManager,"RUD");
+                Log.d("DIALOG", "TOUCHED" );
+                return true;
+            }
+        });
+
+
             FloatingActionButton addDictionaryButton = (FloatingActionButton) findViewById(R.id.addDictionaryFAB);
             addDictionaryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -180,5 +195,9 @@ public class DictionariesActivity extends AppCompatActivity {
         dictionariesList.setAdapter(new DictionariesListViewAdapter(this, dictionariesInfo));
         ((BaseAdapter)dictionariesList.getAdapter()).notifyDataSetChanged();
     }
+
+        public void updateData(){
+            dictionariesInfo = Dictionary.listAll(Dictionary.class);
+        }
 
 }

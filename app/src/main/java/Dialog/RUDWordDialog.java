@@ -1,0 +1,61 @@
+package Dialog;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.os.Bundle;
+
+import com.study.xps.projectdictionary.R;
+
+import Models.Tags;
+import Models.Word;
+import activities.WordsActivity;
+
+/**
+ * Created by XPS on 4/29/2016.
+ */
+public class RUDWordDialog extends DialogFragment {
+
+    private long wordID;
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        Bundle bundle = getArguments();
+        wordID = bundle.getLong(Tags.WORD_TAG);
+
+        builder.setItems(R.array.rud, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (which == 0)
+                {
+                    DialogFragment topicDialog = new NewWordDialog();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(Tags.SUCCESS_QUERY_TAG,true);
+                    bundle.putLong(Tags.WORD_VALUE_TAG, wordID);
+                    topicDialog.setArguments(bundle);
+
+                    topicDialog.show(getFragmentManager(), Tags.NEW_TOPIC_DIALOG);
+                }
+
+                if( which == 1) {
+                    Word editWord = Word.findById(Word.class,wordID);
+                    editWord.delete();
+
+
+                    Activity parent = getActivity();
+                    if (parent instanceof WordsActivity) {
+                        WordsActivity _parent = (WordsActivity) parent;
+                        _parent.loadAppropriateFragment();
+
+                        _parent.wordsInfo = Word.find(Word.class, "topic_ID = ?", WordsActivity.currentTopicId + "");
+                        dismiss();
+                    }
+                }
+            }
+        });
+        return  builder.create();
+    }
+}

@@ -30,6 +30,10 @@ public class Dictionary extends SugarRecord{
         creationDate = getDate();
     }
 
+    public Dictionary(int dsa,String asd,String as){ //TODO delete
+
+    }
+
     //public Long getId() {
     //    return id;
     //}

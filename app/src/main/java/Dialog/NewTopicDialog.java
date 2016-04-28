@@ -19,6 +19,7 @@ import com.study.xps.projectdictionary.R;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import Models.Tags;
 import activities.TopicsActivity;
 import Adapters.TopicsSpinnerAdapter;
 import Models.Topic;
@@ -33,11 +34,25 @@ public class NewTopicDialog extends DialogFragment {
     private Spinner topicImagesSpinner;
     private Button saveButton;
     private EditText topicName;
+    boolean update;
+    long topicID;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
+
+        Bundle bundle = getArguments();
+        bundle = getArguments();
+        try {
+            update = bundle.getBoolean(Tags.TOPIC_NAME_TAG);
+            topicID = bundle.getLong(Tags.TOPIC_TAG);
+        } catch (Exception e){
+            update = false;
+            topicID = 0;
+        }
 
         getDialog().setTitle("New topic");
 
@@ -55,9 +70,24 @@ public class NewTopicDialog extends DialogFragment {
                 if (!topicName.getText().toString().equals(""))
                 {
                     if (topicImage.getTag() != null){
-                     new Topic(TopicsActivity.currentDictionaryID,topicName.getText().toString(),(Integer)topicImage.getTag()).save();
-                    } else  new Topic(TopicsActivity.currentDictionaryID,topicName.getText().toString(),R.drawable.ic_add).save();
+                        if (!update)
+                            new Topic(TopicsActivity.currentDictionaryID,topicName.getText().toString(),(Integer)topicImage.getTag()).save();
+                            else {
+                                    Topic editTopic = Topic.findById(Topic.class,topicID);
+                                    editTopic.setTopicName(topicName.getText().toString());
+                                    editTopic.setImageRecourceID((Integer)topicImage.getTag());
+                                    editTopic.save();
+                             }
+                    } else
 
+                    if (!update)
+                        new Topic(TopicsActivity.currentDictionaryID,topicName.getText().toString(),R.drawable.chat).save();
+                    else {
+                        Topic editTopic = Topic.findById(Topic.class,topicID);
+                        editTopic.setTopicName(topicName.getText().toString());
+                        editTopic.setImageRecourceID(R.drawable.chat);
+                        editTopic.save();
+                    }
 
                     Activity parent = getActivity();
                     if (parent instanceof TopicsActivity) {

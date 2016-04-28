@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.TopicsGridViewAdapter;
+import Dialog.RUDTopicDialog;
 import Fragments.EmptyFragment;
 import Fragments.TopicsGridFragment;
 import Models.Tags;
@@ -128,6 +130,22 @@ public class TopicsActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),topicsInfo.get(position).getTopicName(),Toast.LENGTH_SHORT);
             }
         });
+
+        topicsGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                RUDTopicDialog rudDialog = new RUDTopicDialog();
+                Bundle bundle = new Bundle();
+                bundle.putLong(Tags.TOPIC_TAG, topicsInfo.get(pos).getId());
+                rudDialog.setArguments(bundle);
+                rudDialog.show(fragmentManager,"RUD");
+                Log.d("DIALOG", "TOUCHED" );
+                return true;
+            }
+        });
+
+
 
         FloatingActionButton addTopicButton = (FloatingActionButton) findViewById(R.id.addTopicFAB);
         addTopicButton.setOnClickListener(new View.OnClickListener() {

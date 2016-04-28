@@ -7,7 +7,7 @@
     <string name="number_of_vocabularies">Number of topics: </string>
     <string name="created">Created </string>
     <string name="topics">Stores topics: </string>
-    <string name="new_dic_title">New dictionary </string>
+    <string name="new_dic_title">Dictionary name</string>
     <string name="ok">OK</string>
     <string name="cancel">CANCEL </string>
     <string name="topics_title">Topics</string>
