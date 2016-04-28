@@ -15,6 +15,10 @@ public class Tags {
     public static final String NEW_TOPIC_DIALOG = "ADD_TOPIC";
     public static final String NEW_WORD_DIALOG = "ADD_TOPIC";
     public static final String WORD_VALUE_TAG = "GET_WORD";
+    public static final String WORD_VALUE_FAKE_1 = "GET_WORD_FAKE_1";
+    public static final String WORD_VALUE_FAKE_2 = "GET_WORD_FAKE_2";
+    public static final String WORD_VALUE_FAKE_3 = "GET_WORD_FAKE_3";
     public static final String WORD_TRANSLATE_TAG= "GET_TRANSLATE";
+    public static final String TESTING_TYPE_TAG= "TESTING_TYPE";
 
 }

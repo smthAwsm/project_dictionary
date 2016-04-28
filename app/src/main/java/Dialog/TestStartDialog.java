@@ -41,6 +41,7 @@ public class TestStartDialog extends DialogFragment {
                     case R.id.testingLevelBeginer:
                         Intent intentBegin = new Intent(getActivity(), TestingActivity.class);
                         intentBegin.putExtra(Tags.TOPIC_TAG, WordsActivity.currentTopicId);
+                        intentBegin.putExtra(Tags.TESTING_TYPE_TAG,0);
                         startActivity(intentBegin);
                         dismiss();
                         Log.d("QWE", "1");
@@ -49,6 +50,7 @@ public class TestStartDialog extends DialogFragment {
                         Log.d("QWE", "2");
                         Intent intentNorm = new Intent(getActivity(), TestingActivity.class);
                         intentNorm.putExtra(Tags.TOPIC_TAG, WordsActivity.currentTopicId);
+                        intentNorm.putExtra(Tags.TESTING_TYPE_TAG,1);
                         startActivity(intentNorm);
                         dismiss();
                         break;
@@ -56,6 +58,7 @@ public class TestStartDialog extends DialogFragment {
                         Log.d("QWE", "3");
                         Intent intentAdvan = new Intent(getActivity(), TestingActivity.class);
                         intentAdvan.putExtra(Tags.TOPIC_TAG, WordsActivity.currentTopicId);
+                        intentAdvan.putExtra(Tags.TESTING_TYPE_TAG,2);
                         startActivity(intentAdvan);
                         dismiss();
                         break;

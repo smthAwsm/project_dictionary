@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
+import Fragments.TestingAdvancedFragment;
 import Fragments.TestingBeginnerFragment;
 import Models.Tags;
 import Models.Word;
@@ -14,18 +15,18 @@ import Models.Word;
 /**
  * Created by XPS on 4/28/2016.
  */
-public class TestSwipeAdapterBeginner extends FragmentStatePagerAdapter {
+public class TestSwipeAdapterAdvanced extends FragmentStatePagerAdapter {
 
     List<Word> wordsInfo;
 
-    public TestSwipeAdapterBeginner(FragmentManager fm, List<Word> wordData) {
+    public TestSwipeAdapterAdvanced(FragmentManager fm, List<Word> wordData) {
         super(fm);
         wordsInfo = wordData;
     }
 
     @Override
     public Fragment getItem(int position) {
-    Fragment fragment = new TestingBeginnerFragment();
+        Fragment fragment = new TestingAdvancedFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Tags.WORD_VALUE_TAG,wordsInfo.get(position).getValue());
         bundle.putString(Tags.WORD_TRANSLATE_TAG,wordsInfo.get(position).getTranslation());

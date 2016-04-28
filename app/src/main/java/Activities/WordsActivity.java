@@ -111,9 +111,11 @@ public class WordsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_test:
+                if (wordsInfo.size() > 8){
                 DialogFragment testDialog = new TestStartDialog();
-                testDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
-                return true;
+                testDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);}
+                else Toast.makeText(getApplicationContext(),getString(R.string.more_words),Toast.LENGTH_SHORT).show();
+                    return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

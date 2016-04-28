@@ -19,7 +19,9 @@ import com.study.xps.projectdictionary.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import Adapters.TestSwipeAdapterAdvanced;
 import Adapters.TestSwipeAdapterBeginner;
+import Adapters.TestSwipeAdapterNormal;
 import Fragments.EmptyFragment;
 import Fragments.TestingBeginnerFragment;
 import Models.Tags;
@@ -31,12 +33,15 @@ import Models.Word;
 public class TestingActivity extends AppCompatActivity {
 
     private long currentTopicID;
+    private int testing_type;
     List<Word> wordList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.testing_activity);
+
+        testing_type = getIntent().getIntExtra(Tags.TESTING_TYPE_TAG,0);
         currentTopicID = getIntent().getLongExtra(Tags.TOPIC_TAG, 0);
 
         try {
@@ -46,8 +51,21 @@ public class TestingActivity extends AppCompatActivity {
         }
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.testingBeginViewPager);
-        TestSwipeAdapterBeginner swipeAdapterBeginner = new TestSwipeAdapterBeginner(getSupportFragmentManager(),wordList);
-        viewPager.setAdapter(swipeAdapterBeginner);
+
+        switch (testing_type){
+            case 0:
+                TestSwipeAdapterBeginner swipeAdapterBeginner = new TestSwipeAdapterBeginner(getSupportFragmentManager(),wordList);
+                viewPager.setAdapter(swipeAdapterBeginner);
+                break;
+            case 1:
+                TestSwipeAdapterNormal swipeAdapterNormal = new TestSwipeAdapterNormal(getSupportFragmentManager(),wordList);
+                viewPager.setAdapter(swipeAdapterNormal);
+                break;
+            case 2:
+                TestSwipeAdapterAdvanced swipeAdapterAdvanced = new TestSwipeAdapterAdvanced(getSupportFragmentManager(),wordList);
+                viewPager.setAdapter(swipeAdapterAdvanced);
+                break;
+        }
 
 
     }
