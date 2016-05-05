@@ -6,5 +6,7 @@
     <color name="separator">#9E9E9E</color>
     <color name="white">#FAFAFA</color>
     <color name="empty">#EEEEEE</color>
+    <color name="right">#00E676</color>
+    <color name="wrong">#F44336</color>
     <color name="background">#FBFBFB</color>
 </resources>

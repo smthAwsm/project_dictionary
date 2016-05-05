@@ -22,4 +22,36 @@ public class Tags {
     public static final String WORD_TRANSLATE_TAG= "GET_TRANSLATE";
     public static final String TESTING_TYPE_TAG= "TESTING_TYPE";
 
+    //TODO Change graphics to SVG
+    //TODO Volume up in reading (if possible)
+    //TODO Topics number calculation
+    //TODO Denie not English words in NewWordDialog -> Translation
+    //TODO Image storing as values array
+    //TODO Fix colors array on words activity
+    //TODO Attach FloatingButton to ListView
+    //TODO Load data on object editing (Dictionary - name/ Topic - name,image/ Word - value/translation)
+    //TODO Test deleting Dictionaries/Topics/Word for appropriate fragment behavior
+    //TODO Fix bug with empty topics/words list
+    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
+
+
+    //TODO Yandex API for word translation
+    //TODO Input hints
+    //TODO Database data load ASYNC
+    //TODO Image loading (for topics) do Async.
+    //TODO Word search
+    //TODO Testing TESTING/WRITING calculate results
+    //TODO Settings to change current dictionary
+    //TODO Create first start quick guide
+
+
+    //TODO Test support on API < 23, fix problems if necessary
+    //TODO To think about multi language fuctionality (More than UKR/RUS -> Eng)
+    //TODO Develop animations, add to project
+    //TODO Testing SELF EXAM IMPROVE translation appearence
+    //TODO Store some statistics about results
+    //TODO Google API Login + Google Drive Backup
+    //TODO Check for Material guidelines
+    //TODO Add more images
+
 }

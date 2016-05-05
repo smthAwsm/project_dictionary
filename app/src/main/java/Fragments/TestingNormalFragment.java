@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.orm.util.Collection;
@@ -29,7 +30,7 @@ public class TestingNormalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
-        String correctTranslation = bundle.getString(Tags.WORD_TRANSLATE_TAG);
+        final String correctTranslation = bundle.getString(Tags.WORD_TRANSLATE_TAG);
         String wordValue = bundle.getString(Tags.WORD_VALUE_TAG);
         List<String> fakeTranslate = new ArrayList<String>();
         fakeTranslate.add(correctTranslation);
@@ -43,26 +44,63 @@ public class TestingNormalFragment extends Fragment {
         TextView wordTextView = (TextView) view.findViewById(R.id.normalWordtextView);
         wordTextView.setText(wordValue);
 
-        RadioButton radioButton1 = (RadioButton) view.findViewById(R.id.testRadioButton1);
+        final RadioButton radioButton1 = (RadioButton) view.findViewById(R.id.testRadioButton1);
         radioButton1.setText(fakeTranslate.get(0));
-        RadioButton radioButton2 = (RadioButton) view.findViewById(R.id.testRadioButton2);
+        final RadioButton radioButton2 = (RadioButton) view.findViewById(R.id.testRadioButton2);
         radioButton2.setText(fakeTranslate.get(1));
-        RadioButton radioButton3 = (RadioButton) view.findViewById(R.id.testRadioButton3);
+        final RadioButton radioButton3 = (RadioButton) view.findViewById(R.id.testRadioButton3);
         radioButton3.setText(fakeTranslate.get(2));
-        RadioButton radioButton4 = (RadioButton) view.findViewById(R.id.testRadioButton4);
+        final RadioButton radioButton4 = (RadioButton) view.findViewById(R.id.testRadioButton4);
         radioButton4.setText(fakeTranslate.get(3));
 
-        //final TextView translateTextView = (TextView) view.findViewById(R.id.translateTextView);
+        RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.optionRadioGroup);
 
-//        translateTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                translateTextView.setBackgroundColor(Color.TRANSPARENT);
-//            }
-//        });
-//
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+             switch (checkedId){
+                 case R.id.testRadioButton1:
+                     if(radioButton1.getText() == correctTranslation)
+                         radioButton1.setTextColor(getResources().getColor(R.color.right));
+                     else radioButton1.setTextColor(getResources().getColor(R.color.wrong));
 
-//        translateTextView.setText(bundle.getString(Tags.WORD_TRANSLATE_TAG));
+                     radioButton2.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton3.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton4.setTextColor(getResources().getColor(R.color.separator));
+
+                     break;
+                 case R.id.testRadioButton2:
+                     if(radioButton2.getText() == correctTranslation)
+                         radioButton2.setTextColor(getResources().getColor(R.color.right));
+                     else radioButton2.setTextColor(getResources().getColor(R.color.wrong));
+
+                     radioButton1.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton3.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton4.setTextColor(getResources().getColor(R.color.separator));
+
+                     break;
+                 case R.id.testRadioButton3:
+                     if(radioButton3.getText() == correctTranslation)
+                         radioButton3.setTextColor(getResources().getColor(R.color.right));
+                     else radioButton3.setTextColor(getResources().getColor(R.color.wrong));
+
+                     radioButton2.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton1.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton4.setTextColor(getResources().getColor(R.color.separator));
+                     break;
+                 case R.id.testRadioButton4:
+                     if(radioButton4.getText() == correctTranslation)
+                         radioButton4.setTextColor(getResources().getColor(R.color.right));
+                     else radioButton4.setTextColor(getResources().getColor(R.color.wrong));
+
+                     radioButton2.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton3.setTextColor(getResources().getColor(R.color.separator));
+                     radioButton1.setTextColor(getResources().getColor(R.color.separator));
+                     break;
+             }
+            }
+        });
+
 
         return view;
     }
