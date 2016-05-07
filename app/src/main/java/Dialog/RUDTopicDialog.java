@@ -54,8 +54,7 @@ public class RUDTopicDialog extends DialogFragment {
                     if (parent instanceof TopicsActivity) {
                         TopicsActivity _parent = (TopicsActivity) parent;
                         _parent.loadAppropriateFragment();
-
-                        _parent.topicsInfo = Topic.find(Topic.class, "dictionary_ID = ?", TopicsActivity.currentDictionaryID + "");
+                        _parent.updateData();
                         dismiss();
                     }
                 }

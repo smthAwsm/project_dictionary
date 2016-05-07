@@ -67,11 +67,13 @@ public class NewTopicDialog extends DialogFragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TopicsActivity parent = (TopicsActivity) getActivity();
+                if (parent instanceof TopicsActivity) {
                 if (!topicName.getText().toString().equals(""))
                 {
                     if (topicImage.getTag() != null){
                         if (!update)
-                            new Topic(TopicsActivity.currentDictionaryID,topicName.getText().toString(),(Integer)topicImage.getTag()).save();
+                            new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),(Integer)topicImage.getTag()).save();
                             else {
                                     Topic editTopic = Topic.findById(Topic.class,topicID);
                                     editTopic.setTopicName(topicName.getText().toString());
@@ -81,20 +83,15 @@ public class NewTopicDialog extends DialogFragment {
                     } else
 
                     if (!update)
-                        new Topic(TopicsActivity.currentDictionaryID,topicName.getText().toString(),R.drawable.chat).save();
+                        new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),R.drawable.ic_star).save(); //TODO image change
                     else {
                         Topic editTopic = Topic.findById(Topic.class,topicID);
                         editTopic.setTopicName(topicName.getText().toString());
-                        editTopic.setImageRecourceID(R.drawable.chat);
+                        editTopic.setImageRecourceID(R.drawable.ic_star); //TODO image change
                         editTopic.save();
                     }
-
-                    Activity parent = getActivity();
-                    if (parent instanceof TopicsActivity) {
-                        TopicsActivity _parent = (TopicsActivity) parent;
-                        _parent.loadAppropriateFragment();
-
-                        _parent.topicsInfo = Topic.find(Topic.class, "dictionary_ID = ?", TopicsActivity.currentDictionaryID + "");
+                        parent.loadAppropriateFragment();
+                        parent.updateData();
                         dismiss();
                     }
                 }

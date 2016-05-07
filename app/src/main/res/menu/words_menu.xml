@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_test"
-        android:icon="@drawable/ic_thumbs_up_down_black_48dp"
+        android:icon="@drawable/ic_puzzle"
         android:title="@string/ok"
         app:showAsAction="ifRoom"/>
 </menu>

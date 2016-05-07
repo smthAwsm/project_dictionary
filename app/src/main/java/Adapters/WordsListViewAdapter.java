@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.media.AudioManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,7 +74,6 @@ public class WordsListViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                 int pos = (int) holder.pronounceButton.getTag();
                 String toSpeak = wordsList.get(pos).getTranslation();
-
                 textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
             }
         });

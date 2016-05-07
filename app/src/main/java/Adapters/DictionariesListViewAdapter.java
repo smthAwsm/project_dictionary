@@ -21,10 +21,12 @@ public class DictionariesListViewAdapter extends BaseAdapter {
 
     Context context;
     List<Dictionary> dictionariesList;
+    List<Long> topicsCounted;
     LayoutInflater inflater;
 
-    public DictionariesListViewAdapter(DictionariesActivity dictionariesActivity, List<Dictionary> data){
+    public DictionariesListViewAdapter(DictionariesActivity dictionariesActivity, List<Dictionary> data,List<Long> topicsCount){
         dictionariesList = data;
+        topicsCounted = topicsCount;
         context = dictionariesActivity;
         inflater = (LayoutInflater)context. getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -59,7 +61,7 @@ public class DictionariesListViewAdapter extends BaseAdapter {
 
        holder.nameTextView.setText(dictionariesList.get(position).getName());
        holder.dateTextView.setText(context.getString(R.string.created) +" "+ dictionariesList.get(position).getCreationDateString());
-       holder.topicsNumberTextView.setText(context.getString(R.string.topics) +" "+ position);
+       holder.topicsNumberTextView.setText(context.getString(R.string.topics) +"  "+ topicsCounted.get(position));
 
         return listView;
     }

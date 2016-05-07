@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -32,11 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.WordsListViewAdapter;
+import Adapters.WordsRecyclingViewAdapter;
 import Dialog.NewWordDialog;
 import Dialog.RUDWordDialog;
 import Dialog.TestStartDialog;
 import Fragments.EmptyFragment;
 import Fragments.WordsListFragment;
+import Models.ActivityDataInterface;
 import Models.Dictionary;
 import Models.Tags;
 import Models.Word;
@@ -44,12 +48,12 @@ import Models.Word;
 /**
  * Created by XPS on 4/25/2016.
  */
-public class WordsActivity extends AppCompatActivity {
+public class WordsActivity extends AppCompatActivity implements ActivityDataInterface {
 
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private ListView wordsList;
+    private RecyclerView wordsList;
     private int[] shapesColor;
     public static List<Word> wordsInfo;
 
@@ -75,13 +79,7 @@ public class WordsActivity extends AppCompatActivity {
 
         //Word.deleteAll(Word.class);
 
-        try {
-            wordsInfo = Word.find(Word.class, "topic_ID = "+currentTopicId +"");
-        } catch (Exception e){
-            wordsInfo = new ArrayList<Word>();
-        }
-
-        //wordsInfo = Word.listAll(Word.class);
+        updateData();
         loadAppropriateFragment();
     }
 
@@ -91,13 +89,8 @@ public class WordsActivity extends AppCompatActivity {
         super.onResume();
         Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
 
-        if(f != null && f instanceof EmptyFragment)
-            addEmptyListListeners();
-
-        if(f != null && f instanceof WordsListFragment){
-            addWordListListeners();
-
-            updateListData();}
+        if(f != null && f instanceof WordsListFragment)
+             updateViewData();
     }
 
     @Override
@@ -107,7 +100,6 @@ public class WordsActivity extends AppCompatActivity {
 
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -121,9 +113,7 @@ public class WordsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
+    @Override
     public void loadAppropriateFragment(){
 
         if(wordsInfo.isEmpty()) {
@@ -162,107 +152,35 @@ public class WordsActivity extends AppCompatActivity {
             }
             startActivity(new Intent(WordsActivity.this, TransparentActivity.class));
         }
-
     }
 
-    private void createDictionaryAlert(){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.new_dic_title));
-
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String dictionaryName = input.getText().toString();
-                Dictionary newDictionary = new Dictionary(dictionaryName);
-                newDictionary.save();
-
-                wordsInfo = Dictionary.listAll(Word.class);
-                loadAppropriateFragment();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
+    @Override
+    public void updateData() {
+        try {
+            wordsInfo = Word.find(Word.class, "topic_ID = "+currentTopicId +"");
+        } catch (Exception e){
+            wordsInfo = new ArrayList<Word>();
+        }
     }
-
-    private void addWordListListeners(){
-
-        wordsList = (ListView) findViewById(R.id.wordsListView);
-        wordsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("asd",position+"");
-
-
-                Toast.makeText(getApplicationContext(),position +"", Toast.LENGTH_SHORT);
-                //WordsListViewAdapter adapter = (WordsListViewAdapter) parent.getAdapter();
-                //Intent dictionaryTopicsIntent = new Intent(getApplicationContext(),TopicsActivity.class);
-                //dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,wordsInfo.get(position).getId());
-                //startActivity(dictionaryTopicsIntent);
-            }
-        });
-
-        wordsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-                RUDWordDialog rudDialog = new RUDWordDialog();
-                Bundle bundle = new Bundle();
-                bundle.putLong(Tags.WORD_TAG, wordsInfo.get(pos).getId());
-                rudDialog.setArguments(bundle);
-                rudDialog.show(fragmentManager,"RUD");
-                Log.d("DIALOG", "TOUCHED" );
-                return true;
-            }
-        });
-
-        FloatingActionButton addDictionaryButton = (FloatingActionButton) findViewById(R.id.addNewWordFAB);
-        addDictionaryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment wordDialog = new NewWordDialog();
-                wordDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
-            }
-        });
-    }
-    private void addEmptyListListeners(){
-
-        ImageView addWordImage = (ImageView) findViewById(R.id.addVocabularyImage);
-        TextView addDictionaryLabel = (TextView) findViewById(R.id.noVocabulariesText);
-        addDictionaryLabel.setText(getString(R.string.no_words));
-
-        addWordImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment wordDialog = new NewWordDialog();
-                wordDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
-            }
-        });
-        addDictionaryLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment wordDialog = new NewWordDialog();
-                wordDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
-            }
-        });
-    }
-
-    public void updateListData() {
+    @Override
+    public void updateViewData() {
         shapesColor = getMatColor();
-        wordsList = (ListView) findViewById(R.id.wordsListView);
-        WordsListViewAdapter wordsListAdapter = new WordsListViewAdapter(this, wordsInfo,shapesColor);
+        wordsList = (RecyclerView) findViewById(R.id.wordsRecyclerView);
+        //WordsListViewAdapter wordsListAdapter = new WordsListViewAdapter(this, wordsInfo,shapesColor);
         //wordsListAdapter.setMatColor();
-        wordsList.setAdapter(wordsListAdapter);
-        ((BaseAdapter) wordsList.getAdapter()).notifyDataSetChanged();
+        WordsRecyclingViewAdapter viewAdapter = new WordsRecyclingViewAdapter(wordsInfo);
+        wordsList.setAdapter(viewAdapter);
+        wordsList.setLayoutManager(new LinearLayoutManager(this));
+        //((BaseAdapter) wordsList.getAdapter()).notifyDataSetChanged();
+    }
+
+    @Override
+    public List<Word> getActivityData() {
+        return wordsInfo;
+    }
+    @Override
+    public FragmentManager getActivityFragmentManager() {
+        return fragmentManager;
     }
 
     private int[] getMatColor()
@@ -292,7 +210,4 @@ public class WordsActivity extends AppCompatActivity {
         }
         return returnColor;
     }
-
-
-
 }

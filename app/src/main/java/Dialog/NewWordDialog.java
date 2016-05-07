@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +66,20 @@ public class NewWordDialog extends DialogFragment {
         valueTextBox = (EditText) topicDialog.findViewById(R.id.wordTextBox);
         translationTextBox = (EditText) topicDialog.findViewById(R.id.translationTextBox);
 
+        InputFilter filter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isLetterOrDigit(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+        translationTextBox.setFilters(new InputFilter[] { filter });
+
+
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +122,7 @@ public class NewWordDialog extends DialogFragment {
         Dialog dialog = getDialog();
         if(dialog != null)
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
     }
+
+
 }

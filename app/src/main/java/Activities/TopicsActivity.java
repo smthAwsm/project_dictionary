@@ -26,6 +26,7 @@ import Adapters.TopicsGridViewAdapter;
 import Dialog.RUDTopicDialog;
 import Fragments.EmptyFragment;
 import Fragments.TopicsGridFragment;
+import Models.ActivityDataInterface;
 import Models.Tags;
 import Models.Topic;
 import Dialog.NewTopicDialog;
@@ -33,15 +34,13 @@ import Dialog.NewTopicDialog;
 /**
  * Created by XPS on 4/12/2016.
  */
-public class TopicsActivity extends AppCompatActivity {
-
+public class TopicsActivity extends AppCompatActivity implements ActivityDataInterface{
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private GridView topicsGrid;
-    public List<Topic> topicsInfo;
-    public static long currentDictionaryID;
-
+    private List<Topic> topicsInfo;
+    private long currentDictionaryID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +51,7 @@ public class TopicsActivity extends AppCompatActivity {
         currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
 
         fragmentManager = getFragmentManager();
-
-        try {
-            topicsInfo = Topic.find(Topic.class, "dictionary_ID = "+currentDictionaryID +"");
-        } catch (Exception e){
-          topicsInfo = new ArrayList<Topic>();
-        }
+        updateData();
         //topicsInfo = Topic.listAll(Topic.class);
         loadAppropriateFragment();
     }
@@ -65,17 +59,10 @@ public class TopicsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
-
-        if(f != null && f instanceof EmptyFragment)
-            addEmptyListListeners();
-
-        if(f != null && f instanceof TopicsGridFragment){
-            addTopicListListeners();
-            updateGridData();}
+        if(f != null && f instanceof TopicsGridFragment)
+              updateViewData();
     }
-
     public void loadAppropriateFragment(){
 
         if(topicsInfo.isEmpty()) {
@@ -115,75 +102,27 @@ public class TopicsActivity extends AppCompatActivity {
         startActivity(new Intent(TopicsActivity.this, TransparentActivity.class));
     }
 
-    private void addTopicListListeners(){
-
-        topicsGrid = (GridView) findViewById(R.id.topicsGridView);
-        topicsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //DictionariesListViewAdapter adapter = (DictionariesListViewAdapter) parent.getAdapter();
-
-                Intent topicWordsIntent = new Intent(getApplicationContext(),WordsActivity.class);
-                topicWordsIntent.putExtra(Tags.TOPIC_TAG,topicsInfo.get(position).getId() );
-                topicWordsIntent.putExtra(Tags.TOPIC_NAME_TAG,topicsInfo.get(position).getTopicName() );
-                startActivity(topicWordsIntent);
-                Toast.makeText(getApplicationContext(),topicsInfo.get(position).getTopicName(),Toast.LENGTH_SHORT);
-            }
-        });
-
-        topicsGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-                RUDTopicDialog rudDialog = new RUDTopicDialog();
-                Bundle bundle = new Bundle();
-                bundle.putLong(Tags.TOPIC_TAG, topicsInfo.get(pos).getId());
-                rudDialog.setArguments(bundle);
-                rudDialog.show(fragmentManager,"RUD");
-                Log.d("DIALOG", "TOUCHED" );
-                return true;
-            }
-        });
-
-
-
-        FloatingActionButton addTopicButton = (FloatingActionButton) findViewById(R.id.addTopicFAB);
-        addTopicButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createTopicDialog();
-            }
-        });
+    public void updateData(){
+        try {
+        topicsInfo = Topic.find(Topic.class, "dictionary_ID = "+currentDictionaryID +"");
+    } catch (Exception e){
+        topicsInfo = new ArrayList<Topic>();
+        }
     }
 
-    private void addEmptyListListeners(){
-        ImageView addTopicImage = (ImageView) findViewById(R.id.addVocabularyImage);
-        TextView addTopicLabel = (TextView) findViewById(R.id.noVocabulariesText);
-        addTopicLabel.setText(getString(R.string.no_topics));
-
-        addTopicImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createTopicDialog();
-            }
-        });
-        addTopicLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createTopicDialog();
-            }
-        });
-    }
-
-    public void updateGridData(){
+    public void updateViewData(){
         topicsGrid = (GridView) findViewById(R.id.topicsGridView);
         topicsGrid.setAdapter(new TopicsGridViewAdapter(this, topicsInfo));
         ((BaseAdapter)topicsGrid.getAdapter()).notifyDataSetChanged();
     }
 
-    private void createTopicDialog() {
-        DialogFragment topicDialog = new NewTopicDialog();
-        topicDialog.show(getFragmentManager(), Tags.NEW_TOPIC_DIALOG);
+    public long getCurrentDictionaryID() {
+        return currentDictionaryID;
     }
-
+    public List<Topic> getActivityData() {
+        return topicsInfo;
+    }
+    public FragmentManager getActivityFragmentManager() {
+        return fragmentManager;
+    }
 }
