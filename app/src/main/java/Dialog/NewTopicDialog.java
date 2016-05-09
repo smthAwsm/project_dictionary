@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +42,9 @@ public class NewTopicDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
         Bundle bundle = getArguments();
-        bundle = getArguments();
+        final Topic editTopic;
+
         try {
             update = bundle.getBoolean(Tags.TOPIC_NAME_TAG);
             topicID = bundle.getLong(Tags.TOPIC_TAG);
@@ -55,14 +54,28 @@ public class NewTopicDialog extends DialogFragment {
         }
 
         getDialog().setTitle("New topic");
-
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         final View topicDialog = inflater.inflate(R.layout.dialog_topic_add,null);
+
         topicImagesSpinner  = (Spinner) topicDialog.findViewById(R.id.imagesSpinner);
         topicImage =  (ImageView) topicDialog.findViewById(R.id.imageView);
-        saveButton = (Button) topicDialog.findViewById(R.id.buttonAddTopic);
+        topicImage.setTag(R.drawable.ic_star);
+
+        topicImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                          topicImagesSpinner.performClick(); }
+        });
+
         topicName = (EditText) topicDialog.findViewById(R.id.topicNameTextBox);
 
+        if(update){
+            editTopic = Topic.findById(Topic.class,topicID);
+            topicImage.setImageResource((int)editTopic.getImageRecourceID());
+            topicName.setText(editTopic.getTopicName());
+        } else  editTopic = new Topic();
+
+        saveButton = (Button) topicDialog.findViewById(R.id.buttonAddTopic);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,21 +88,19 @@ public class NewTopicDialog extends DialogFragment {
                         if (!update)
                             new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),(Integer)topicImage.getTag()).save();
                             else {
-                                    Topic editTopic = Topic.findById(Topic.class,topicID);
-                                    editTopic.setTopicName(topicName.getText().toString());
-                                    editTopic.setImageRecourceID((Integer)topicImage.getTag());
-                                    editTopic.save();
+                                     editTopic.setTopicName(topicName.getText().toString());
+                                     editTopic.setImageRecourceID((Integer)topicImage.getTag());
+                                     editTopic.save();
                              }
                     } else
-
-                    if (!update)
-                        new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),R.drawable.ic_star).save(); //TODO image change
-                    else {
-                        Topic editTopic = Topic.findById(Topic.class,topicID);
+                        if (!update)
+                        new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),(Integer)topicImage.getTag()).save();
+                     else {
                         editTopic.setTopicName(topicName.getText().toString());
-                        editTopic.setImageRecourceID(R.drawable.ic_star); //TODO image change
+                        editTopic.setImageRecourceID((Integer)topicImage.getTag());
                         editTopic.save();
-                    }
+                     }
+
                         parent.loadAppropriateFragment();
                         parent.updateData();
                         dismiss();
@@ -120,8 +131,7 @@ public class NewTopicDialog extends DialogFragment {
         topicImage.setImageResource(recourceID);
         topicImage.setTag(recourceID);
         //imageID = recourceID;
-
-    //    int drawableId = (Integer)myImageView.getTag();
+        //int drawableId = (Integer)myImageView.getTag();
         hideSpinnerDropDown(topicImagesSpinner);
     }
 

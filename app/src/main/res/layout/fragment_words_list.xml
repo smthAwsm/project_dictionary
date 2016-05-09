@@ -11,13 +11,12 @@
         android:layout_height="match_parent"
         android:id="@+id/wordsRecyclerView"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1.31"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addNewWordFAB"
-        app:layout_behavior = "Models.FABScrollBehavior"
+        app:layout_behavior = "Helpers.FABScrollBehavior"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

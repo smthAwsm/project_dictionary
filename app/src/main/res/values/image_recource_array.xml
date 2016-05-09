@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="graphics">
+        <item>@drawable/basket</item>
+        <item>@drawable/binoculars</item>
+        <item>@drawable/brain</item>
+        <item>@drawable/calculator</item>
+        <item>@drawable/calendar</item>
+        <item>@drawable/chat</item>
+        <item>@drawable/clock</item>
+        <item>@drawable/coffee</item>
+        <item>@drawable/coffee_1</item>
+        <item>@drawable/cogwheel</item>
+        <item>@drawable/coins</item>
+        <item>@drawable/compass</item>
+        <item>@drawable/diagram</item>
+        <item>@drawable/diagram_1</item>
+        <item>@drawable/documentation</item>
+        <item>@drawable/dollar_bill</item>
+        <item>@drawable/employee</item>
+        <item>@drawable/employees</item>
+        <item>@drawable/flag</item>
+        <item>@drawable/flask</item>
+        <item>@drawable/form</item>
+        <item>@drawable/glasses</item>
+        <item>@drawable/horse</item>
+        <item>@drawable/idea</item>
+        <item>@drawable/laptop</item>
+        <item>@drawable/lifebuoy</item>
+        <item>@drawable/magnifying_glass</item>
+        <item>@drawable/medal</item>
+        <item>@drawable/megaphone</item>
+        <item>@drawable/microscope</item>
+        <item>@drawable/money_bag</item>
+        <item>@drawable/mortarboard</item>
+        <item>@drawable/mountain</item>
+        <item>@drawable/organization</item>
+        <item>@drawable/paper_plane</item>
+        <item>@drawable/piggy_bank</item>
+        <item>@drawable/pointer</item>
+        <item>@drawable/rocket</item>
+        <item>@drawable/smartphone</item>
+        <item>@drawable/smartphone_1</item>
+        <item>@drawable/speedometer</item>
+        <item>@drawable/store</item>
+        <item>@drawable/suitcase</item>
+        <item>@drawable/target</item>
+        <item>@drawable/team</item>
+        <item>@drawable/telescope</item>
+        <item>@drawable/tie</item>
+        <item>@drawable/trophy</item>
+        <item>@drawable/ufo</item>
+        <item>@drawable/website</item>
+    </integer-array>
+</resources>

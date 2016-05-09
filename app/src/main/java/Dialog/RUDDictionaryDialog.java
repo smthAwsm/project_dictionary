@@ -35,8 +35,9 @@ public class RUDDictionaryDialog extends DialogFragment {
                 {
                     android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
                     builder.setTitle(getString(R.string.new_dic_title));
-
+                    final Dictionary editDictionary = Dictionary.findById(Dictionary.class,dictionaryID);
                     final EditText input = new EditText(getActivity());
+                    input.setText(editDictionary.getName());
                     input.setInputType(InputType.TYPE_CLASS_TEXT);
                     builder.setView(input);
 
@@ -44,7 +45,7 @@ public class RUDDictionaryDialog extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String dictionaryName = input.getText().toString();
-                            Dictionary editDictionary = Dictionary.findById(Dictionary.class,dictionaryID);
+
                             editDictionary.setDictionaryName(dictionaryName);
                             editDictionary.save();
 

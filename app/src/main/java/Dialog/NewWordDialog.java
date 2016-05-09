@@ -48,6 +48,7 @@ public class NewWordDialog extends DialogFragment {
 
         //getDialog().setTitle("New topic");
         Bundle bundle = getArguments();
+        final Word editWord;
         try {
             edit = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
             wordID = bundle.getLong(Tags.WORD_VALUE_TAG);
@@ -55,16 +56,19 @@ public class NewWordDialog extends DialogFragment {
             edit = false;
             wordID = 0;
         }
-
-
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         final View topicDialog = inflater.inflate(R.layout.dialog_word_add,null);
 
         okButton = (TextView) topicDialog.findViewById(R.id.newWordOK);
         cancelButton = (TextView) topicDialog.findViewById(R.id.newWordCancel);
-
         valueTextBox = (EditText) topicDialog.findViewById(R.id.wordTextBox);
         translationTextBox = (EditText) topicDialog.findViewById(R.id.translationTextBox);
+
+        if(edit) {
+            editWord = Word.findById(Word.class, wordID);
+            valueTextBox.setText(editWord.getValue());
+            translationTextBox.setText(editWord.getTranslation());
+        } else editWord = new Word();
 
         InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
@@ -87,7 +91,6 @@ public class NewWordDialog extends DialogFragment {
                         if(!edit)
                         new Word(WordsActivity.currentTopicId,valueTextBox.getText().toString(),translationTextBox.getText().toString()).save();
                         if (edit){
-                            Word editWord = Word.findById(Word.class,wordID);
                             editWord.setValue(valueTextBox.getText().toString());
                             editWord.setTranslation(translationTextBox.getText().toString());
                             editWord.save();
@@ -99,7 +102,6 @@ public class NewWordDialog extends DialogFragment {
                     if (parent instanceof WordsActivity) {
                         WordsActivity _parent = (WordsActivity) parent;
                         _parent.loadAppropriateFragment();
-
                         _parent.wordsInfo = Word.find(Word.class, "topic_ID = ?", WordsActivity.currentTopicId + "");
                         dismiss();
                     }

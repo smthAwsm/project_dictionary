@@ -4,28 +4,17 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
@@ -33,15 +22,11 @@ import com.study.xps.projectdictionary.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.WordsListViewAdapter;
 import Adapters.WordsRecyclingViewAdapter;
-import Dialog.NewWordDialog;
-import Dialog.RUDWordDialog;
 import Dialog.TestStartDialog;
 import Fragments.EmptyFragment;
 import Fragments.WordsListFragment;
-import Models.ActivityDataInterface;
-import Models.Dictionary;
+import Helpers.ActivityDataInterface;
 import Models.Tags;
 import Models.Word;
 
@@ -166,12 +151,12 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     public void updateViewData() {
         shapesColor = getMatColor();
         wordsList = (RecyclerView) findViewById(R.id.wordsRecyclerView);
-        //WordsListViewAdapter wordsListAdapter = new WordsListViewAdapter(this, wordsInfo,shapesColor);
-        //wordsListAdapter.setMatColor();
-        WordsRecyclingViewAdapter viewAdapter = new WordsRecyclingViewAdapter(wordsInfo);
+        WordsRecyclingViewAdapter viewAdapter = new WordsRecyclingViewAdapter(wordsInfo,this,shapesColor);
         wordsList.setAdapter(viewAdapter);
         wordsList.setLayoutManager(new LinearLayoutManager(this));
+        //WordsListViewAdapter wordsListAdapter = new WordsListViewAdapter(this, wordsInfo,shapesColor);
         //((BaseAdapter) wordsList.getAdapter()).notifyDataSetChanged();
+        //wordsListAdapter.setMatColor();
     }
 
     @Override

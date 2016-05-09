@@ -1,35 +1,26 @@
 package activities;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.study.xps.projectdictionary.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.TopicsGridViewAdapter;
-import Dialog.RUDTopicDialog;
+import Adapters.TopicsRecyclingGridViewAdapter;
 import Fragments.EmptyFragment;
 import Fragments.TopicsGridFragment;
-import Models.ActivityDataInterface;
+import Helpers.ActivityDataInterface;
+import Helpers.GridAutoFitLayoutManager;
 import Models.Tags;
 import Models.Topic;
-import Dialog.NewTopicDialog;
 
 /**
  * Created by XPS on 4/12/2016.
@@ -38,7 +29,7 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private GridView topicsGrid;
+    private RecyclerView topicsView;
     private List<Topic> topicsInfo;
     private long currentDictionaryID;
     @Override
@@ -111,9 +102,11 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     }
 
     public void updateViewData(){
-        topicsGrid = (GridView) findViewById(R.id.topicsGridView);
-        topicsGrid.setAdapter(new TopicsGridViewAdapter(this, topicsInfo));
-        ((BaseAdapter)topicsGrid.getAdapter()).notifyDataSetChanged();
+        topicsView = (RecyclerView) findViewById(R.id.topicsRecyclerView);
+        topicsView.setAdapter(new TopicsRecyclingGridViewAdapter(topicsInfo,this));
+        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(this,400);
+        topicsView.setLayoutManager(layoutManager);
+        // ((BaseAdapter) topicsView.getAdapter()).notifyDataSetChanged();
     }
 
     public long getCurrentDictionaryID() {

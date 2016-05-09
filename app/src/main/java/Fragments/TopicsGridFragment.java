@@ -50,34 +50,6 @@ public class TopicsGridFragment extends Fragment {
     }
 
     private void addTopicListListeners(View view){
-        parent = (TopicsActivity)getActivity();
-        topicsGrid = (GridView) view.findViewById(R.id.topicsGridView);
-        final List<Topic> topicsInfo = parent.getActivityData();
-
-        topicsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent topicWordsIntent = new Intent(parent.getContext(), WordsActivity.class);
-                topicWordsIntent.putExtra(Tags.TOPIC_TAG,topicsInfo.get(position).getId() );
-                topicWordsIntent.putExtra(Tags.TOPIC_NAME_TAG,topicsInfo.get(position).getTopicName() );
-                startActivity(topicWordsIntent);
-                Toast.makeText(parent.getContext(),topicsInfo.get(position).getTopicName(),Toast.LENGTH_SHORT);
-            }
-        });
-
-        topicsGrid.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-                RUDTopicDialog rudDialog = new RUDTopicDialog();
-                Bundle bundle = new Bundle();
-                bundle.putLong(Tags.TOPIC_TAG, topicsInfo.get(pos).getId());
-                rudDialog.setArguments(bundle);
-                rudDialog.show(parent.getActivityFragmentManager(),"RUD");
-                Log.d("DIALOG", "TOUCHED" );
-                return true;
-            }
-        });
 
         FloatingActionButton addTopicButton = (FloatingActionButton) view.findViewById(R.id.addTopicFAB);
         addTopicButton.setOnClickListener(new View.OnClickListener() {
