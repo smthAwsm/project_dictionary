@@ -36,7 +36,7 @@ public class Tags {
     //DONE Load data on object editing (Dictionary - name/ Topic - name,image/ Word - value/translation)
 
 
-    //TODO Yandex API for word translation
+    //DONE Yandex API for word translation
     //TODO Input hints
     //TODO Database data load ASYNC
     //TODO Word search
