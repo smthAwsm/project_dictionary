@@ -68,6 +68,7 @@ public class NewWordDialog extends DialogFragment {
     private long wordID;
 
     private boolean edit;
+    private boolean isOnline;
     private RequestQueue requestQueue;
 
 
@@ -78,6 +79,7 @@ public class NewWordDialog extends DialogFragment {
         //getDialog().setTitle("New topic");
         requestQueue = Volley.newRequestQueue(getActivity());
         Bundle bundle = getArguments();
+        isOnline = isOnline();
         final Word editWord;
         try {
             edit = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
@@ -108,7 +110,8 @@ public class NewWordDialog extends DialogFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 String translation = getTranslation(s.toString());
-                //Log.i("###### TRANSLATION ", translation);
+                if(translation != null)
+                Log.i("###### TRANSLATION ", translation);
             }
         });
 
@@ -135,7 +138,9 @@ public class NewWordDialog extends DialogFragment {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                WordsActivity parent = (WordsActivity) getActivity();
                 if ((!valueTextBox.getText().toString().equals("")) && (!translationTextBox.getText().toString().equals(""))){
+
                         if(!edit)
                         new Word(WordsActivity.currentTopicId,valueTextBox.getText().toString(),translationTextBox.getText().toString()).save();
                         if (edit){
@@ -143,18 +148,14 @@ public class NewWordDialog extends DialogFragment {
                             editWord.setTranslation(translationTextBox.getText().toString());
                             editWord.save();
                         }
-                }
-                else return;
+                } else return;
 
-                    Activity parent = getActivity();
-                    if (parent instanceof WordsActivity) {
-                        WordsActivity _parent = (WordsActivity) parent;
-                        _parent.loadAppropriateFragment();
-                        _parent.wordsInfo = Word.find(Word.class, "topic_ID = ?", WordsActivity.currentTopicId + "");
+                        parent.updateData();
+                        parent.loadAppropriateFragment();
+                        parent.updateViewData();
                         dismiss();
                     }
-                }
-        });
+                });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +163,6 @@ public class NewWordDialog extends DialogFragment {
                 dismiss();
             }
         });
-
         return topicDialog;
     }
 
@@ -178,27 +178,28 @@ public class NewWordDialog extends DialogFragment {
     private String getTranslation(String word){
         String result;
         String restURL;
-    try {
-        String fromLan = Language.UKRAINIAN.toString();
-        String toLan   = Language.ENGLISH  .toString();
 
-        restURL = SERVICE_URL + PARAM_API_KEY + URLEncoder.encode(API_KEY,ENCODING)
-                + PARAM_LANG_PAIR + URLEncoder.encode(fromLan,ENCODING) + URLEncoder.encode("-",ENCODING)
-                + URLEncoder.encode(toLan,ENCODING)
-                + PARAM_TEXT + URLEncoder.encode(word,ENCODING);
-        Log.i("REQUEST URL ", restURL);
-    }
-    catch (UnsupportedEncodingException e) {
+        if (isOnline){
+            try {
+                String fromLan = Language.UKRAINIAN.toString();
+                String toLan   = Language.ENGLISH  .toString();
 
-        e.printStackTrace();
-        return null;
-    }
-          if (isOnline())
-          result = fetchJsonResponse(restURL);
-          else {
-              //Toast.makeText(getActivity(),"OFFLINE", Toast.LENGTH_SHORT).show();
-                result = null;
-          }
+                restURL = SERVICE_URL + PARAM_API_KEY + URLEncoder.encode(API_KEY,ENCODING)
+                        + PARAM_LANG_PAIR + URLEncoder.encode(fromLan,ENCODING) + URLEncoder.encode("-",ENCODING)
+                        + URLEncoder.encode(toLan,ENCODING)
+                        + PARAM_TEXT + URLEncoder.encode(word,ENCODING);
+                Log.i("REQUEST URL ", restURL);
+                }
+                catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            result = fetchJsonResponse(restURL);
+        }
+        else {
+            //Toast.makeText(getActivity(),"OFFLINE", Toast.LENGTH_SHORT).show();
+            result = null;
+        }
        return result;
     }
 
@@ -217,7 +218,7 @@ public void onResponse(JSONObject response) {
         translation[0] = result.replaceAll("[\\[\\]\"]","");
             Log.i("###### TRANSLATION ", translation[0]);
 
-            if(translation[0] != ""){
+            if(translation[0] != null){
             ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,translation);
             translationTextBox.setAdapter(adapter);
             translationTextBox.setThreshold(1);

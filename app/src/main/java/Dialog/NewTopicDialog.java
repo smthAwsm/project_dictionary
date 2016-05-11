@@ -72,6 +72,7 @@ public class NewTopicDialog extends DialogFragment {
         if(update){
             editTopic = Topic.findById(Topic.class,topicID);
             topicImage.setImageResource((int)editTopic.getImageRecourceID());
+            topicImage.setTag(editTopic.getImageRecourceID());
             topicName.setText(editTopic.getTopicName());
         } else  editTopic = new Topic();
 
@@ -100,10 +101,10 @@ public class NewTopicDialog extends DialogFragment {
                         editTopic.setImageRecourceID((Integer)topicImage.getTag());
                         editTopic.save();
                      }
-
-                        parent.loadAppropriateFragment();
                         parent.updateData();
-                        dismiss();
+                        parent.loadAppropriateFragment();
+                        parent.updateViewData();
+                    dismiss();
                     }
                 }
             }

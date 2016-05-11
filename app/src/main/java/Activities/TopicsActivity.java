@@ -32,30 +32,23 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     private RecyclerView topicsView;
     private List<Topic> topicsInfo;
     private long currentDictionaryID;
+    private TopicsGridFragment topicsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container_layout);
-
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(getString(R.string.topics_title));
-        currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
 
+        topicsInfo = new ArrayList<Topic>();
+        currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
         fragmentManager = getFragmentManager();
         updateData();
-        //topicsInfo = Topic.listAll(Topic.class);
         loadAppropriateFragment();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
-        //if(f != null && f instanceof TopicsGridFragment)
-           //   updateViewData();
-    }
     public void loadAppropriateFragment(){
-
         if(topicsInfo.isEmpty()) {
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof TopicsGridFragment){
@@ -76,37 +69,37 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         else {
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof EmptyFragment){
-                TopicsGridFragment topicsFragment = new TopicsGridFragment();
+                if (topicsFragment == null)
+                    topicsFragment = new TopicsGridFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.mainFragmentContainer,topicsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
             if(f == null ){
-                TopicsGridFragment topicsFragment = new TopicsGridFragment();
+                topicsFragment = new TopicsGridFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.mainFragmentContainer,topicsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
         }
-        startActivity(new Intent(TopicsActivity.this, TransparentActivity.class));
     }
 
     public void updateData(){
         try {
-        topicsInfo = Topic.find(Topic.class, "dictionary_ID = "+currentDictionaryID +"");
+        //topicsInfo = Topic.listAll(Topic.class);
+        List <Topic> topicsFound = Topic.find(Topic.class, "dictionary_ID = "+currentDictionaryID +"");
+        topicsInfo.clear();
+        topicsInfo.addAll(topicsFound);
     } catch (Exception e){
         topicsInfo = new ArrayList<Topic>();
         }
     }
 
     public void updateViewData(){
-        topicsView = (RecyclerView) findViewById(R.id.topicsRecyclerView);
-        topicsView.setAdapter(new TopicsRecyclingGridViewAdapter(topicsInfo,this));
-        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(this,400);
-        topicsView.setLayoutManager(layoutManager);
-        // ((BaseAdapter) topicsView.getAdapter()).notifyDataSetChanged();
+        if(topicsFragment != null)
+        topicsFragment.getAdapter().notifyDataSetChanged();
     }
 
     public long getCurrentDictionaryID() {

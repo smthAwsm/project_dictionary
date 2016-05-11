@@ -44,16 +44,12 @@ public class RUDWordDialog extends DialogFragment {
                     Word editWord = Word.findById(Word.class,wordID);
                     editWord.delete();
 
-
-                    Activity parent = getActivity();
-                    if (parent instanceof WordsActivity) {
-                        WordsActivity _parent = (WordsActivity) parent;
-                        _parent.loadAppropriateFragment();
-
-                        _parent.wordsInfo = Word.find(Word.class, "topic_ID = ?", WordsActivity.currentTopicId + "");
+                        WordsActivity parent = (WordsActivity) getActivity();
+                        parent.updateData();
+                        parent.loadAppropriateFragment();
+                        parent.updateViewData();
                         dismiss();
                     }
-                }
             }
         });
         return  builder.create();

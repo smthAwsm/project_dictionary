@@ -35,12 +35,10 @@ import Models.Word;
  */
 public class WordsActivity extends AppCompatActivity implements ActivityDataInterface {
 
-
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    private RecyclerView wordsList;
-    private int[] shapesColor;
-    public static List<Word> wordsInfo;
+    WordsListFragment wordsFragment;
+    public static List<Word> wordsInfo = new ArrayList<Word>();;
 
     public static long currentTopicId;
     private String currentTopicName;
@@ -49,33 +47,15 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container_layout);
-
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setTitle(currentTopicName);
+
         currentTopicId = getIntent().getLongExtra(Tags.TOPIC_TAG,0);
         currentTopicName = getIntent().getStringExtra(Tags.TOPIC_NAME_TAG);
-        supportActionBar.setTitle(currentTopicName);
-        Log.e("QWER",currentTopicId + "");
-
+        Log.e("TOPIC ID ",currentTopicId + "");
         fragmentManager = getFragmentManager();
-
-        //wordsInfo = new ArrayList<Word>();
-        //for (int i = 0; i < 15; i++ )
-        //wordsInfo.add(new Word(,"ггг","gtgt"));
-
-        //Word.deleteAll(Word.class);
-
         updateData();
         loadAppropriateFragment();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
-
-        //if(f != null && f instanceof WordsListFragment)
-        //     updateViewData();
     }
 
     @Override
@@ -122,41 +102,39 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         else {
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof EmptyFragment){
-                WordsListFragment wordsFragment = new WordsListFragment();
+                if (wordsFragment == null)
+                    wordsFragment = new WordsListFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.mainFragmentContainer,wordsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
             if(f == null ){
-                WordsListFragment wordsFragment = new WordsListFragment();
+                wordsFragment = new WordsListFragment();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.mainFragmentContainer,wordsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
-            startActivity(new Intent(WordsActivity.this, TransparentActivity.class));
         }
     }
 
     @Override
     public void updateData() {
         try {
-            wordsInfo = Word.find(Word.class, "topic_ID = "+currentTopicId +"");
+            //Word.deleteAll(Word.class);
+            List<Word> wordsFound = Word.find(Word.class, "topic_ID = "+currentTopicId +"");
+            wordsInfo.clear();
+            wordsInfo.addAll(wordsFound);
         } catch (Exception e){
             wordsInfo = new ArrayList<Word>();
         }
     }
+
     @Override
     public void updateViewData() {
-        shapesColor = getMatColor();
-        wordsList = (RecyclerView) findViewById(R.id.wordsRecyclerView);
-        WordsRecyclingViewAdapter viewAdapter = new WordsRecyclingViewAdapter(wordsInfo,this,shapesColor);
-        wordsList.setAdapter(viewAdapter);
-        wordsList.setLayoutManager(new LinearLayoutManager(this));
-        //WordsListViewAdapter wordsListAdapter = new WordsListViewAdapter(this, wordsInfo,shapesColor);
-        //((BaseAdapter) wordsList.getAdapter()).notifyDataSetChanged();
-        //wordsListAdapter.setMatColor();
+        if(wordsFragment != null)
+        wordsFragment.getAdapter().notifyDataSetChanged();
     }
 
     @Override
@@ -166,33 +144,5 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     @Override
     public FragmentManager getActivityFragmentManager() {
         return fragmentManager;
-    }
-
-    private int[] getMatColor()
-    {
-        int[] returnColor = new int[]{ Color.BLACK };
-        int arrayId = getResources().getIdentifier("mdcolors" , "array", getPackageName());
-
-        if (arrayId != 0)
-        {
-            //if (shapesColor == null){
-            returnColor = new int[wordsInfo.size()+1];
-            TypedArray colors = getResources().obtainTypedArray(arrayId);
-            for (int i = 0; i < wordsInfo.size()+1; i++){
-                int index = (int) (Math.random() * colors.length());
-                returnColor[i] = colors.getColor(index, Color.BLACK);
-            //}
-            //colors.recycle();
-       }
-// else {
-//                returnColor = new int[wordsInfo.size()];
-//                TypedArray colors = getResources().obtainTypedArray(arrayId);
-//                for (int i = 0; i < wordsInfo.size() - shapesColor.length; i++){
-//                    int index = (int) (Math.random() * colors.length());
-//                    returnColor[shapesColor.length + i] = colors.getColor(index, Color.BLACK);
-//                }
-//            }
-        }
-        return returnColor;
     }
 }

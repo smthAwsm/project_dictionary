@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,10 @@ import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
+import Adapters.TopicsRecyclingGridViewAdapter;
 import Dialog.NewTopicDialog;
 import Dialog.RUDTopicDialog;
+import Helpers.GridAutoFitLayoutManager;
 import Models.Tags;
 import Models.Topic;
 import activities.DictionariesActivity;
@@ -33,9 +36,10 @@ import activities.WordsActivity;
  */
 public class TopicsGridFragment extends Fragment {
 
-    GridView topicsGrid;
-    TopicsActivity parent;
-
+    private GridView topicsGrid;
+    private TopicsActivity parent;
+    private TopicsRecyclingGridViewAdapter adapter;
+    private RecyclerView topicsView;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -45,7 +49,15 @@ public class TopicsGridFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_topic_list, container, false);
+        parent = (TopicsActivity) getActivity();
         addTopicListListeners(view);
+
+        adapter = new TopicsRecyclingGridViewAdapter(parent.getActivityData(), parent);
+        topicsView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
+        topicsView.setAdapter(adapter);
+        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(parent, 400);
+        topicsView.setLayoutManager(layoutManager);
+
         return view;
     }
 
@@ -63,5 +75,9 @@ public class TopicsGridFragment extends Fragment {
     private void createTopicDialog() {
         DialogFragment topicDialog = new NewTopicDialog();
         topicDialog.show(getFragmentManager(), Tags.NEW_TOPIC_DIALOG);
+    }
+
+    public TopicsRecyclingGridViewAdapter getAdapter() {
+        return adapter;
     }
 }

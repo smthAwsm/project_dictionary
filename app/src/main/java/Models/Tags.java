@@ -25,7 +25,7 @@ public class Tags {
     //DONE Change graphics to SVG
     //DONE Volume up in reading (volume is max)
     //DONE Topics number calculation
-    //DONE Denie not English words in NewWordDialog -> Translation
+    //TODO Denie not English words in NewWordDialog -> Translation
     //DONE Image storing as values array
     //DONE Image loading (for topics) do Async !!!!
     //TODO Test deleting/editing Dictionaries/Topics/Word for appropriate fragment behavior
@@ -35,13 +35,13 @@ public class Tags {
     //DONE Attach FloatingButton to ListView (ListView -> RecyclerView)
     //DONE Load data on object editing (Dictionary - name/ Topic - name,image/ Word - value/translation)
 
+    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
 
     //DONE Yandex API for word translation
     //TODO Input hints
     //TODO Database data load ASYNC
     //TODO Word search
     //TODO Testing TESTING/WRITING calculate results
-    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
     //TODO Settings to change current dictionary
     //TODO Create first start quick guide
 

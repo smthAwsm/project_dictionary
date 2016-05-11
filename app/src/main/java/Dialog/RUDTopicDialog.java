@@ -40,7 +40,6 @@ public class RUDTopicDialog extends DialogFragment {
                     bundle.putBoolean(Tags.TOPIC_NAME_TAG,true);
                     bundle.putLong(Tags.TOPIC_TAG,topicID);
                     topicDialog.setArguments(bundle);
-
                     topicDialog.show(getFragmentManager(), Tags.NEW_TOPIC_DIALOG);
                 }
 
@@ -50,15 +49,13 @@ public class RUDTopicDialog extends DialogFragment {
                     editTopic.delete();
                     //TODO implement word deletting
 
-                    Activity parent = getActivity();
-                    if (parent instanceof TopicsActivity) {
-                        TopicsActivity _parent = (TopicsActivity) parent;
-                        _parent.loadAppropriateFragment();
-                        _parent.updateData();
+                    TopicsActivity parent = (TopicsActivity) getActivity();
+                        parent.updateData();
+                        parent.loadAppropriateFragment();
+                        parent.updateViewData();
                         dismiss();
                     }
                 }
-            }
         });
         return  builder.create();
     }

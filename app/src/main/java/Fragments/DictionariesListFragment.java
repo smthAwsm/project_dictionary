@@ -103,8 +103,8 @@ public class DictionariesListFragment extends ListFragment {
                 newDictionary.save();
 
                 parent.updateData();
-                parent.updateViewData();
                 parent.loadAppropriateFragment();
+                parent.updateViewData();
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
