@@ -1,6 +1,7 @@
 package Fragments;
 
 import android.app.Fragment;
+import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import activities.TopicsActivity;
 /**
  * Created by XPS on 4/9/2016.
  */
-public class DictionariesListFragment extends Fragment {
+public class DictionariesListFragment extends ListFragment {
     ListView dictionariesList;
     DictionariesActivity parent;
 
@@ -52,16 +53,7 @@ public class DictionariesListFragment extends Fragment {
         parent = (DictionariesActivity)getActivity();
         final List<Dictionary> dictionariesInfo = parent.getActivityData();
 
-        dictionariesList = (ListView) view.findViewById(R.id.dictionariesListView);
-        dictionariesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DictionariesListViewAdapter adapter = (DictionariesListViewAdapter) parent.getAdapter();
-                Intent dictionaryTopicsIntent = new Intent(parent.getContext(), TopicsActivity.class);
-                dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,dictionariesInfo.get(position).getId());
-                startActivity(dictionaryTopicsIntent);
-            }
-        });
+        dictionariesList = (ListView) view.findViewById(android.R.id.list);
 
         dictionariesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -72,7 +64,6 @@ public class DictionariesListFragment extends Fragment {
                 bundle.putLong(Tags.DICTIONARY_TAG, dictionariesInfo.get(pos).getId());
                 rudDialog.setArguments(bundle);
                 rudDialog.show(parent.getActivityFragmentManager(),"RUD");
-                Log.d("DIALOG", "TOUCHED" );
                 return true;
             }
         });
@@ -84,6 +75,15 @@ public class DictionariesListFragment extends Fragment {
                 createDictionaryAlert();
             }
         });
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        parent = (DictionariesActivity)getActivity();
+        final List<Dictionary> dictionariesInfo = parent.getActivityData();
+        Intent dictionaryTopicsIntent = new Intent(parent, TopicsActivity.class);
+        dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,dictionariesInfo.get(position).getId());
+        startActivity(dictionaryTopicsIntent);
     }
 
     private void createDictionaryAlert(){
@@ -103,6 +103,7 @@ public class DictionariesListFragment extends Fragment {
                 newDictionary.save();
 
                 parent.updateData();
+                parent.updateViewData();
                 parent.loadAppropriateFragment();
             }
         });

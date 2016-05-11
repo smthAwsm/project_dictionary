@@ -74,8 +74,8 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         super.onResume();
         Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
 
-        if(f != null && f instanceof WordsListFragment)
-             updateViewData();
+        //if(f != null && f instanceof WordsListFragment)
+        //     updateViewData();
     }
 
     @Override

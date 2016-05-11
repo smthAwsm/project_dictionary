@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
@@ -25,9 +26,9 @@ import Models.Topic;
 public class DictionariesActivity extends AppCompatActivity implements ActivityDataInterface {
 
     private  FragmentManager fragmentManager;
-
     private FragmentTransaction fragmentTransaction;
     private ListView dictionariesList;
+    private DictionariesListViewAdapter adapter;
     private static List<Dictionary> dictionariesInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +46,13 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
     @Override
     protected void onResume() {
         super.onResume();
-        Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
-        if(f != null && f instanceof DictionariesListFragment)
-        updateViewData();
+
+
         }
 
     public void loadAppropriateFragment(){
 
         if(dictionariesInfo.isEmpty()) {
-
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof DictionariesListFragment){
                 EmptyFragment noDictionariesFragments = new EmptyFragment();
@@ -74,29 +73,40 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof EmptyFragment){
                 DictionariesListFragment dictionariesFragment = new DictionariesListFragment();
+                adapter = new DictionariesListViewAdapter(this, dictionariesInfo);
+                dictionariesFragment.setListAdapter(adapter);
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.mainFragmentContainer,dictionariesFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
+
+                if(f != null && f instanceof DictionariesListFragment){
+                    dictionariesList = (ListView) findViewById(android.R.id.list);
+                    adapter = new DictionariesListViewAdapter(this, dictionariesInfo);
+                    dictionariesList.setAdapter(adapter);}
             }
             if(f == null ){
                 DictionariesListFragment dictionariesFragment = new DictionariesListFragment();
+                adapter = new DictionariesListViewAdapter(this, dictionariesInfo);
+                dictionariesFragment.setListAdapter(adapter);
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.add(R.id.mainFragmentContainer,dictionariesFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
                 }
-            startActivity(new Intent(DictionariesActivity.this, TransparentActivity.class));
+            //startActivity(new Intent(DictionariesActivity.this, TransparentActivity.class));
         }
     }
 
     public void updateData(){
             dictionariesInfo = Dictionary.listAll(Dictionary.class);
         }
-    public void updateViewData(){
-        dictionariesList = (ListView) findViewById(R.id.dictionariesListView);
-        dictionariesList.setAdapter(new DictionariesListViewAdapter(this, dictionariesInfo,calculateTopics()));
-        ((BaseAdapter)dictionariesList.getAdapter()).notifyDataSetChanged();
+
+    @Override
+    public  void updateViewData() {
+        adapter.clear();
+        adapter.addAll(dictionariesInfo);
+        adapter.notifyDataSetChanged();
     }
 
     public List<Dictionary> getActivityData(){
@@ -105,17 +115,4 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
     public FragmentManager getActivityFragmentManager() {
         return fragmentManager;
     }
-
-    private List<Long> calculateTopics(){
-        List<Long> topicsNumber = new ArrayList<Long>();
-
-        for (Dictionary dictionary : dictionariesInfo )
-        {
-            long ID = dictionary.getId();
-            long count =  Topic.count(Topic.class,"dictionary_ID = " + ID,null );
-            topicsNumber.add(count);
-        }
-        return topicsNumber;
-    }
-
 }

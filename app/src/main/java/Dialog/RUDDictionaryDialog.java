@@ -24,7 +24,8 @@ public class RUDDictionaryDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final DictionariesActivity parentActivity = (DictionariesActivity) getActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
         Bundle bundle = getArguments();
         dictionaryID = bundle.getLong(Tags.DICTIONARY_TAG);
 
@@ -49,13 +50,10 @@ public class RUDDictionaryDialog extends DialogFragment {
                             editDictionary.setDictionaryName(dictionaryName);
                             editDictionary.save();
 
-                            Activity parent = getActivity();
-                            if (parent instanceof DictionariesActivity) {
-                                DictionariesActivity dialogParent =(DictionariesActivity) parent;
-                                dialogParent.updateData();
+                                parentActivity.updateData();
+                                parentActivity.updateViewData();
                                 dismiss();
-                                dialogParent.loadAppropriateFragment();
-                            }
+                                parentActivity.loadAppropriateFragment();
                         }
                     });
                     builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -72,13 +70,10 @@ public class RUDDictionaryDialog extends DialogFragment {
                     editDictionary.delete();
                     //TODO implement topic/word deletting
 
-                    Activity parent = getActivity();
-                    if (parent instanceof DictionariesActivity) {
-                        DictionariesActivity dialogParent =(DictionariesActivity) parent;
-                        dialogParent.updateData();
-                        dismiss();
-                        dialogParent.loadAppropriateFragment();
-                    }
+                    parentActivity.updateData();
+                    parentActivity.updateViewData();
+                    dismiss();
+                    parentActivity.loadAppropriateFragment();
                 }
 
             }

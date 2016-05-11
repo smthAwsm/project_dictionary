@@ -9,7 +9,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/dictionariesListView"
+        android:id="@android:id/list"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1.31"
         android:layout_alignParentBottom="true"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/ic_add_white"
-        app:layout_anchor="@id/dictionariesListView"
+        app:layout_anchor="@android:id/list"
         app:layout_anchorGravity="bottom|right|end"
         android:layout_margin="20dp"/>
 

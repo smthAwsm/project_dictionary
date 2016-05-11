@@ -51,8 +51,8 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     protected void onResume() {
         super.onResume();
         Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
-        if(f != null && f instanceof TopicsGridFragment)
-              updateViewData();
+        //if(f != null && f instanceof TopicsGridFragment)
+           //   updateViewData();
     }
     public void loadAppropriateFragment(){
 
