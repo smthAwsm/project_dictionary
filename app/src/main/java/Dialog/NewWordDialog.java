@@ -3,6 +3,7 @@ package Dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -68,7 +69,7 @@ public class NewWordDialog extends DialogFragment {
     private long wordID;
 
     private boolean edit;
-    private boolean isOnline;
+    private boolean isOnline = false;
     private RequestQueue requestQueue;
 
 
@@ -79,7 +80,8 @@ public class NewWordDialog extends DialogFragment {
         //getDialog().setTitle("New topic");
         requestQueue = Volley.newRequestQueue(getActivity());
         Bundle bundle = getArguments();
-        isOnline = isOnline();
+        IsOnlineTask onlineStatus = new IsOnlineTask();
+        onlineStatus.execute();
         final Word editWord;
         try {
             edit = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
@@ -174,7 +176,6 @@ public class NewWordDialog extends DialogFragment {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
-
     private String getTranslation(String word){
         String result;
         String restURL;
@@ -197,7 +198,7 @@ public class NewWordDialog extends DialogFragment {
             result = fetchJsonResponse(restURL);
         }
         else {
-            //Toast.makeText(getActivity(),"OFFLINE", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"OFFLINE", Toast.LENGTH_SHORT).show();
             result = null;
         }
        return result;
@@ -238,15 +239,25 @@ public void onErrorResponse(VolleyError error) {
     return translation[0];
 }
 
-    private boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        } catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-        return false;
+    private class IsOnlineTask extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+                int     exitValue = ipProcess.waitFor();
+                return (exitValue == 0);
+            } catch (IOException e)          { e.printStackTrace(); }
+            catch (InterruptedException e) { e.printStackTrace(); }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            isOnline = aBoolean;
+        }
     }
 }
 

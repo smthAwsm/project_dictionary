@@ -33,9 +33,9 @@ import activities.WordsActivity;
  */
 public class WordsListFragment extends Fragment {
 
-    private int[] shapesColor;
     private RecyclerView wordsList;
     private WordsActivity parent;
+    List<Word> wordData;
     private WordsRecyclingViewAdapter viewAdapter;
 
     @Override
@@ -49,11 +49,10 @@ public class WordsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_words_list, container, false);
         parent = (WordsActivity) getActivity();
         addWordViewListeners(view);
-        parent.getActivityData();
+        wordData = parent.getActivityData();
 
-        shapesColor = getMatColor();
         wordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
-        viewAdapter = new WordsRecyclingViewAdapter(parent.getActivityData(),parent,shapesColor);
+        viewAdapter = new WordsRecyclingViewAdapter(wordData,parent);
         wordsList.setAdapter(viewAdapter);
         wordsList.setLayoutManager(new LinearLayoutManager(parent));
 
@@ -72,34 +71,6 @@ public class WordsListFragment extends Fragment {
         });
     }
 
-    private int[] getMatColor()
-    {
-        int[] returnColor = new int[]{ Color.BLACK };
-        int arrayId = getResources().getIdentifier("mdcolors" , "array", parent.getPackageName());
-
-        if (arrayId != 0)
-        {
-        int size = parent.getActivityData().size();
-         //if (shapesColor == null){
-            returnColor = new int[size + 1];
-            TypedArray colors = getResources().obtainTypedArray(arrayId);
-            for (int i = 0; i < size + 1; i++){
-                int index = (int) (Math.random() * colors.length());
-                returnColor[i] = colors.getColor(index, Color.BLACK);
-                //}
-                //colors.recycle();
-            }
-// else {
-//                returnColor = new int[wordsInfo.size()];
-//                TypedArray colors = getResources().obtainTypedArray(arrayId);
-//                for (int i = 0; i < wordsInfo.size() - shapesColor.length; i++){
-//                    int index = (int) (Math.random() * colors.length());
-//                    returnColor[shapesColor.length + i] = colors.getColor(index, Color.BLACK);
-//                }
-//            }
-        }
-        return returnColor;
-    }
 
     public WordsRecyclingViewAdapter getAdapter() {
         return viewAdapter;

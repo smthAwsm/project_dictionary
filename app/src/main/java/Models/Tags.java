@@ -26,22 +26,25 @@ public class Tags {
     //DONE Volume up in reading (volume is max)
     //DONE Topics number calculation
     //TODO Denie not English words in NewWordDialog -> Translation
+    //TODO Color generation
+    //DONE Check isOnline ASYNC
+    //TODO Database data load ASYNC
     //DONE Image storing as values array
     //DONE Image loading (for topics) do Async !!!!
-    //TODO Test deleting/editing Dictionaries/Topics/Word for appropriate fragment behavior
-    //TODO After deleting all topics fregment doesnt change
-    //TODO Fix bug with empty topics/words list
+    //DONE Test deleting/editing Dictionaries/Topics/Word for appropriate fragment behavior
+    //DONE After deleting all topics fragment doesnt change
+    //DONE Fix bug with empty topics/words list
     //TODO Fix colors array on words activity
     //DONE Attach FloatingButton to ListView (ListView -> RecyclerView)
     //DONE Load data on object editing (Dictionary - name/ Topic - name,image/ Word - value/translation)
 
-    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
+
 
     //DONE Yandex API for word translation
     //TODO Input hints
-    //TODO Database data load ASYNC
     //TODO Word search
     //TODO Testing TESTING/WRITING calculate results
+    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
     //TODO Settings to change current dictionary
     //TODO Create first start quick guide
 

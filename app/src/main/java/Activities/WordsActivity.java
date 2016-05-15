@@ -38,6 +38,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     WordsListFragment wordsFragment;
+    private RecyclerView wordsView;
     public static List<Word> wordsInfo = new ArrayList<Word>();;
 
     public static long currentTopicId;
@@ -108,6 +109,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 fragmentTransaction.replace(R.id.mainFragmentContainer,wordsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
+                wordsView = (RecyclerView)findViewById(R.id.wordsRecyclerView);
             }
             if(f == null ){
                 wordsFragment = new WordsListFragment();
@@ -115,6 +117,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 fragmentTransaction.add(R.id.mainFragmentContainer,wordsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
+                wordsView = (RecyclerView)findViewById(R.id.wordsRecyclerView);
             }
         }
     }
@@ -133,7 +136,8 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
 
     @Override
     public void updateViewData() {
-        if(wordsFragment != null)
+        if(wordsView != null)
+
         wordsFragment.getAdapter().notifyDataSetChanged();
     }
 

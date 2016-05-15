@@ -36,7 +36,6 @@ import activities.WordsActivity;
  */
 public class TopicsGridFragment extends Fragment {
 
-    private GridView topicsGrid;
     private TopicsActivity parent;
     private TopicsRecyclingGridViewAdapter adapter;
     private RecyclerView topicsView;

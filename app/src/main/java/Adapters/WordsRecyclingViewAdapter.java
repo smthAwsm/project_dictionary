@@ -1,6 +1,8 @@
 package Adapters;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -11,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 
@@ -28,17 +29,18 @@ import activities.WordsActivity;
  */
 public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
-    private List<Word> wordsList;
+    private List<Word> wordData;
     int[] shapeColors;
     TextToSpeech textToSpeech;
     WordsActivity parent;
     Context context;
 
-    public WordsRecyclingViewAdapter(List<Word> wordsList, WordsActivity parent, int[] shapeColors){
-            this.shapeColors = shapeColors;
-            this.wordsList = wordsList;
+    public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent){
+            this.wordData = wordData;
             this.parent = parent;
     }
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,15 +56,8 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Word word = wordsList.get(position);
-
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
+        final Word word = wordData.get(position);
+        shapeColors = getMatColor();
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -99,7 +94,7 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
     @Override
     public int getItemCount() {
-        return wordsList.size();
+        return wordData.size();
     }
 
     private void getTTS(){
@@ -131,5 +126,38 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             translationValue = (TextView) itemView.findViewById(R.id.translationTextView);
         }
 
+    }
+
+    private int[] getMatColor()
+    {
+        int[] returnColor = new int[]{ Color.BLACK };
+        int arrayId = parent.getResources().getIdentifier("mdcolors" , "array", parent.getPackageName());
+
+        if (arrayId != 0)
+        {
+            int size = wordData.size();
+            TypedArray colors = parent.getResources().obtainTypedArray(arrayId);
+
+            if (shapeColors == null){
+                returnColor = new int[size];
+                for (int i = 0; i < size; i++){
+                    int index = (int) (Math.random() * colors.length());
+                    returnColor[i] = colors.getColor(index, Color.BLACK);
+                }
+            }
+            else{
+                int [] temp = new int[size - shapeColors.length];
+                returnColor = new int[size+temp.length];
+
+                for (int i = 0; i < size - shapeColors.length; i++){
+                    int index = (int) (Math.random() * colors.length());
+                    temp[i] = colors.getColor(index, Color.BLACK);
+                }
+
+                System.arraycopy(shapeColors,0, returnColor,0,shapeColors.length);
+                System.arraycopy(temp,0, returnColor,shapeColors.length,temp.length);
+            }
+        }
+        return returnColor;
     }
 }
