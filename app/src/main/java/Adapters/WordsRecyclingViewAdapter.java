@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,6 +31,7 @@ import activities.WordsActivity;
 public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
     private List<Word> wordData;
+    //List<Integer> shapeColors;
     int[] shapeColors;
     TextToSpeech textToSpeech;
     WordsActivity parent;
@@ -40,14 +42,12 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             this.parent = parent;
     }
 
-
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         getTTS();
-
+        shapeColors = getMatColor();
         View wordView = inflater.inflate(R.layout.fragment_words_list_item,parent,false);
         ViewHolder viewHolder = new ViewHolder(wordView);
 
@@ -57,7 +57,6 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Word word = wordData.get(position);
-        shapeColors = getMatColor();
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -73,6 +72,7 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
         holder.sideShape.setBackgroundResource(R.drawable.shape);
         GradientDrawable bgShape = (GradientDrawable) holder.sideShape.getBackground(); //TODO color changing add
+        //bgShape.setColor(shapeColors.get(position));
         bgShape.setColor(shapeColors[position]);
 
         final ImageView pronounceButton = holder.pronounceButton;
@@ -90,7 +90,6 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
          TextView translationValue = holder.translationValue;
          translationValue.setText(word.getTranslation());
     }
-
 
     @Override
     public int getItemCount() {
@@ -114,7 +113,6 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
         public ImageView pronounceButton;
         public TextView wordValue;
 
-
         public TextView translationValue;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -128,9 +126,11 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
     }
 
+    //private List<Integer> getMatColor()
     private int[] getMatColor()
     {
-        int[] returnColor = new int[]{ Color.BLACK };
+        //List<Integer> returnColor = new ArrayList<Integer>();
+        int[] returnColor = new int[wordData.size()];
         int arrayId = parent.getResources().getIdentifier("mdcolors" , "array", parent.getPackageName());
 
         if (arrayId != 0)
@@ -138,25 +138,26 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             int size = wordData.size();
             TypedArray colors = parent.getResources().obtainTypedArray(arrayId);
 
-            if (shapeColors == null){
-                returnColor = new int[size];
-                for (int i = 0; i < size; i++){
+            //if (shapeColors == null){
+               for (int i = 0; i < size; i++){
                     int index = (int) (Math.random() * colors.length());
-                    returnColor[i] = colors.getColor(index, Color.BLACK);
+                    returnColor[i] = index;
+                   //returnColor.add(index);
                 }
-            }
-            else{
-                int [] temp = new int[size - shapeColors.length];
-                returnColor = new int[size+temp.length];
-
-                for (int i = 0; i < size - shapeColors.length; i++){
-                    int index = (int) (Math.random() * colors.length());
-                    temp[i] = colors.getColor(index, Color.BLACK);
-                }
-
-                System.arraycopy(shapeColors,0, returnColor,0,shapeColors.length);
-                System.arraycopy(temp,0, returnColor,shapeColors.length,temp.length);
-            }
+            //}
+//            else{
+//                int diff = size - shapeColors.size();
+//                if(diff !=0 ){
+//                List<Integer> temp  = new ArrayList<Integer>();
+//
+//                for (int i = 0; i < diff; i++){
+//                    int index = (int) (Math.random() * colors.length());
+//                    temp.add(index);
+//                }
+//                returnColor.addAll(shapeColors);
+//                returnColor.addAll(temp);
+//                } else return shapeColors;
+//            }
         }
         return returnColor;
     }
