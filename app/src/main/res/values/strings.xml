@@ -22,4 +22,7 @@
     <string name="testing_advanced">Writing</string>
     <string name="no">NO THANKS</string>
     <string name="more_words">Try adding more words</string>
+    <string name="account_permission">This app needs to access your Google account (via Contacts).</string>
+    <string name="no_play_services">"This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app."</string>
+    <string name="no_inet">Please check your internet connection</string>
 </resources>
