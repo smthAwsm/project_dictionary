@@ -50,11 +50,13 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
 
         final Word word = wordData.get(position);
 
         holder.bindData(word,position);
+
+
 
         final ImageView pronounceButton = holder.pronounceButton;
         pronounceButton.setTag(position);
@@ -99,10 +101,14 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
     public class ViewHolder extends RecyclerView.ViewHolder{
         public View itemView;
         public ImageView pronounceButton;
-        public TextView wordValue;
         public FrameLayout sideShape;
 
+        public TextView wordValue;
         public TextView translationValue;
+
+        private CountingLayoutListener mTranslationLayoutListener;
+        private CountingLayoutListener mWordLayoutListener;
+
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -110,17 +116,130 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             pronounceButton = (ImageView) itemView.findViewById(R.id.pronounceButton);
             wordValue = (TextView) itemView.findViewById(R.id.wordTextView);
             translationValue = (TextView) itemView.findViewById(R.id.translationTextView);
-
             sideShape = (FrameLayout) itemView.findViewById(R.id.sideShape);
+
+            mTranslationLayoutListener = new CountingLayoutListener(translationValue);
+            translationValue.addOnLayoutChangeListener(mTranslationLayoutListener);
+            mWordLayoutListener = new CountingLayoutListener(wordValue,mTranslationLayoutListener);
+            wordValue.addOnLayoutChangeListener(mWordLayoutListener);
         }
 
         public void bindData(Word word,int position){
 
+            wordValue.setText(word.getValue());
+            translationValue.setText(word.getTranslation());
+
             int materialColor = context.getMaterialColor(position);
             sideShape.setBackgroundColor(materialColor);
 
-            wordValue.setText(word.getValue());
-            translationValue.setText(word.getTranslation());
+            //int i = mTranslationLayoutListener.getLineCount();
+            //int m = mTranslationLayoutListener.getLineCount();
+
+
+            //Log.e("********* Word counted","Lines counted"+i);
+            //Log.e("@@@ Translation counted","Lines counted"+m);
+            //wordListener.get
+
+//
+//              //  wordValue.addOnLayoutChangeListener();
+//            //} else {
+//                final int lineCountWord = (wordValue.getLineCount() > 1) ?
+//                        wordValue.getLineCount() : 0;
+//                final int lineCountTranslate = (translationValue.getLineCount() > 1) ?
+//                        translationValue.getLineCount() : 0;
+            }
         }
-    }
+
+
+
+
+//        View.OnLayoutChangeListener wordListener = new View.OnLayoutChangeListener() {
+//
+//
+//            public int getLineCountWord() {
+//                return lineCountWord;
+//            }
+//
+//            public int lineCountWord;
+//
+//            @Override
+//            public void onLayoutChange(final View v, final int left, final int top,
+//                                       final int right, final int bottom, final int oldLeft,
+//                                       final int oldTop, final int oldRight, final int oldBottom) {
+//                //wordValue.removeOnLayoutChangeListener(this);
+//
+//                //lineCountWord = (wordValue.getLineCount() > 1) ?
+//                //        wordValue.getLineCount() : 0;
+//
+////                    final int lineCountTranslate = (translationValue.getLineCount() > 1) ?
+////                            translationValue.getLineCount() : 0;
+//
+////                    CardView cardView = (CardView) itemView.findViewById(R.id.wordCard);
+////                    ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+//
+////                    int additionalValue = (layoutParams.height / 3) * (lineCountWord + lineCountTranslate);
+////                    int height = layoutParams.height + additionalValue;
+////                    layoutParams.height = 0;
+////                    layoutParams.height = height;
+////                    //Log.e("RESULT",layoutParams.height+"");
+////                    Log.e("Word Count",lineCountWord+"");
+////                    Log.e("Translate Count",lineCountTranslate+"");
+//                //cardView.setLayoutParams(layoutParams);
+//            }
+//        };
+
+
+
+//        View.OnLayoutChangeListener translateListener = new View.OnLayoutChangeListener() {
+//            public int lineCountWord;
+//            @Override
+//            public void onLayoutChange(final View v, final int left, final int top,
+//                                       final int right, final int bottom, final int oldLeft,
+//                                       final int oldTop, final int oldRight, final int oldBottom) {
+////                translationValue.removeOnLayoutChangeListener(this);
+////
+////                lineCountWord = (translationValue.getLineCount() > 1) ?
+////                        translationValue.getLineCount() : 0;
+//            }
+//        };
+
+        class CountingLayoutListener implements View.OnLayoutChangeListener{
+
+            private int mLineCount;
+            private TextView mCountedTextView;
+            private CountingLayoutListener mListenerToCheck = null;
+
+            public CountingLayoutListener(TextView textViewValue) {
+                this.mCountedTextView = textViewValue;
+            }
+
+            public CountingLayoutListener(TextView textViewValue,CountingLayoutListener listenerToCheck) {
+                this.mCountedTextView = textViewValue;
+                mListenerToCheck = listenerToCheck;
+            }
+
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,
+                                       int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+
+                //mTranslationTextView.removeOnLayoutChangeListener(this);
+                mLineCount =  mCountedTextView.getLineCount();//(translationValue.getLineCount() > 1) ? translationValue.getLineCount() : 0;
+
+                if(mListenerToCheck != null) {
+                    Log.d("************* COUNTED", "Word count " + mListenerToCheck.getLineCount()
+                                                +"Translate count " + getLineCount());
+                    fitCard();
+                }
+            }
+
+            public int getLineCount() {
+                return mLineCount;
+            }
+            public void fitCard() {
+                Log.e("&&&&&&&&&&&&&&&","CARD FITTED!!!");
+            }
+        }
+
+
 }
+
