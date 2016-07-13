@@ -20,6 +20,10 @@ public class Dictionary extends SugarRecord{
     //private Long id;
     private String dictionaryName;
     private String creationDate;
+    //private Language languageFrom;
+    //private Language TranslationTo;
+
+
 
     public Dictionary(){
 

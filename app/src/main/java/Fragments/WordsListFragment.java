@@ -19,6 +19,7 @@ import android.widget.EditText;
 
 import com.study.xps.projectdictionary.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import Adapters.WordsRecyclingViewAdapter;
@@ -52,7 +53,12 @@ public class WordsListFragment extends Fragment {
         wordData = parent.getActivityData();
 
         wordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
-        viewAdapter = new WordsRecyclingViewAdapter(wordData,parent);
+
+        List<Integer> colors = new ArrayList<>();
+        parent.addMatColor(colors,wordData.size());
+
+        viewAdapter = new WordsRecyclingViewAdapter(wordData,parent,colors);
+        viewAdapter.setHasStableIds(false);
         wordsList.setAdapter(viewAdapter);
         wordsList.setLayoutManager(new LinearLayoutManager(parent));
 

@@ -37,6 +37,11 @@ public class GridAutoFitLayoutManager extends GridLayoutManager
             columnWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48,
                     context.getResources().getDisplayMetrics());
         }
+        else {
+            columnWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, columnWidth,
+                    context.getResources().getDisplayMetrics());
+        }
+
         return columnWidth;
     }
 

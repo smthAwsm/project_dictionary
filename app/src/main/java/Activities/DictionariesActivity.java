@@ -43,6 +43,13 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
         loadAppropriateFragment();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    if(adapter != null)
+        adapter.notifyDataSetChanged();
+    }
+
     public void loadAppropriateFragment(){
 
         if(dictionariesInfo.isEmpty()) {

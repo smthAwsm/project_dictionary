@@ -40,13 +40,12 @@ public class LoginActivity extends AppCompatActivity implements EasyPermissions.
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"TOUCHED",Toast.LENGTH_SHORT).show();
 
-                if(mGoogleDriveHelper == null)
-               mGoogleDriveHelper  = new GoogleDriveHelper(mContext);
-                else mGoogleDriveHelper.callApi();
+//                if(mGoogleDriveHelper == null)
+//                 mGoogleDriveHelper  = new GoogleDriveHelper(mContext);
+//                else mGoogleDriveHelper.callApi();
 
-               // startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
+                startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
             }
         });
     }

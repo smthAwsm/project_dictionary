@@ -37,8 +37,10 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    WordsListFragment wordsFragment;
+    private WordsListFragment wordsFragment;
     private RecyclerView wordsView;
+    private List<Integer> shapeColors;
+
     public static List<Word> wordsInfo = new ArrayList<Word>();;
 
     public static long currentTopicId;
@@ -109,7 +111,6 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 fragmentTransaction.replace(R.id.mainFragmentContainer,wordsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
-                wordsView = (RecyclerView)findViewById(R.id.wordsRecyclerView);
             }
             if(f == null ){
                 wordsFragment = new WordsListFragment();
@@ -117,8 +118,8 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 fragmentTransaction.add(R.id.mainFragmentContainer,wordsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
-                wordsView = (RecyclerView)findViewById(R.id.wordsRecyclerView);
             }
+            wordsView = (RecyclerView)findViewById(R.id.wordsRecyclerView);
         }
     }
 
@@ -148,5 +149,51 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     @Override
     public FragmentManager getActivityFragmentManager() {
         return fragmentManager;
+    }
+
+    public int getMaterialShapeColor(int position){
+
+        if(shapeColors != null && wordsInfo.size() <= shapeColors.size()) {
+            return shapeColors.get(position);
+        } else {
+            if(wordsInfo.size() > 0){
+                if(shapeColors == null)
+                    shapeColors = new ArrayList<>();
+                addMatColor(shapeColors,wordsInfo.size());
+                return shapeColors.get(position);
+            }
+        }
+        return Color.WHITE;
+    }
+
+    public void addMatColor(List<Integer> resultArray, int colorsNumber)
+    {
+        int arrayId = getResources().getIdentifier("mdcolors" , "array", getPackageName());
+
+        if (arrayId != 0)
+        {
+            TypedArray colors = getResources().obtainTypedArray(arrayId);
+
+            if (resultArray.size() ==  0){
+                //resultArray = new ArrayList<>();
+                for (int i = 0; i < colorsNumber; i++){
+                    int index = (int) (Math.random() * colors.length());
+                    resultArray.add(colors.getColor(index, Color.BLACK));
+                }
+            }
+            else {
+                int diff = colorsNumber - resultArray.size();
+                if(diff !=0 ) {
+                    List<Integer> temp  = new ArrayList<Integer>();
+
+                    for (int i = 0; i < diff; i++){
+                        int index = (int) (Math.random() * colors.length());
+                        temp.add(index);
+                    }
+                    resultArray.addAll(temp);
+                }
+            }
+            colors.recycle();
+        }
     }
 }

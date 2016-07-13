@@ -75,7 +75,6 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
                 fragmentTransaction.replace(R.id.mainFragmentContainer,topicsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
-                topicsView = (RecyclerView)findViewById(R.id.topicsRecyclerView);
             }
             if(f == null ){
                 topicsFragment = new TopicsGridFragment();
@@ -83,15 +82,14 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
                 fragmentTransaction.add(R.id.mainFragmentContainer,topicsFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
-                topicsView = (RecyclerView)findViewById(R.id.topicsRecyclerView);
             }
+            topicsView = (RecyclerView)findViewById(R.id.topicsRecyclerView);
         }
     }
 
     public void updateData(){
         try {
-        //topicsInfo = Topic.listAll(Topic.class);
-        List <Topic> topicsFound = Topic.find(Topic.class, "dictionary_ID = "+currentDictionaryID +"");
+        List <Topic> topicsFound = Topic.find(Topic.class, "dictionary_ID = " + currentDictionaryID +"");
         topicsInfo.clear();
         topicsInfo.addAll(topicsFound);
     } catch (Exception e){

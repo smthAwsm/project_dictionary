@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,14 +55,13 @@ public class TopicsGridFragment extends Fragment {
         adapter = new TopicsRecyclingGridViewAdapter(parent.getActivityData(), parent);
         topicsView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
         topicsView.setAdapter(adapter);
-        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(parent, 400);
+        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(parent,200 );
         topicsView.setLayoutManager(layoutManager);
 
         return view;
     }
 
     private void addTopicListListeners(View view){
-
         FloatingActionButton addTopicButton = (FloatingActionButton) view.findViewById(R.id.addTopicFAB);
         addTopicButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -54,15 +54,9 @@ public enum Language {
   TURKISH("tr"),
   UKRAINIAN("uk");
 
-  /**
-   * String representation of this language.
-   */
   private final String language;
 
-  /**
-   * Enum constructor.
-   * @param pLanguage The language identifier.
-   */
+
   private Language(final String pLanguage) {
     language = pLanguage;
   }
@@ -76,10 +70,6 @@ public enum Language {
     return null;
   }
 
-  /**
-   * Returns the String representation of this language.
-   * @return The String representation of this language.
-   */
   @Override
   public String toString() {
     return language;

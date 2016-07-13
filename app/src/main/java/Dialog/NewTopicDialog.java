@@ -90,7 +90,7 @@ public class NewTopicDialog extends DialogFragment {
                             new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),(Integer)topicImage.getTag()).save();
                             else {
                                      editTopic.setTopicName(topicName.getText().toString());
-                                     editTopic.setImageRecourceID((Integer)topicImage.getTag());
+                                     editTopic.setImageRecourceID(Long.parseLong(topicImage.getTag().toString()));
                                      editTopic.save();
                              }
                     } else

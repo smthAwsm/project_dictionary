@@ -44,10 +44,6 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
         return position;
     }
 
-    public String getDictionaryName(int position) {
-        return dictionariesList.get(position).getName();
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();

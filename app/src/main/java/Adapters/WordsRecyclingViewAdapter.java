@@ -31,49 +31,39 @@ import activities.WordsActivity;
 public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
     private List<Word> wordData;
-    //List<Integer> shapeColors;
-    int[] shapeColors;
-    TextToSpeech textToSpeech;
-    WordsActivity parent;
-    Context context;
+    private List<Integer> materialColors;
+    private WordsActivity context;
+    //private Context context;
+    //int[] shapeColors;
 
-    public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent){
+    public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent,List<Integer> materialColors){
             this.wordData = wordData;
-            this.parent = parent;
+            this.context = parent;
+            this.materialColors = materialColors;
+            //context = parent;
+             getTTS();
     }
+
+
+    private TextToSpeech textToSpeech;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
+        //context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        getTTS();
-        shapeColors = getMatColor();
         View wordView = inflater.inflate(R.layout.fragment_words_list_item,parent,false);
         ViewHolder viewHolder = new ViewHolder(wordView);
 
         return viewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Word word = wordData.get(position);
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                RUDWordDialog rudDialog = new RUDWordDialog();
-                Bundle bundle = new Bundle();
-                bundle.putLong(Tags.WORD_TAG, word.getId());
-                rudDialog.setArguments(bundle);
-                rudDialog.show( parent.getActivityFragmentManager(),"RUD");
-                Log.d("DIALOG", "TOUCHED" );
-                return true;
-            }
-        });
 
-        holder.sideShape.setBackgroundResource(R.drawable.shape);
-        GradientDrawable bgShape = (GradientDrawable) holder.sideShape.getBackground(); //TODO color changing add
-        //bgShape.setColor(shapeColors.get(position));
-        bgShape.setColor(shapeColors[position]);
+        final Word word = wordData.get(position);
+
+        holder.bindData(word,Color.BLACK);
 
         final ImageView pronounceButton = holder.pronounceButton;
         pronounceButton.setTag(position);
@@ -85,10 +75,18 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             }
         });
 
-         TextView wordValue = holder.wordValue;
-         wordValue.setText(word.getValue());
-         TextView translationValue = holder.translationValue;
-         translationValue.setText(word.getTranslation());
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                RUDWordDialog rudDialog = new RUDWordDialog();
+                Bundle bundle = new Bundle();
+                bundle.putLong(Tags.WORD_TAG, word.getId());
+                rudDialog.setArguments(bundle);
+                rudDialog.show( context.getActivityFragmentManager(),"RUD");
+                Log.d("DIALOG", "TOUCHED" );
+                return true;
+            }
+        });
     }
 
     @Override
@@ -107,8 +105,8 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
         });
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        View itemView;
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        public View itemView;
         public ImageView sideShape;
         public ImageView pronounceButton;
         public TextView wordValue;
@@ -124,41 +122,15 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             translationValue = (TextView) itemView.findViewById(R.id.translationTextView);
         }
 
-    }
+        public void bindData(Word word,int color){
 
-    //private List<Integer> getMatColor()
-    private int[] getMatColor()
-    {
-        //List<Integer> returnColor = new ArrayList<Integer>();
-        int[] returnColor = new int[wordData.size()];
-        int arrayId = parent.getResources().getIdentifier("mdcolors" , "array", parent.getPackageName());
+            sideShape.setBackgroundResource(R.drawable.shape);
+            GradientDrawable bgShape = (GradientDrawable) sideShape.getBackground();
+            bgShape.setColor(color);
+            bgShape.setColor(Color.BLACK);
 
-        if (arrayId != 0)
-        {
-            int size = wordData.size();
-            TypedArray colors = parent.getResources().obtainTypedArray(arrayId);
-
-            //if (shapeColors == null){
-               for (int i = 0; i < size; i++){
-                    int index = (int) (Math.random() * colors.length());
-                    returnColor[i] = index;
-                   //returnColor.add(index);
-                }
-            //}
-//            else{
-//                int diff = size - shapeColors.size();
-//                if(diff !=0 ){
-//                List<Integer> temp  = new ArrayList<Integer>();
-//
-//                for (int i = 0; i < diff; i++){
-//                    int index = (int) (Math.random() * colors.length());
-//                    temp.add(index);
-//                }
-//                returnColor.addAll(shapeColors);
-//                returnColor.addAll(temp);
-//                } else return shapeColors;
-//            }
+            wordValue.setText(word.getValue());
+            translationValue.setText(word.getTranslation());
         }
-        return returnColor;
     }
 }
