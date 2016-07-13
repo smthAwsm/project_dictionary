@@ -54,10 +54,7 @@ public class WordsListFragment extends Fragment {
 
         wordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
 
-        List<Integer> colors = new ArrayList<>();
-        parent.addMatColor(colors,wordData.size());
-
-        viewAdapter = new WordsRecyclingViewAdapter(wordData,parent,colors);
+        viewAdapter = new WordsRecyclingViewAdapter(wordData,parent);
         viewAdapter.setHasStableIds(false);
         wordsList.setAdapter(viewAdapter);
         wordsList.setLayoutManager(new LinearLayoutManager(parent));

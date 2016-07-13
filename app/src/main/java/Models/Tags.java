@@ -38,6 +38,9 @@ public class Tags {
     //DONE On rename topic crash
     //DONE Fix topics displaying width
     //TODO Fix colors array on words activity
+    //TODO Large word text displaying
+    //TODO Color after new word adding
+    //TODO Colors saving before rotation
     //TODO Color generation
     //TODO Test support on API < 23, fix problems if necessary
     //TODO Appropriate DB deleting

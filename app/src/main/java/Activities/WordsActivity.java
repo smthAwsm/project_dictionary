@@ -151,7 +151,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         return fragmentManager;
     }
 
-    public int getMaterialShapeColor(int position){
+    public int getMaterialColor(int position){
 
         if(shapeColors != null && wordsInfo.size() <= shapeColors.size()) {
             return shapeColors.get(position);
@@ -166,7 +166,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         return Color.WHITE;
     }
 
-    public void addMatColor(List<Integer> resultArray, int colorsNumber)
+    private void addMatColor(List<Integer> resultArray, int colorsNumber)
     {
         int arrayId = getResources().getIdentifier("mdcolors" , "array", getPackageName());
 

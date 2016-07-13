@@ -1,9 +1,5 @@
 package Adapters;
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,15 +29,11 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
     private List<Word> wordData;
     private List<Integer> materialColors;
     private WordsActivity context;
-    //private Context context;
-    //int[] shapeColors;
 
-    public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent,List<Integer> materialColors){
+    public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent){
             this.wordData = wordData;
             this.context = parent;
-            this.materialColors = materialColors;
-            //context = parent;
-             getTTS();
+            getTTS();
     }
 
 
@@ -49,7 +41,6 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View wordView = inflater.inflate(R.layout.fragment_words_list_item,parent,false);
         ViewHolder viewHolder = new ViewHolder(wordView);
@@ -63,7 +54,7 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
         final Word word = wordData.get(position);
 
-        holder.bindData(word,Color.BLACK);
+        holder.bindData(word,position);
 
         final ImageView pronounceButton = holder.pronounceButton;
         pronounceButton.setTag(position);
@@ -107,27 +98,26 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public View itemView;
-        public ImageView sideShape;
         public ImageView pronounceButton;
         public TextView wordValue;
+        public FrameLayout sideShape;
 
         public TextView translationValue;
         public ViewHolder(View itemView) {
             super(itemView);
 
             this.itemView = itemView;
-            sideShape = (ImageView) itemView.findViewById(R.id.word_item_side_shape);
             pronounceButton = (ImageView) itemView.findViewById(R.id.pronounceButton);
             wordValue = (TextView) itemView.findViewById(R.id.wordTextView);
             translationValue = (TextView) itemView.findViewById(R.id.translationTextView);
+
+            sideShape = (FrameLayout) itemView.findViewById(R.id.sideShape);
         }
 
-        public void bindData(Word word,int color){
+        public void bindData(Word word,int position){
 
-            sideShape.setBackgroundResource(R.drawable.shape);
-            GradientDrawable bgShape = (GradientDrawable) sideShape.getBackground();
-            bgShape.setColor(color);
-            bgShape.setColor(Color.BLACK);
+            int materialColor = context.getMaterialColor(position);
+            sideShape.setBackgroundColor(materialColor);
 
             wordValue.setText(word.getValue());
             translationValue.setText(word.getTranslation());
