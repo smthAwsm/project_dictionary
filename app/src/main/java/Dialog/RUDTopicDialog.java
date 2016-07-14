@@ -9,11 +9,17 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
 
+import com.orm.SugarTransactionHelper;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 import com.study.xps.projectdictionary.R;
+
+import java.util.List;
 
 import Models.Dictionary;
 import Models.Tags;
 import Models.Topic;
+import Models.Word;
 import activities.DictionariesActivity;
 import activities.TopicsActivity;
 
@@ -45,9 +51,21 @@ public class RUDTopicDialog extends DialogFragment {
 
                 if( which == 1) {
 
-                    Topic editTopic = Topic.findById(Topic.class, topicID);
-                    editTopic.delete();
-                    //TODO implement word deletting
+                    final Topic editTopic = Topic.findById(Topic.class, topicID);
+
+                    SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
+                        @Override
+                        public void manipulateInTransaction() {
+
+                                List<Word> words = Select.from(Word.class)
+                                        .where(Condition.prop("topic_ID").eq(editTopic.getId()))
+                                        .list();
+                                for (Word word : words)
+                                    word.delete();
+
+                            editTopic.delete();
+                        }
+                    });
 
                     TopicsActivity parent = (TopicsActivity) getActivity();
                         parent.updateData();

@@ -153,8 +153,8 @@ public class NewWordDialog extends DialogFragment {
                 } else return;
 
                         parent.updateData();
-                        parent.loadAppropriateFragment();
-                        parent.updateViewData();
+                        //parent.loadAppropriateFragment();
+                        //parent.updateViewData();
                         dismiss();
                     }
                 });

@@ -7,12 +7,20 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
 
+import com.orm.SugarTransactionHelper;
+import com.orm.query.Condition;
+import com.orm.query.Select;
 import com.study.xps.projectdictionary.R;
+
+import java.util.List;
 
 import Models.Dictionary;
 import Models.Tags;
+import Models.Topic;
+import Models.Word;
 import activities.DictionariesActivity;
 
 /**
@@ -66,9 +74,27 @@ public class RUDDictionaryDialog extends DialogFragment {
                 }
 
                 if( which == 1) {
-                    Dictionary editDictionary = Dictionary.findById(Dictionary.class,dictionaryID);
-                    editDictionary.delete();
-                    //TODO implement topic/word deletting
+                    final Dictionary editDictionary = Dictionary.findById(Dictionary.class,dictionaryID);
+
+                    SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
+                        @Override
+                        public void manipulateInTransaction() {
+
+                            List<Topic> topics = Select.from(Topic.class)
+                                    .where(Condition.prop("dictionary_ID").eq(editDictionary.getId()))
+                                    .list();
+
+                            for (Topic topic : topics){
+                                List<Word> words = Select.from(Word.class)
+                                        .where(Condition.prop("topic_ID").eq(topic.getId()))
+                                        .list();
+                                            for (Word word : words)
+                                                word.delete();
+                                 topic.delete();
+                            }
+                            editDictionary.delete();
+                        }
+                    });
 
                     parentActivity.updateData();
                     parentActivity.updateViewData();

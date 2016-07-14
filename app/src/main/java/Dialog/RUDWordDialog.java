@@ -46,8 +46,8 @@ public class RUDWordDialog extends DialogFragment {
 
                         WordsActivity parent = (WordsActivity) getActivity();
                         parent.updateData();
-                        parent.loadAppropriateFragment();
-                        parent.updateViewData();
+                        //parent.loadAppropriateFragment();
+                        //parent.updateViewData();
                         dismiss();
                     }
             }

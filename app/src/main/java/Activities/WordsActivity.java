@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -60,7 +61,6 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         Log.e("TOPIC ID ",currentTopicId + "");
         fragmentManager = getFragmentManager();
         updateData();
-        loadAppropriateFragment();
     }
 
 
@@ -107,8 +107,8 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     }
 
     //@Override //TODO
-    public void loadAppropriateFragment(){
-
+    public void loadAppropriateFragment(List<Word> dbWords){
+    wordsInfo = dbWords;
         if(wordsInfo.isEmpty()) {
 
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
@@ -150,14 +150,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
 
     @Override
     public void updateData() {
-        try {
-            //Word.deleteAll(Word.class);
-            List<Word> wordsFound = Word.find(Word.class, "topic_ID = "+currentTopicId +"");
-            wordsInfo.clear();
-            wordsInfo.addAll(wordsFound);
-        } catch (Exception e){
-            wordsInfo = new ArrayList<Word>();
-        }
+      new LoadWords().execute(currentTopicId);
     }
 
     @Override
@@ -221,4 +214,36 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
             colors.recycle();
         }
     }
+
+
+    class LoadWords extends AsyncTask<Long,Void,List<Word>> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<Word> doInBackground(Long... params) {
+            try {
+                List<Word> wordsFound = Word.find(Word.class, "topic_ID = "+currentTopicId +"");
+                wordsInfo.clear();
+                wordsInfo.addAll(wordsFound);
+            } catch (Exception e){
+                wordsInfo = new ArrayList<Word>();
+            }
+            return wordsInfo;
+        }
+
+        @Override
+        protected void onPostExecute(List<Word> wordList) {
+            super.onPostExecute(wordList);
+
+            loadAppropriateFragment(wordList);
+            updateViewData();
+        }
+    }
+
+
+
+
 }

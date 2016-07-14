@@ -44,12 +44,12 @@ public class Tags {
     //DONE Color after new word adding
     //DONE Color generation
     //DONE Colors saving before rotation
-    //TODO Database data load ASYNC
+    //DONE Database data load ASYNC
     //TODO Appropriate DB deleting
-    //TODO Crash adding word after rotation (fragment destroyed)
+    //TODO Crash adding word/topic after rotation (fragment destroyed)
+    //TODO Test support on API < 23, fix problems if necessary
     //TODO Fix bottom element size
     //TODO Test large word text displaying after add
-    //TODO Test support on API < 23, fix problems if necessary
 
 
     //DONE Yandex API for word translation
