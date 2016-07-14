@@ -102,7 +102,7 @@ public class NewTopicDialog extends DialogFragment {
                         editTopic.save();
                      }
                         parent.updateData();
-                        parent.loadAppropriateFragment();
+                        //parent.loadAppropriateFragment();
                         parent.updateViewData();
                     dismiss();
                     }

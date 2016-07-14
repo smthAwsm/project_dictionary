@@ -21,6 +21,7 @@ public class Tags {
     public static final String WORD_VALUE_FAKE_3 = "GET_WORD_FAKE_3";
     public static final String WORD_TRANSLATE_TAG= "GET_TRANSLATE";
     public static final String TESTING_TYPE_TAG= "TESTING_TYPE";
+    public static final String MATERIAL_COLORS = "GET_COLORS";
 
     //DONE Change graphics to SVG
     //DONE Volume up in reading (volume is max)
@@ -37,24 +38,28 @@ public class Tags {
     //DONE After adding/deleting topic/word is not updated
     //DONE On rename topic crash
     //DONE Fix topics displaying width
-    //TODO Fix colors array on words activity
-    //TODO Large word text displaying
-    //TODO Color after new word adding
-    //TODO Colors saving before rotation
-    //TODO Color generation
-    //TODO Test support on API < 23, fix problems if necessary
-    //TODO Appropriate DB deleting
+    //DONE Fix colors array on words activity
+    //DONE Large word text displaying
+    //DONE Large word text displaying
+    //DONE Color after new word adding
+    //DONE Color generation
+    //DONE Colors saving before rotation
     //TODO Database data load ASYNC
+    //TODO Appropriate DB deleting
+    //TODO Crash adding word after rotation (fragment destroyed)
+    //TODO Fix bottom element size
+    //TODO Test large word text displaying after add
+    //TODO Test support on API < 23, fix problems if necessary
 
 
     //DONE Yandex API for word translation
     //DONE Input hints
     //TODO Word search
+    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
+    //TODO Create first start quick guide
     //TODO Denie not English words in NewWordDialog -> Translation
     //TODO Testing TESTING/WRITING calculate results
-    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
     //TODO Settings to change current dictionary
-    //TODO Create first start quick guide
 
 
     //TODO To think about multi language fuctionality (More than UKR/RUS -> Eng)

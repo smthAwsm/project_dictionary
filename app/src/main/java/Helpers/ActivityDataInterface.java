@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ActivityDataInterface {
 
-   void loadAppropriateFragment();
+   //void loadAppropriateFragment();
    void updateData();
    void updateViewData();
    List getActivityData();

@@ -51,7 +51,7 @@ public class RUDTopicDialog extends DialogFragment {
 
                     TopicsActivity parent = (TopicsActivity) getActivity();
                         parent.updateData();
-                        parent.loadAppropriateFragment();
+                        //parent.loadAppropriateFragment();
                         parent.updateViewData();
                         dismiss();
                     }

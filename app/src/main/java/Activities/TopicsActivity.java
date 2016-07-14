@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,10 +46,11 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
         fragmentManager = getFragmentManager();
         updateData();
-        loadAppropriateFragment();
+
     }
 
-    public void loadAppropriateFragment(){
+    public void loadAppropriateFragment(List<Topic> dbData){
+        topicsInfo = dbData;
         if(topicsInfo.isEmpty()) {
             Fragment f = fragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof TopicsGridFragment){
@@ -88,13 +90,7 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     }
 
     public void updateData(){
-        try {
-        List <Topic> topicsFound = Topic.find(Topic.class, "dictionary_ID = " + currentDictionaryID +"");
-        topicsInfo.clear();
-        topicsInfo.addAll(topicsFound);
-    } catch (Exception e){
-        topicsInfo = new ArrayList<Topic>();
-        }
+        new LoadTopics().execute(currentDictionaryID);
     }
 
     public void updateViewData(){
@@ -111,5 +107,34 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     }
     public FragmentManager getActivityFragmentManager() {
         return fragmentManager;
+    }
+
+
+    class LoadTopics extends AsyncTask<Long,Void,List<Topic>>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<Topic> doInBackground(Long... params) {
+
+            try {
+                List <Topic> topicsFound = Topic.find(Topic.class, "dictionary_ID = " + currentDictionaryID +"");
+                topicsInfo.clear();
+                topicsInfo.addAll(topicsFound);
+            } catch (Exception e){
+                topicsInfo = new ArrayList<Topic>();
+            }
+            return topicsInfo;
+        }
+
+        @Override
+        protected void onPostExecute(List<Topic> topics) {
+            super.onPostExecute(topics);
+
+            loadAppropriateFragment(topics);
+            updateViewData();
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         loadAppropriateFragment();
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -81,7 +84,29 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+         outState.putSerializable(Tags.MATERIAL_COLORS, (Serializable) shapeColors);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        try{
+            // Get the Bundle Object
+            //Bundle bundleObject = getIntent().getExtras();
+
+            shapeColors = (ArrayList<Integer>) savedInstanceState.getSerializable(Tags.MATERIAL_COLORS);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    //@Override //TODO
     public void loadAppropriateFragment(){
 
         if(wordsInfo.isEmpty()) {
@@ -188,7 +213,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
 
                     for (int i = 0; i < diff; i++){
                         int index = (int) (Math.random() * colors.length());
-                        temp.add(index);
+                        temp.add(colors.getColor(index, Color.BLACK));
                     }
                     resultArray.addAll(temp);
                 }
