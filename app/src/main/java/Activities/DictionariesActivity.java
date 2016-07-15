@@ -1,9 +1,10 @@
 package activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,7 @@ import Models.Topic;
 
 public class DictionariesActivity extends AppCompatActivity implements ActivityDataInterface {
 
-    private  FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private ListView dictionariesList;
     private DictionariesListViewAdapter adapter;
@@ -38,7 +39,7 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
         supportActionBar.setTitle(R.string.vocabularies_title);
 
         //Dictionary.deleteAll(Dictionary.class);
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         updateData();
         loadAppropriateFragment();
     }

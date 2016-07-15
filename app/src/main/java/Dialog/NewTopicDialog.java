@@ -2,7 +2,7 @@ package Dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -31,12 +31,11 @@ import Models.Topic;
 public class NewTopicDialog extends DialogFragment {
 
     private ImageView topicImage;
-    private int imageID = 0;
     private Spinner topicImagesSpinner;
     private Button saveButton;
     private EditText topicName;
-    boolean update;
-    long topicID;
+    private boolean update;
+    private long topicID;
 
 
     @Nullable
@@ -102,8 +101,7 @@ public class NewTopicDialog extends DialogFragment {
                         editTopic.save();
                      }
                         parent.updateData();
-                        //parent.loadAppropriateFragment();
-                        parent.updateViewData();
+                        //parent.updateViewData(); //TODO delete
                     dismiss();
                     }
                 }
@@ -131,8 +129,6 @@ public class NewTopicDialog extends DialogFragment {
     public void setTopicImage(int recourceID){
         topicImage.setImageResource(recourceID);
         topicImage.setTag(recourceID);
-        //imageID = recourceID;
-        //int drawableId = (Integer)myImageView.getTag();
         hideSpinnerDropDown(topicImagesSpinner);
     }
 
@@ -142,7 +138,26 @@ public class NewTopicDialog extends DialogFragment {
             method.setAccessible(true);
             method.invoke(spinner);
         } catch (Exception e) {
-            e.printStackTrace();
+        e.printStackTrace();
+    }
+}
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Tags.TOPIC_IMAGE_RESOURCE,(Integer)topicImage.getTag());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        try {
+            Integer imageResource = savedInstanceState.getInt(Tags.TOPIC_IMAGE_RESOURCE);
+            topicImage.setImageResource(imageResource);
+            topicImage.setTag(imageResource);
+        } catch (NullPointerException e){
+
         }
+
     }
 }

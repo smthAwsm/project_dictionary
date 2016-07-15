@@ -1,13 +1,12 @@
 package Dialog;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.InputType;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.orm.SugarTransactionHelper;

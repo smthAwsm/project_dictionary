@@ -1,17 +1,14 @@
 package activities;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +22,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import Adapters.WordsRecyclingViewAdapter;
 import Dialog.TestStartDialog;
 import Fragments.EmptyFragment;
 import Fragments.WordsListFragment;
@@ -59,7 +55,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         currentTopicId = getIntent().getLongExtra(Tags.TOPIC_TAG,0);
         currentTopicName = getIntent().getStringExtra(Tags.TOPIC_NAME_TAG);
         Log.e("TOPIC ID ",currentTopicId + "");
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         updateData();
     }
 
@@ -77,8 +73,9 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
             case R.id.action_test:
                 if (wordsInfo.size() > 8){
                 DialogFragment testDialog = new TestStartDialog();
-                testDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);}
-                else Toast.makeText(getApplicationContext(),getString(R.string.more_words),Toast.LENGTH_SHORT).show();
+                testDialog.show(getSupportFragmentManager(), Tags.NEW_WORD_DIALOG);}
+                else Toast.makeText(getApplicationContext(),
+                                    getString(R.string.more_words),Toast.LENGTH_SHORT).show();
                     return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -89,6 +86,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
          outState.putSerializable(Tags.MATERIAL_COLORS, (Serializable) shapeColors);
+         getSupportFragmentManager().putFragment(outState,Tags.WORDS_FRAGMENT,wordsFragment);
     }
 
     @Override
@@ -96,10 +94,10 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         super.onRestoreInstanceState(savedInstanceState);
 
         try{
-            // Get the Bundle Object
-            //Bundle bundleObject = getIntent().getExtras();
-
-            shapeColors = (ArrayList<Integer>) savedInstanceState.getSerializable(Tags.MATERIAL_COLORS);
+            shapeColors = (ArrayList<Integer>) savedInstanceState
+                                    .getSerializable(Tags.MATERIAL_COLORS);
+            wordsFragment = (WordsListFragment) getSupportFragmentManager()
+                                .getFragment(savedInstanceState,Tags.WORDS_FRAGMENT);
         } catch(Exception e){
             e.printStackTrace();
         }

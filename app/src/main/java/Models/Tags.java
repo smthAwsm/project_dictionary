@@ -22,6 +22,8 @@ public class Tags {
     public static final String WORD_TRANSLATE_TAG= "GET_TRANSLATE";
     public static final String TESTING_TYPE_TAG= "TESTING_TYPE";
     public static final String MATERIAL_COLORS = "GET_COLORS";
+    public static final String WORDS_FRAGMENT = "GET_WORDS_FRAGMENT";
+    public static final String TOPIC_IMAGE_RESOURCE = "GET_IMAGE_RESOURCE";
 
     //DONE Change graphics to SVG
     //DONE Volume up in reading (volume is max)
@@ -45,8 +47,10 @@ public class Tags {
     //DONE Color generation
     //DONE Colors saving before rotation
     //DONE Database data load ASYNC
-    //TODO Appropriate DB deleting
-    //TODO Crash adding word/topic after rotation (fragment destroyed)
+    //DONE Appropriate DB deleting
+    //DONE Crash adding word after rotation (fragment destroyed)
+    //DONE Image reseting after rotation Create Topic
+    //TODO Vocabulary list cleaned after rotation
     //TODO Test support on API < 23, fix problems if necessary
     //TODO Fix bottom element size
     //TODO Test large word text displaying after add

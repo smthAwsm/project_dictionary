@@ -1,13 +1,15 @@
 package Fragments;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
+
+
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,7 +71,8 @@ public class WordsListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment wordDialog = new NewWordDialog();
-                wordDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
+                //wordDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
+                wordDialog.show(getFragmentManager(),Tags.NEW_WORD_DIALOG);
             }
         });
     }

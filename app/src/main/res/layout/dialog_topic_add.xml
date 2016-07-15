@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/ic_star" />
+        android:src="@drawable/ic_star"/>
 
     <Button
         android:layout_width="wrap_content"

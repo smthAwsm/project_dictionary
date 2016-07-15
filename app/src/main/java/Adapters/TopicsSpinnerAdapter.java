@@ -28,7 +28,6 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     List<Integer> integers;
 
     public TopicsSpinnerAdapter(Context context, NewTopicDialog newTopicDialog,List<String> objects) {
-        //super(context, textViewResourceId, objects);
         this.context=context;
         spinnerObject = objects;
         dialog = newTopicDialog;
@@ -87,7 +86,6 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
         imagesGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
                 dialog.setTopicImage(integers.get(pos));
-
             }
         });
 
@@ -116,4 +114,6 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
             recources.recycle();
         }
     }
+
+
 }
