@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import com.study.xps.projectdictionary.R;
 
@@ -47,8 +49,23 @@ public class TopicsGridFragment extends Fragment {
         adapter = new TopicsRecyclingGridViewAdapter(parent.getActivityData(), parent);
         topicsView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
         topicsView.setAdapter(adapter);
-        GridAutoFitLayoutManager layoutManager = new GridAutoFitLayoutManager(parent,200 );
+
+        final GridLayoutManager layoutManager = new GridLayoutManager(parent,1);
         topicsView.setLayoutManager(layoutManager);
+
+        topicsView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        topicsView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        int viewWidth = topicsView.getMeasuredWidth();
+                        float cardViewWidth = getActivity().getResources().getDimension(R.dimen.card_width);
+                        int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
+
+                        layoutManager.setSpanCount(newSpanCount);
+                        layoutManager.requestLayout();
+                    }
+                });
 
         return view;
     }

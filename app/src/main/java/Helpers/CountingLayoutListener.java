@@ -35,8 +35,7 @@ public class CountingLayoutListener implements View.OnLayoutChangeListener{
             values[1] = -1;
         }
 
-        mLineCount =  mCountedTextView.getLineCount();//(translationValue.getLineCount() > 1) ? translationValue.getLineCount() : 0;
-
+        mLineCount =  mCountedTextView.getLineCount();
 
         if (values[0] == -1){
             values[0] = mLineCount;
@@ -45,7 +44,6 @@ public class CountingLayoutListener implements View.OnLayoutChangeListener{
         }
 
         if (values[0] != -1 && values[1] != -1){
-            Log.d("************* COUNTED","VALUE 1 count " + values[0]+  " VALUE 2 count " + values[1]);
             fitCard(mCardView);
         }
     }
@@ -54,12 +52,11 @@ public class CountingLayoutListener implements View.OnLayoutChangeListener{
 
         ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
 
-        int additionalValue = (400 / 3) * (values[0] + values[1]);
-        int height = 100 + additionalValue;
-        layoutParams.height = 0;
-        layoutParams.height = height;
+        int mTextSize = (int) mCountedTextView.getTextSize();
+
+        int additionalValue = (mTextSize) * (values[0] + values[1] + 3);
+        layoutParams.height = additionalValue;
         Log.e("RESULT",layoutParams.height+"");
         cardView.setLayoutParams(layoutParams);
-        Log.e("&&&&&&&&&&&&&&&","CARD FITTED!!!");
     }
 }

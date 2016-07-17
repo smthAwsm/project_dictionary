@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import Models.Dictionary;
 /**
  * Created by XPS on 4/9/2016.
  */
-public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
+public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> implements Serializable {
 
     Context context;
     List<Dictionary> dictionariesList;
@@ -72,4 +73,8 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
         TextView dateTextView;
         TextView topicsNumberTextView;
     }
+
+
+
+
 }

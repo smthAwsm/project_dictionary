@@ -23,11 +23,13 @@ public class TopicImagesGridViewAdapter extends BaseAdapter {
     Context context;
     List<Integer> imagesList;
     LayoutInflater inflater;
+    Holder holder;
 
     public TopicImagesGridViewAdapter(Context context, List<Integer> imagesID){
         this.context = context;
         imagesList = imagesID;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        holder = new Holder();
     }
 
     @Override
@@ -47,7 +49,6 @@ public class TopicImagesGridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Holder holder = new Holder();
         View gridViewItem = inflater.inflate(R.layout.dialog_topic_child_grid_item,null);
 
         holder.topicImage = (ImageView) gridViewItem.findViewById(R.id.childGridItemImage);

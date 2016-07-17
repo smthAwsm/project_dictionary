@@ -26,47 +26,54 @@
                </FrameLayout>
 
                <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Medium Text"
-                android:id="@+id/wordTextView"
-                android:layout_above="@+id/word_item_separator"
-                android:layout_toEndOf="@+id/sideShape"
-                android:layout_toStartOf="@+id/pronounceButton"
-                android:layout_margin="5dp"
-                android:ellipsize="end"
-                android:maxLines="5"/>
+                   android:id="@+id/wordTextView"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textAppearance="?android:attr/textAppearanceLarge"
+                   android:text="Medium Text"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginTop="10dp"
+                   android:ellipsize="end"
+                   android:maxLines="5"
+                   android:layout_alignParentTop="true"
+                   android:layout_toRightOf="@+id/sideShape"
+                   android:layout_toEndOf="@+id/sideShape" />
 
                <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/word_item_separator"
-                android:src="@drawable/separator"
-                android:layout_toEndOf="@+id/sideShape"
-                android:layout_toStartOf="@+id/pronounceButton"
-                android:layout_centerVertical="true"/>
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/word_item_separator"
+                   android:src="@drawable/separator"
+                   android:layout_below="@+id/wordTextView"
+                   android:layout_alignLeft="@+id/wordTextView"
+                   android:layout_alignStart="@+id/wordTextView"
+                   android:layout_toLeftOf="@+id/pronounceButton"
+                   android:layout_marginTop="10dp"
+                   android:layout_marginBottom="10dp"/>
 
                <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Medium Text"
-                android:id="@+id/translationTextView"
-                android:layout_below="@+id/word_item_separator"
-                android:layout_toEndOf="@+id/sideShape"
-                android:layout_toStartOf="@+id/pronounceButton"
-                android:layout_margin="5dp"/>
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textAppearance="?android:attr/textAppearanceLarge"
+                   android:text="Medium Text"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginBottom="10dp"
+                   android:id="@+id/translationTextView"
+                   android:layout_below="@+id/word_item_separator"
+                   android:layout_toRightOf="@+id/sideShape"
+                   android:layout_toEndOf="@+id/sideShape" />
 
 
                <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:id="@+id/pronounceButton"
-                android:src="@drawable/ic_hearing"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true" />
+                   android:layout_width="50dp"
+                   android:layout_height="50dp"
+                   android:id="@+id/pronounceButton"
+                   android:src="@drawable/ic_hearing"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignParentEnd="true" />
            </RelativeLayout>
 
     </android.support.v7.widget.CardView>

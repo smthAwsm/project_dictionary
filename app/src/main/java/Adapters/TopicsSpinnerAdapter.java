@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -62,12 +63,9 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        TextView label=(TextView)convertView;
-
         if (convertView==null) {
             convertView=new TextView(context);
-            label=(TextView)convertView;
-            label.setText(spinnerObject.get(position));
+            ((TextView)convertView).setText(spinnerObject.get(position));
         }
         return convertView;
     }
@@ -75,13 +73,18 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
 
     public View getCustomView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View topicImages = inflater.inflate(R.layout.dialog_topic_add_child,null);
+
+        View topicImages = inflater.inflate(R.layout.dialog_topic_add_child,null);
+
+        //topicImages.setLayoutParams(new AbsListView.LayoutParams(topicImages.getLayoutParams()));
+
         imagesGrid = (GridView) topicImages.findViewById(R.id.topicImagesGrid);
         fillIntegers();
 
         TopicImagesGridViewAdapter adapter = new TopicImagesGridViewAdapter(context,integers);
+
         imagesGrid.setAdapter(adapter);
-        adjustGridView();
+        imagesGrid.setLayoutParams(new AbsListView.LayoutParams(imagesGrid.getLayoutParams()));
 
         imagesGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
@@ -90,15 +93,6 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
         });
 
         return imagesGrid;
-    }
-
-    private void adjustGridView(){
-        imagesGrid.setNumColumns(GridView.AUTO_FIT);
-        imagesGrid.setColumnWidth(210);
-        imagesGrid.setMinimumHeight(50);
-        imagesGrid.setHorizontalSpacing(5);
-        imagesGrid.setVerticalSpacing(5);
-        imagesGrid.setStretchMode(GridView.STRETCH_SPACING);
     }
 
     private void fillIntegers(){

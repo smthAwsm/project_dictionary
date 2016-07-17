@@ -101,7 +101,6 @@ public class NewTopicDialog extends DialogFragment {
                         editTopic.save();
                      }
                         parent.updateData();
-                        //parent.updateViewData(); //TODO delete
                     dismiss();
                     }
                 }
