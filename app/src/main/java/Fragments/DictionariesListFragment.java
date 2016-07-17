@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -83,12 +83,12 @@ public class DictionariesListFragment extends ListFragment {
 
     private void createDictionaryAlert(){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AppCompatAlertDialogStyle);
         builder.setTitle(getString(R.string.new_dic_title));
+        View dictionaryName = LayoutInflater.from(parent).inflate(R.layout.dialog_dictionary_add,null);
+        final EditText input = (EditText) dictionaryName.findViewById(R.id.dictionaryNameText);
 
-        final EditText input = new EditText(parent);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+        builder.setView(dictionaryName);
 
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override

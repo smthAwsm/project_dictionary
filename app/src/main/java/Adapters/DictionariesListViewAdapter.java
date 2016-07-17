@@ -22,7 +22,7 @@ import Models.Dictionary;
 /**
  * Created by XPS on 4/9/2016.
  */
-public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> implements Serializable {
+public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
 
     Context context;
     List<Dictionary> dictionariesList;

@@ -6,7 +6,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.text.InputType;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 
 import com.orm.SugarTransactionHelper;
@@ -25,7 +29,7 @@ import activities.DictionariesActivity;
 /**
  * Created by XPS on 4/28/2016.
  */
-public class RUDDictionaryDialog extends DialogFragment {
+public class RUDDictionaryDialog extends AppCompatDialogFragment {
 
     private long dictionaryID;
 
@@ -41,13 +45,22 @@ public class RUDDictionaryDialog extends DialogFragment {
 
                 if (which == 0)
                 {
-                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
                     builder.setTitle(getString(R.string.new_dic_title));
+                    View dictionaryName = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_dictionary_add,null);
+                    final EditText input = (EditText) dictionaryName.findViewById(R.id.dictionaryNameText);
                     final Dictionary editDictionary = Dictionary.findById(Dictionary.class,dictionaryID);
-                    final EditText input = new EditText(getActivity());
                     input.setText(editDictionary.getName());
-                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-                    builder.setView(input);
+
+                    builder.setView(dictionaryName);
+
+
+                    //android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+                    //builder.setTitle(getString(R.string.new_dic_title));
+                    //final EditText input = new EditText(getActivity());
+                    //input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    //builder.setView(input);
 
                     builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                         @Override

@@ -1,11 +1,9 @@
 package Dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,7 @@ import Models.Topic;
 /**
  * Created by XPS on 4/18/2016.
  */
-public class NewTopicDialog extends DialogFragment {
+public class NewTopicDialog extends AppCompatDialogFragment {
 
     private ImageView topicImage;
     private Spinner topicImagesSpinner;

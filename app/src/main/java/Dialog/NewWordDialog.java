@@ -6,7 +6,7 @@ import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -53,7 +53,7 @@ import activities.WordsActivity;
 /**
  * Created by XPS on 4/26/2016.
  */
-public class NewWordDialog extends DialogFragment {
+public class NewWordDialog extends AppCompatDialogFragment {
 
     final String SERVICE_URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
     final String API_KEY = "trnsl.1.1.20160509T111252Z.507a5ce07b028de4.6b97d5b3cab733a6906bf0acf91baa3320b7f9e8";
@@ -78,7 +78,6 @@ public class NewWordDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //getDialog().setTitle("New topic");
         requestQueue = Volley.newRequestQueue(getActivity());
         Bundle bundle = getArguments();
         IsOnlineTask onlineStatus = new IsOnlineTask();

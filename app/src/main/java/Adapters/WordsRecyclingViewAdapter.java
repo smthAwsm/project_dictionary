@@ -29,17 +29,14 @@ import activities.WordsActivity;
 public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
     private List<Word> wordData;
-    private List<Integer> materialColors;
     private WordsActivity context;
+    private TextToSpeech textToSpeech;
 
     public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent){
             this.wordData = wordData;
             this.context = parent;
             getTTS();
     }
-
-
-    private TextToSpeech textToSpeech;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -105,11 +102,6 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
         public TextView wordValue;
         public TextView translationValue;
 
-        private CountingLayoutListener mTranslationLayoutListener;
-        private CountingLayoutListener mWordLayoutListener;
-
-        private Integer[] values = new Integer[]{-1,-1};
-
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -118,12 +110,6 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
             wordValue = (TextView) itemView.findViewById(R.id.wordTextView);
             translationValue = (TextView) itemView.findViewById(R.id.translationTextView);
             sideShape = (FrameLayout) itemView.findViewById(R.id.sideShape);
-
-            CardView cardView = (CardView) itemView.findViewById(R.id.wordCard);
-            mTranslationLayoutListener = new CountingLayoutListener(translationValue,values,cardView);
-            translationValue.addOnLayoutChangeListener(mTranslationLayoutListener);
-            mWordLayoutListener = new CountingLayoutListener(wordValue,values,cardView);
-            wordValue.addOnLayoutChangeListener(mWordLayoutListener);
         }
 
         public void bindData(Word word,int position){

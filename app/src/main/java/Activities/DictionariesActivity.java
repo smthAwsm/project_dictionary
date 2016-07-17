@@ -31,7 +31,6 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(R.string.vocabularies_title);
 
-        //Dictionary.deleteAll(Dictionary.class);
         fragmentManager = getSupportFragmentManager();
         updateData();
         loadAppropriateFragment();
@@ -74,11 +73,6 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
                 fragmentTransaction.replace(R.id.mainFragmentContainer,dictionariesFragment, Tags.SUCCESS_QUERY_TAG);
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
-
-//                if(f != null && f instanceof DictionariesListFragment){
-//                    dictionariesList = (ListView) findViewById(android.R.id.list);
-//                    adapter = new DictionariesListViewAdapter(this, dictionariesInfo);
-//                    dictionariesList.setAdapter(adapter);}
             }
             if(f == null ){
                 DictionariesListFragment dictionariesFragment = new DictionariesListFragment();
@@ -90,7 +84,6 @@ public class DictionariesActivity extends AppCompatActivity implements ActivityD
                 fragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
                 }
-            //startActivity(new Intent(DictionariesActivity.this, TransparentActivity.class));
         }
     }
 

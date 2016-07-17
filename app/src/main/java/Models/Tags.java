@@ -52,9 +52,10 @@ public class Tags {
     //DONE Crash adding word after rotation (fragment destroyed)
     //DONE Image reseting after rotation Create Topic
     //DONE Vocabulary list cleaned after rotation
-    //TODO Test support on API < 23, fix problems if necessary
-    //TODO Fix bottom element size
-    //TODO Test large word text displaying after add
+    //DONE Fix bottom element size
+    //DONE Test large word text displaying after add
+    //DONE Text wrapping EditText
+    //DONE Test support on API < 23, fix problems if necessary
 
 
     //DONE Yandex API for word translation

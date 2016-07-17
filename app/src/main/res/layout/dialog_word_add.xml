@@ -12,10 +12,12 @@
         android:layout_marginTop="20dp"
         android:id="@+id/wordTextBox"
         android:hint="@string/word_hint"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:focusable="true"/>
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:focusable="true"
+        android:gravity="top|left"
+        android:maxLines="10"
+        android:scrollbars="vertical"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -28,10 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/translation_hint"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:focusable="true"/>
+            android:inputType="textMultiLine"
+            android:singleLine="false"
+            android:focusable="true"
+            android:gravity="top|left"
+            android:maxLines="10"
+            android:scrollbars="vertical"/>
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
@@ -53,7 +57,9 @@
         android:textSize="20dp"
         android:id="@+id/newWordCancel"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
