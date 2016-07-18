@@ -25,7 +25,7 @@
         android:layout_weight="85"
         android:textColor="@color/empty"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/no_vocabularies"
+        android:text="@string/no_dictionaries"
         android:id="@+id/noVocabulariesText"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"

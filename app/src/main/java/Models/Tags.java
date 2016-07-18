@@ -1,9 +1,9 @@
-package Models;
+package models;
 
 /**
  * Created by XPS on 4/26/2016.
  */
-public class Tags {
+public abstract class Tags {
 
     public static final String EMPTY_LIST_TAG = "EMPTY";
     public static final String SUCCESS_QUERY_TAG = "GOT";
@@ -25,57 +25,6 @@ public class Tags {
     public static final String WORDS_FRAGMENT = "GET_WORDS_FRAGMENT";
     public static final String TOPIC_IMAGE_RESOURCE = "GET_IMAGE_RESOURCE";
     public static final String VOCABULARY_ADAPTER = "GET_VOC_ADAPTER";
-
-    //DONE Change graphics to SVG
-    //DONE Volume up in reading (volume is max)
-    //DONE Topics number calculation
-    //DONE Check isOnline ASYNC
-    //DONE Image storing as values array
-    //DONE Image loading (for topics) do Async !!!!
-    //DONE Test deleting/editing Dictionaries/Topics/Word for appropriate fragment behavior
-    //DONE After deleting all topics fragment doesnt change
-    //DONE Fix bug with empty topics/words list
-    //DONE Attach FloatingButton to ListView (ListView -> RecyclerView)
-    //DONE Load data on object editing (Dictionary - name/ Topic - name,image/ Word - value/translation)
-    //DONE After topic adding counter on dictionary is not updated
-    //DONE After adding/deleting topic/word is not updated
-    //DONE On rename topic crash
-    //DONE Fix topics displaying width
-    //DONE Fix colors array on words activity
-    //DONE Large word text displaying
-    //DONE Large word text displaying
-    //DONE Color after new word adding
-    //DONE Color generation
-    //DONE Colors saving before rotation
-    //DONE Database data load ASYNC
-    //DONE Appropriate DB deleting
-    //DONE Crash adding word after rotation (fragment destroyed)
-    //DONE Image reseting after rotation Create Topic
-    //DONE Vocabulary list cleaned after rotation
-    //DONE Fix bottom element size
-    //DONE Test large word text displaying after add
-    //DONE Text wrapping EditText
-    //DONE Test support on API < 23, fix problems if necessary
-
-
-    //DONE Yandex API for word translation
-    //DONE Input hints
-    //TODO Word search
-    //TODO Current dictionary saving (Shared Prefs), on app starts load last used dictionary
-    //TODO Create first start quick guide
-    //TODO Denie not English words in NewWordDialog -> Translation
-    //TODO Testing TESTING/WRITING calculate results
-    //TODO Settings to change current dictionary
-
-
-    //TODO To think about multi language fuctionality (More than UKR/RUS -> Eng)
-    //TODO LogIn button animate
-    //TODO Develop animations, add to project
-    //TODO Testing SELF EXAM IMPROVE translation appearence
-    //TODO Store some statistics about results
-    //TODO Google API Login + Google Drive Backup
-    //TODO Check for Material guidelines
-    //TODO Change new topic picture
-    //TODO Add more images
-    //TODO RecyclerView notifying about item not Setting new adapter
+    public static final String VOCABULARY_SHARED = "GET_SHARED_VOC";
+    public static final String APP_SETTINGS = "GET_SHARED_VOC";
 }

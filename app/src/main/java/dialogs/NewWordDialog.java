@@ -1,6 +1,5 @@
-package Dialog;
+package dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 
 import android.os.AsyncTask;
@@ -8,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.text.Editable;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,16 +32,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
-import Adapters.TopicsSpinnerAdapter;
-import Models.Language;
-import Models.Tags;
-import Models.Topic;
-import Models.Word;
-import activities.TopicsActivity;
+import models.Language;
+import models.Tags;
+import models.Word;
 import activities.WordsActivity;
 
 /**
@@ -123,7 +112,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
             translationTextBox.setText(editWord.getTranslation());
         } else editWord = new Word();
 
-        InputFilter filter = new InputFilter() {
+       /* InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
                                        Spanned dest, int dstart, int dend) {
                 for (int i = start; i < end; i++) {
@@ -134,7 +123,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 return null;
             }
         };
-        translationTextBox.setFilters(new InputFilter[] { filter });
+        translationTextBox.setFilters(new InputFilter[] { filter });*/
 
 
         okButton.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +133,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 if ((!valueTextBox.getText().toString().equals("")) && (!translationTextBox.getText().toString().equals(""))){
 
                         if(!edit)
-                        new Word(WordsActivity.currentTopicId,valueTextBox.getText().toString(),translationTextBox.getText().toString()).save();
+                        new Word(WordsActivity.sCurrentTopicId,valueTextBox.getText().toString(),translationTextBox.getText().toString()).save();
                         if (edit){
                             editWord.setValue(valueTextBox.getText().toString());
                             editWord.setTranslation(translationTextBox.getText().toString());
@@ -153,8 +142,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 } else return;
 
                         parent.updateData();
-                        //parent.loadAppropriateFragment();
-                        //parent.updateViewData();
+
                         dismiss();
                     }
                 });

@@ -1,12 +1,10 @@
-package Models;
+package models;
 
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Table;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by XPS on 4/10/2016.

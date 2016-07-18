@@ -1,4 +1,4 @@
-package Helpers;
+package helpers;
 
 import android.support.v7.widget.CardView;
 import android.util.Log;

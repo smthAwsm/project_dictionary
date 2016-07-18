@@ -1,4 +1,4 @@
-package Dialog;
+package dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,11 +13,9 @@ import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
-import Models.Dictionary;
-import Models.Tags;
-import Models.Topic;
-import Models.Word;
-import activities.DictionariesActivity;
+import models.Tags;
+import models.Topic;
+import models.Word;
 import activities.TopicsActivity;
 
 /**

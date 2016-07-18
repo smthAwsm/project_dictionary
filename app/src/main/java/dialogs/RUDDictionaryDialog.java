@@ -1,14 +1,11 @@
-package Dialog;
+package dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.app.AppCompatDialogFragment;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -20,10 +17,10 @@ import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
-import Models.Dictionary;
-import Models.Tags;
-import Models.Topic;
-import Models.Word;
+import models.Dictionary;
+import models.Tags;
+import models.Topic;
+import models.Word;
 import activities.DictionariesActivity;
 
 /**
@@ -47,7 +44,7 @@ public class RUDDictionaryDialog extends AppCompatDialogFragment {
                 {
 
                     android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
-                    builder.setTitle(getString(R.string.new_dic_title));
+                    builder.setTitle(getString(R.string.new_dict_title));
                     View dictionaryName = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_dictionary_add,null);
                     final EditText input = (EditText) dictionaryName.findViewById(R.id.dictionaryNameText);
                     final Dictionary editDictionary = Dictionary.findById(Dictionary.class,dictionaryID);

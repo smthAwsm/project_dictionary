@@ -4,7 +4,7 @@
     android:layout_height="500dp"
     android:id="@+id/spinnerChild">
 
-    <Helpers.MeasurableGridView
+    <helpers.MeasurableGridView
     android:id="@+id/topicImagesGrid"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -20,7 +20,7 @@
         android:id="@+id/addTopicFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_behavior = "Helpers.FABScrollBehavior"
+        app:layout_behavior = "helpers.FABScrollBehavior"
         android:clickable="true"
         android:src="@drawable/ic_add_white"
         app:layout_anchor="@id/topicsRecyclerView"

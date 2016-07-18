@@ -1,4 +1,4 @@
-package Adapters;
+package adapters;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,7 +16,7 @@ import com.study.xps.projectdictionary.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import Dialog.NewTopicDialog;
+import dialogs.NewTopicDialog;
 
 /**
  * Created by XPS on 4/18/2016.

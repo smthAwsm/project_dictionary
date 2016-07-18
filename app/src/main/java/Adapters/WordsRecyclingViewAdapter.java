@@ -1,8 +1,7 @@
-package Adapters;
+package adapters;
 
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +16,9 @@ import com.study.xps.projectdictionary.R;
 import java.util.List;
 import java.util.Locale;
 
-import Dialog.RUDWordDialog;
-import Helpers.CountingLayoutListener;
-import Models.Tags;
-import Models.Word;
+import dialogs.RUDWordDialog;
+import models.Tags;
+import models.Word;
 import activities.WordsActivity;
 
 /**

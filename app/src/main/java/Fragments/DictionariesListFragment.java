@@ -1,7 +1,9 @@
-package Fragments;
+package fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,9 +20,9 @@ import android.widget.ListView;
 import com.study.xps.projectdictionary.R;
 import java.util.List;
 
-import Dialog.RUDDictionaryDialog;
-import Models.Dictionary;
-import Models.Tags;
+import dialogs.RUDDictionaryDialog;
+import models.Dictionary;
+import models.Tags;
 import activities.DictionariesActivity;
 import activities.TopicsActivity;
 
@@ -63,7 +65,8 @@ public class DictionariesListFragment extends ListFragment {
             }
         });
 
-        FloatingActionButton addDictionaryButton = (FloatingActionButton) view.findViewById(R.id.addDictionaryFAB);
+        FloatingActionButton addDictionaryButton = (FloatingActionButton)
+                                        view.findViewById(R.id.addDictionaryFAB);
         addDictionaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,15 +79,23 @@ public class DictionariesListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         parent = (DictionariesActivity)getActivity();
         final List<Dictionary> dictionariesInfo = parent.getActivityData();
+
+        SharedPreferences.Editor prefEditor = getActivity().
+                getSharedPreferences(Tags.APP_SETTINGS,Context.MODE_PRIVATE).edit();
+        Long dictionaryId = dictionariesInfo.get(position).getId();
+        prefEditor.putLong(Tags.VOCABULARY_SHARED, dictionaryId);
+        prefEditor.commit();
+
         Intent dictionaryTopicsIntent = new Intent(parent, TopicsActivity.class);
         dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,dictionariesInfo.get(position).getId());
+        parent.finish();
         startActivity(dictionaryTopicsIntent);
     }
 
     private void createDictionaryAlert(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AppCompatAlertDialogStyle);
-        builder.setTitle(getString(R.string.new_dic_title));
+        builder.setTitle(getString(R.string.new_dict_title));
         View dictionaryName = LayoutInflater.from(parent).inflate(R.layout.dialog_dictionary_add,null);
         final EditText input = (EditText) dictionaryName.findViewById(R.id.dictionaryNameText);
 

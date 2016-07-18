@@ -1,6 +1,5 @@
-package Fragments;
+package fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +10,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.orm.util.Collection;
 import com.study.xps.projectdictionary.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import Models.Tags;
+import models.Tags;
 
 /**
  * Created by XPS on 4/28/2016.

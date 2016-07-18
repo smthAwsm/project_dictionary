@@ -1,4 +1,4 @@
-package Fragments;
+package fragments;
 
 
 import android.os.Bundle;
@@ -15,15 +15,10 @@ import android.view.ViewTreeObserver;
 
 import com.study.xps.projectdictionary.R;
 
-import Adapters.TopicsRecyclingGridViewAdapter;
-import Dialog.NewTopicDialog;
-import Dialog.RUDTopicDialog;
-import Helpers.GridAutoFitLayoutManager;
-import Models.Tags;
-import Models.Topic;
-import activities.DictionariesActivity;
+import adapters.TopicsRecyclingGridViewAdapter;
+import dialogs.NewTopicDialog;
+import models.Tags;
 import activities.TopicsActivity;
-import activities.WordsActivity;
 
 
 /**

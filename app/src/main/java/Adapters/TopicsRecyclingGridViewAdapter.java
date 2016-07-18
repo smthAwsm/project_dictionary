@@ -1,4 +1,4 @@
-package Adapters;
+package adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +16,9 @@ import com.study.xps.projectdictionary.R;
 
 import java.util.List;
 
-import Dialog.RUDTopicDialog;
-import Models.Tags;
-import Models.Topic;
+import dialogs.RUDTopicDialog;
+import models.Tags;
+import models.Topic;
 import activities.TopicsActivity;
 import activities.WordsActivity;
 

@@ -1,4 +1,4 @@
-package Dialog;
+package dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -18,10 +18,10 @@ import com.study.xps.projectdictionary.R;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-import Models.Tags;
+import models.Tags;
 import activities.TopicsActivity;
-import Adapters.TopicsSpinnerAdapter;
-import Models.Topic;
+import adapters.TopicsSpinnerAdapter;
+import models.Topic;
 
 /**
  * Created by XPS on 4/18/2016.

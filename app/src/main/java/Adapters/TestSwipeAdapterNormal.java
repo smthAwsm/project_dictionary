@@ -1,20 +1,18 @@
-package Adapters;
+package adapters;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import Fragments.TestingBeginnerFragment;
-import Fragments.TestingNormalFragment;
-import Models.Tags;
-import Models.Word;
+import fragments.TestingNormalFragment;
+import models.Tags;
+import models.Word;
 
 /**
  * Created by XPS on 4/28/2016.

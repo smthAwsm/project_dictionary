@@ -1,72 +1,61 @@
 package activities;
 
-import android.app.Activity;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
-
-
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.study.xps.projectdictionary.R;
+import adapters.TestSwipeAdapterAdvanced;
+import adapters.TestSwipeAdapterBeginner;
+import adapters.TestSwipeAdapterNormal;
+import models.Tags;
+import models.Word;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import Adapters.TestSwipeAdapterAdvanced;
-import Adapters.TestSwipeAdapterBeginner;
-import Adapters.TestSwipeAdapterNormal;
-import Fragments.EmptyFragment;
-import Fragments.TestingBeginnerFragment;
-import Models.Tags;
-import Models.Word;
 
 /**
  * Created by XPS on 4/28/2016.
  */
 public class TestingActivity extends AppCompatActivity {
 
-    private long currentTopicID;
-    private int testing_type;
-    List<Word> wordList;
+    private long mCurrentTopicID;
+    private int mTestingType;
+    private List<Word> mWordList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.testing_activity);
 
-        testing_type = getIntent().getIntExtra(Tags.TESTING_TYPE_TAG,0);
-        currentTopicID = getIntent().getLongExtra(Tags.TOPIC_TAG, 0);
+        mTestingType = getIntent().getIntExtra(Tags.TESTING_TYPE_TAG,0);
+        mCurrentTopicID = getIntent().getLongExtra(Tags.TOPIC_TAG, 0);
 
         try {
-            wordList = Word.find(Word.class, "topic_ID = "+currentTopicID +"");
+            mWordList = Word.find(Word.class, "topic_ID = "+ mCurrentTopicID +"");
         } catch (Exception e){
-            wordList = new ArrayList<Word>();
+            mWordList = new ArrayList<>();
         }
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.testingBeginViewPager);
 
-        switch (testing_type){
+        switch (mTestingType){
             case 0:
-                TestSwipeAdapterBeginner swipeAdapterBeginner = new TestSwipeAdapterBeginner(getSupportFragmentManager(),wordList);
+                TestSwipeAdapterBeginner swipeAdapterBeginner = new TestSwipeAdapterBeginner(
+                        getSupportFragmentManager(), mWordList);
                 viewPager.setAdapter(swipeAdapterBeginner);
                 break;
             case 1:
-                TestSwipeAdapterNormal swipeAdapterNormal = new TestSwipeAdapterNormal(getSupportFragmentManager(),wordList);
+                TestSwipeAdapterNormal swipeAdapterNormal = new TestSwipeAdapterNormal(
+                        getSupportFragmentManager(), mWordList);
                 viewPager.setAdapter(swipeAdapterNormal);
                 break;
             case 2:
-                TestSwipeAdapterAdvanced swipeAdapterAdvanced = new TestSwipeAdapterAdvanced(getSupportFragmentManager(),wordList);
+                TestSwipeAdapterAdvanced swipeAdapterAdvanced = new TestSwipeAdapterAdvanced(
+                        getSupportFragmentManager(), mWordList);
                 viewPager.setAdapter(swipeAdapterAdvanced);
                 break;
         }
-
-
     }
 }

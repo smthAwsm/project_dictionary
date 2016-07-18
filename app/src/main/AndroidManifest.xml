@@ -20,7 +20,7 @@
 
 
         <activity
-            android:name="activities.LoginActivity">
+            android:name="activities.SplashActivity" android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,16 +36,15 @@
         </activity>
 
         <activity
-            android:name="activities.TransparentActivity"
-            android:theme="@style/Theme.Transparent" >
-        </activity>
-
-        <activity
             android:name="activities.WordsActivity" android:configChanges="orientation|screenSize">
         </activity>
 
         <activity
             android:name="activities.TestingActivity">
+        </activity>
+
+        <activity
+            android:name="activities.IntroActivity" android:theme="@style/AppThemeNoBar">
         </activity>
 
         <meta-data

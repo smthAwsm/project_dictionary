@@ -1,4 +1,4 @@
-package Helpers;
+package helpers;
 import android.support.v4.app.FragmentManager;
 
 import java.util.List;
@@ -8,7 +8,6 @@ import java.util.List;
  */
 public interface ActivityDataInterface {
 
-   //void loadAppropriateFragment();
    void updateData();
    void updateViewData();
    List getActivityData();

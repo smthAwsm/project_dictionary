@@ -1,4 +1,4 @@
-package Adapters;
+package adapters;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
-import Fragments.TestingBeginnerFragment;
-import Models.Tags;
-import Models.Word;
+import fragments.TestingBeginnerFragment;
+import models.Tags;
+import models.Word;
 
 /**
  * Created by XPS on 4/28/2016.

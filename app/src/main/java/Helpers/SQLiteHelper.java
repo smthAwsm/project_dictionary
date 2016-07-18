@@ -1,4 +1,4 @@
-package Helpers;
+package helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import Models.Dictionary;
+import models.Dictionary;
 
 /**
  * Created by XPS on 4/10/2016.

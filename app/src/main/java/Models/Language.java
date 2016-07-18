@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package Models;
+package models;
 
 /**
  * Language - an enum of language codes supported by the Yandex API

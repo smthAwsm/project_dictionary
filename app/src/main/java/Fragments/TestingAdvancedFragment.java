@@ -1,4 +1,4 @@
-package Fragments;
+package fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 
-import Models.Tags;
+import models.Tags;
 
 /**
  * Created by XPS on 4/28/2016.

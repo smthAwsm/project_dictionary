@@ -9,4 +9,9 @@
     <color name="right">#00E676</color>
     <color name="wrong">#F44336</color>
     <color name="background">#FBFBFB</color>
+    <color name="black_trans80">#14000000</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="orange">#FF9800</color>
+    <color name="green">#4CAF50</color>
+    <color name="indicator_unselected">#4D000000</color>
 </resources>

@@ -1,4 +1,4 @@
-package Adapters;
+package adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,7 +14,7 @@ import com.study.xps.projectdictionary.R;
 import java.util.List;
 
 import activities.TopicsActivity;
-import Models.Topic;
+import models.Topic;
 
 /**
  * Created by XPS on 4/12/2016.

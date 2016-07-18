@@ -1,4 +1,4 @@
-package Helpers;
+package helpers;
 
 /**
  * Created by XPS on 07/17/2016.

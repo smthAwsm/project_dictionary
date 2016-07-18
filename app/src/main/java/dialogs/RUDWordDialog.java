@@ -1,6 +1,5 @@
-package Dialog;
+package dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,8 +8,8 @@ import android.support.v4.app.DialogFragment;
 
 import com.study.xps.projectdictionary.R;
 
-import Models.Tags;
-import Models.Word;
+import models.Tags;
+import models.Word;
 import activities.WordsActivity;
 
 /**

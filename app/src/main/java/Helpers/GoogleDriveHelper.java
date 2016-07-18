@@ -1,30 +1,21 @@
-package Helpers;
+package helpers;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.study.xps.projectdictionary.R;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
-import java.util.jar.Manifest;
 
-import activities.LoginActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 

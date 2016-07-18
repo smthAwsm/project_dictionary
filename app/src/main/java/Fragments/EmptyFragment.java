@@ -1,8 +1,5 @@
-package Fragments;
+package fragments;
 
-import android.app.Activity;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,11 +16,10 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 
-import Dialog.NewTopicDialog;
-import Dialog.NewWordDialog;
-import Models.Dictionary;
-import Models.Tags;
-import Models.Word;
+import dialogs.NewTopicDialog;
+import dialogs.NewWordDialog;
+import models.Dictionary;
+import models.Tags;
 import activities.DictionariesActivity;
 import activities.TopicsActivity;
 import activities.WordsActivity;
@@ -83,7 +79,7 @@ public class EmptyFragment extends Fragment {
         }
 
         if (getActivity()  instanceof DictionariesActivity){
-            addingLabel.setText(getString(R.string.no_vocabularies));
+            addingLabel.setText(getString(R.string.no_dictionaries));
             listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -98,7 +94,7 @@ public class EmptyFragment extends Fragment {
     private void createDictionaryAlert(final DictionariesActivity parent){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-        builder.setTitle(getString(R.string.new_dic_title));
+        builder.setTitle(getString(R.string.new_dict_title));
 
         final EditText input = new EditText(parent);
         input.setInputType(InputType.TYPE_CLASS_TEXT);

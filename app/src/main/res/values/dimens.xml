@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="card_width">200dp</dimen>
+    <dimen name="activity_margin_half">8dp</dimen>
+    <dimen name="statusbar_size">24dp</dimen>
 </resources>

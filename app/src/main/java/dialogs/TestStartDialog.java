@@ -1,6 +1,5 @@
-package Dialog;
+package dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 
 import android.content.Intent;
@@ -13,13 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 
-import Models.Tags;
-import Models.Word;
+import models.Tags;
 import activities.TestingActivity;
 import activities.WordsActivity;
 
@@ -41,7 +38,7 @@ public class TestStartDialog extends DialogFragment {
                 switch (v.getId()) {
                     case R.id.testingLevelBeginer:
                         Intent intentBegin = new Intent(getActivity(), TestingActivity.class);
-                        intentBegin.putExtra(Tags.TOPIC_TAG, WordsActivity.currentTopicId);
+                        intentBegin.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
                         intentBegin.putExtra(Tags.TESTING_TYPE_TAG,0);
                         startActivity(intentBegin);
                         dismiss();
@@ -50,7 +47,7 @@ public class TestStartDialog extends DialogFragment {
                     case R.id.testingLevelNormal:
                         Log.d("QWE", "2");
                         Intent intentNorm = new Intent(getActivity(), TestingActivity.class);
-                        intentNorm.putExtra(Tags.TOPIC_TAG, WordsActivity.currentTopicId);
+                        intentNorm.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
                         intentNorm.putExtra(Tags.TESTING_TYPE_TAG,1);
                         startActivity(intentNorm);
                         dismiss();
@@ -58,7 +55,7 @@ public class TestStartDialog extends DialogFragment {
                     case R.id.testingLevelAdvanced:
                         Log.d("QWE", "3");
                         Intent intentAdvan = new Intent(getActivity(), TestingActivity.class);
-                        intentAdvan.putExtra(Tags.TOPIC_TAG, WordsActivity.currentTopicId);
+                        intentAdvan.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
                         intentAdvan.putExtra(Tags.TESTING_TYPE_TAG,2);
                         startActivity(intentAdvan);
                         dismiss();
