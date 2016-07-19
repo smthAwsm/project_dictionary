@@ -7,14 +7,10 @@ import com.orm.SugarRecord;
  */
 public class Word extends SugarRecord{
 
-    private static final String LOG_TAG = "DATABASE LOGING";
-
-    //private Long id;
     private long topicID;
     private String value;
     private String translation;
     //private String assocValue;
-
 
     public Word(){
 

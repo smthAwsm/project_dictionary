@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
-import dialogs.RUDWordDialog;
+import dialogs.UpdateWordDialog;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
@@ -64,7 +64,7 @@ public class WordsRecyclingViewAdapter extends
         holder.mItemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                RUDWordDialog updateWordDialog = new RUDWordDialog();
+                UpdateWordDialog updateWordDialog = new UpdateWordDialog();
                 Bundle bundle = new Bundle();
                 bundle.putLong(Tags.WORD_TAG, word.getId());
                 updateWordDialog.setArguments(bundle);

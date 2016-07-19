@@ -19,41 +19,48 @@ import models.Tags;
  * Created by XPS on 4/28/2016.
  */
 public class TestingAdvancedFragment extends Fragment {
+    private String mWordValue;
+    private String mWordTranslate;
+    private EditText mTranslateValueView;
+
      @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+         try {
+             Bundle bundle = getArguments();
+             mWordValue = bundle.getString(Tags.WORD_VALUE_TAG);
+             mWordTranslate = bundle.getString(Tags.WORD_TRANSLATE_TAG);
+         } catch (Exception e){
+             throw new RuntimeException();
+         }
 
-        Bundle bundle = getArguments();
-        String wordValue = bundle.getString(Tags.WORD_VALUE_TAG);
-        final String wordTranslate = bundle.getString(Tags.WORD_TRANSLATE_TAG);
          View view = inflater.inflate(R.layout.fragment_testing_advanced,container,false);
-
          TextView wordValueView = (TextView) view.findViewById(R.id.valueTextView);
-         wordValueView.setText(wordValue);
-
-         final EditText translateValueView = (EditText) view.findViewById(R.id.translationEdit);
-
-         translateValueView.addTextChangedListener(new TextWatcher() {
-             @Override
-             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-             }
-
-             @Override
-             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-             }
-
-             @Override
-             public void afterTextChanged(Editable s) {
-                if (s.toString().equals(wordTranslate))
-                    translateValueView.setTextColor(getResources().getColor(R.color.right));
-                    else  translateValueView.setTextColor(getResources().getColor(R.color.wrong));
-                }
-         });
-
-        return view;
+         wordValueView.setText(mWordValue);
+         mTranslateValueView = (EditText) view.findViewById(R.id.translationEdit);
+         mTranslateValueView.addTextChangedListener(mAnswerTextWacher);
+         return view;
     }
+
+    private TextWatcher mAnswerTextWacher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().equals(mWordTranslate))
+                mTranslateValueView.setTextColor(getResources().getColor(R.color.right));
+            else  mTranslateValueView.setTextColor(getResources().getColor(R.color.wrong));
+        }
+    };
 
 
 }

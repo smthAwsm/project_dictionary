@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
-
 import dialogs.NewTopicDialog;
 import dialogs.NewWordDialog;
 import models.Dictionary;
@@ -29,9 +28,8 @@ import activities.WordsActivity;
  */
 public class EmptyFragment extends Fragment {
 
-    ImageView addingImage;
-    TextView addingLabel;
-
+    private ImageView mAddingImage;
+    private TextView mAddingLabel;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -40,14 +38,15 @@ public class EmptyFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocabulary_empty_list, container, false);
 
-        addingImage = (ImageView) view.findViewById(R.id.addVocabularyImage);
-        addingLabel = (TextView) view.findViewById(R.id.noVocabulariesText);
+        mAddingImage = (ImageView) view.findViewById(R.id.addVocabularyImage);
+        mAddingLabel = (TextView) view.findViewById(R.id.noVocabulariesText);
 
-        addingImage.setOnClickListener(getListener());
-        addingLabel.setOnClickListener(getListener());
+        mAddingImage.setOnClickListener(getListener());
+        mAddingLabel.setOnClickListener(getListener());
 
         return view;
     }
@@ -57,7 +56,7 @@ public class EmptyFragment extends Fragment {
         View.OnClickListener listener = null;
 
         if (getActivity()  instanceof WordsActivity){
-            addingLabel.setText(getString(R.string.no_words));
+            mAddingLabel.setText(getString(R.string.no_words));
             listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +67,7 @@ public class EmptyFragment extends Fragment {
         }
 
         if (getActivity()  instanceof TopicsActivity){
-            addingLabel.setText(getString(R.string.no_topics));
+            mAddingLabel.setText(getString(R.string.no_topics));
             listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -79,7 +78,7 @@ public class EmptyFragment extends Fragment {
         }
 
         if (getActivity()  instanceof DictionariesActivity){
-            addingLabel.setText(getString(R.string.no_dictionaries));
+            mAddingLabel.setText(getString(R.string.no_dictionaries));
             listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -91,24 +90,24 @@ public class EmptyFragment extends Fragment {
         return listener;
     }
 
-    private void createDictionaryAlert(final DictionariesActivity parent){
+    private void createDictionaryAlert(final DictionariesActivity contextActivity){
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(contextActivity);
         builder.setTitle(getString(R.string.new_dict_title));
 
-        final EditText input = new EditText(parent);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
+        final EditText mDictionaryNameEdit = new EditText(contextActivity);
+        mDictionaryNameEdit.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(mDictionaryNameEdit);
 
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String dictionaryName = input.getText().toString();
+                String dictionaryName = mDictionaryNameEdit.getText().toString();
                 Dictionary newDictionary = new Dictionary(dictionaryName);
                 newDictionary.save();
 
-                parent.updateData();
-                parent.loadAppropriateFragment();
+                contextActivity.updateData();
+                contextActivity.loadAppropriateFragment();
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

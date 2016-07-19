@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
-
 import models.Tags;
 import activities.TestingActivity;
 import activities.WordsActivity;
@@ -26,10 +25,10 @@ import activities.WordsActivity;
 public class TestStartDialog extends DialogFragment {
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //getDialog().setTitle("New topic");
-        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT);
         final View testingDialog = inflater.inflate(R.layout.dialog_words_testing, null);
 
         View.OnClickListener cardClick = new View.OnClickListener() {
@@ -42,10 +41,8 @@ public class TestStartDialog extends DialogFragment {
                         intentBegin.putExtra(Tags.TESTING_TYPE_TAG,0);
                         startActivity(intentBegin);
                         dismiss();
-                        Log.d("QWE", "1");
                         break;
                     case R.id.testingLevelNormal:
-                        Log.d("QWE", "2");
                         Intent intentNorm = new Intent(getActivity(), TestingActivity.class);
                         intentNorm.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
                         intentNorm.putExtra(Tags.TESTING_TYPE_TAG,1);
@@ -53,7 +50,6 @@ public class TestStartDialog extends DialogFragment {
                         dismiss();
                         break;
                     case R.id.testingLevelAdvanced:
-                        Log.d("QWE", "3");
                         Intent intentAdvan = new Intent(getActivity(), TestingActivity.class);
                         intentAdvan.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
                         intentAdvan.putExtra(Tags.TESTING_TYPE_TAG,2);
@@ -87,6 +83,7 @@ public class TestStartDialog extends DialogFragment {
         super.onStart();
         Dialog dialog = getDialog();
         if(dialog != null)
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 }

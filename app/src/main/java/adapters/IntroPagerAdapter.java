@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import fragments.PlaceholderFragment;
+import fragments.IntroPlaceholderFragment;
 
 /**
  * Created by XPS on 07/18/2016.
@@ -17,7 +17,7 @@ public class IntroPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PlaceholderFragment.newInstance(position + 1);
+        return IntroPlaceholderFragment.newInstance(position + 1);
     }
 
     @Override

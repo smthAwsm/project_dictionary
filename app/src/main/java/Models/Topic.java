@@ -19,20 +19,12 @@ public class Topic extends SugarRecord {
         imageRecourceID = recourceID;
     }
 
-    public long getDictionaryID() {
-        return dictionaryID;
-    }
-
     public String getTopicName() {
         return topicName;
     }
 
     public long getImageRecourceID() {
         return imageRecourceID;
-    }
-
-    public void setDictionaryID(long dictionaryID) {
-        this.dictionaryID = dictionaryID;
     }
 
     public void setTopicName(String topicName) {

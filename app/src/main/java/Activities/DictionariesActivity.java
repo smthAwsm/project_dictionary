@@ -22,7 +22,7 @@ public class DictionariesActivity extends AppCompatActivity
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private DictionariesListViewAdapter mListViewAdapter;
-    private static List<Dictionary> sDictionariesInfo;
+    private static List<Dictionary> sDictionaryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class DictionariesActivity extends AppCompatActivity
     }
 
     public void loadAppropriateFragment(){
-        if(sDictionariesInfo.isEmpty()) {
+        if(sDictionaryList.isEmpty()) {
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof DictionariesListFragment){
                 EmptyFragment noDictionariesFragments = new EmptyFragment();
@@ -68,7 +68,7 @@ public class DictionariesActivity extends AppCompatActivity
             if(f != null && f instanceof EmptyFragment){
                 DictionariesListFragment dictionariesFragment = new DictionariesListFragment();
                 dictionariesFragment.setRetainInstance(true);
-                mListViewAdapter = new DictionariesListViewAdapter(this, sDictionariesInfo);
+                mListViewAdapter = new DictionariesListViewAdapter(this, sDictionaryList);
                 dictionariesFragment.setListAdapter(mListViewAdapter);
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.replace(R.id.mainFragmentContainer,
@@ -79,7 +79,7 @@ public class DictionariesActivity extends AppCompatActivity
             if(f == null ){
                 DictionariesListFragment dictionariesFragment = new DictionariesListFragment();
                 dictionariesFragment.setRetainInstance(true);
-                mListViewAdapter = new DictionariesListViewAdapter(this, sDictionariesInfo);
+                mListViewAdapter = new DictionariesListViewAdapter(this, sDictionaryList);
                 dictionariesFragment.setListAdapter(mListViewAdapter);
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.add(R.id.mainFragmentContainer,
@@ -93,16 +93,16 @@ public class DictionariesActivity extends AppCompatActivity
     @Override
     public  void updateViewData() {
         mListViewAdapter.clear();
-        mListViewAdapter.addAll(sDictionariesInfo);
+        mListViewAdapter.addAll(sDictionaryList);
         mListViewAdapter.notifyDataSetChanged();
     }
 
     public void updateData(){
-        sDictionariesInfo = Dictionary.listAll(Dictionary.class);
+        sDictionaryList = Dictionary.listAll(Dictionary.class);
     }
 
     public List<Dictionary> getActivityData(){
-            return sDictionariesInfo;
+            return sDictionaryList;
         }
 
     public FragmentManager getActivityFragmentManager() {

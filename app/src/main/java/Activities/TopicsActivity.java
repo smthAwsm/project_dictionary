@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import com.study.xps.projectdictionary.R;
 import fragments.EmptyFragment;
-import fragments.TopicsGridFragment;
+import fragments.TopicsRecyclerGridFragment;
 import helpers.ActivityDataInterface;
 import models.Tags;
 import models.Topic;
@@ -30,9 +30,9 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
-    private TopicsGridFragment mTopicsGridFragment;
+    private TopicsRecyclerGridFragment mTopicsRecyclerGridFragment;
     private RecyclerView mTopicsView;
-    private List<Topic> mTopicList;
+    private static List<Topic> sTopicList;
     private long mCurrentDictionaryID;
 
     @Override
@@ -42,7 +42,7 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(getString(R.string.topics_title));
 
-        mTopicList = new ArrayList<>();
+        sTopicList = new ArrayList<>();
         mCurrentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
         mFragmentManager = getSupportFragmentManager();
         updateData();
@@ -67,10 +67,10 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     }
 
     public void loadAppropriateFragment(List<Topic> dbData){
-        mTopicList = dbData;
-        if(mTopicList.isEmpty()) {
+        sTopicList = dbData;
+        if(sTopicList.isEmpty()) {
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
-            if(f != null && f instanceof TopicsGridFragment){
+            if(f != null && f instanceof TopicsRecyclerGridFragment){
                 EmptyFragment noTopicsFragments = new EmptyFragment();
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.replace(R.id.mainFragmentContainer,
@@ -89,19 +89,19 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         } else {
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof EmptyFragment){
-                if (mTopicsGridFragment == null)
-                    mTopicsGridFragment = new TopicsGridFragment();
+                if (mTopicsRecyclerGridFragment == null)
+                    mTopicsRecyclerGridFragment = new TopicsRecyclerGridFragment();
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.replace(R.id.mainFragmentContainer,
-                        mTopicsGridFragment, Tags.SUCCESS_QUERY_TAG);
+                        mTopicsRecyclerGridFragment, Tags.SUCCESS_QUERY_TAG);
                 mFragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
             if(f == null ){
-                mTopicsGridFragment = new TopicsGridFragment();
+                mTopicsRecyclerGridFragment = new TopicsRecyclerGridFragment();
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.add(R.id.mainFragmentContainer,
-                        mTopicsGridFragment, Tags.SUCCESS_QUERY_TAG);
+                        mTopicsRecyclerGridFragment, Tags.SUCCESS_QUERY_TAG);
                 mFragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
@@ -123,7 +123,7 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         return mCurrentDictionaryID;
     }
     public List<Topic> getActivityData() {
-        return mTopicList;
+        return sTopicList;
     }
     public FragmentManager getActivityFragmentManager() {
         return mFragmentManager;
@@ -141,12 +141,12 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
             try {
                 List <Topic> topicsFound = Topic.find(Topic.class,
                         "dictionary_ID = " + mCurrentDictionaryID +"");
-                mTopicList.clear();
-                mTopicList.addAll(topicsFound);
+                sTopicList.clear();
+                sTopicList.addAll(topicsFound);
             } catch (Exception e){
-                mTopicList = new ArrayList<Topic>();
+                sTopicList = new ArrayList<Topic>();
             }
-            return mTopicList;
+            return sTopicList;
         }
 
         @Override

@@ -13,29 +13,27 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
 import com.study.xps.projectdictionary.R;
-
-import java.util.Arrays;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import java.util.Arrays;
 
 /**
  * Created by XPS on 07/10/2016.
  */
+
 public class GoogleDriveHelper {
-
-
     private GoogleAccountCredential mAccountCredential;
     private Activity mContext;
 
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String PREF_ACCOUNT_NAME = "JUST_LEARN_IT_DICTIONARY";
     private static final String[] SCOPES = {DriveScopes.DRIVE_METADATA_READONLY};
 
     public GoogleDriveHelper(Activity context){
-                this.mContext = context;
+        this.mContext = context;
         mAccountCredential = GoogleAccountCredential.usingOAuth2(
                 mContext,
                 Arrays.asList(SCOPES))
@@ -49,22 +47,26 @@ public class GoogleDriveHelper {
         } else if(mAccountCredential.getSelectedAccountName() == null){
             chooseAccout();
         } else if (!isDeviceOnline()) {
-            Toast.makeText(mContext, mContext.getString(R.string.no_inet), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getString(R.string.no_inet),
+                    Toast.LENGTH_SHORT).show();
         } else Toast.makeText(mContext,"TASK START",Toast.LENGTH_LONG).show();
-        //else new MakeRequestTask
     }
 
     private boolean isGooglePlayAvailable(){
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        final int connectionStatusCode = googleApiAvailability.isGooglePlayServicesAvailable(mContext);
+        final int connectionStatusCode = googleApiAvailability.
+                isGooglePlayServicesAvailable(mContext);
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
+
     private void acquireGooglePlayServices(){
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        final int connectionStatusCode = googleApiAvailability.isGooglePlayServicesAvailable(mContext);
+        final int connectionStatusCode = googleApiAvailability.
+                isGooglePlayServicesAvailable(mContext);
         if(googleApiAvailability.isUserResolvableError(connectionStatusCode))
             showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
     }
+
     private void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode){
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         Dialog dialog = googleApiAvailability.getErrorDialog(
@@ -106,7 +108,6 @@ public class GoogleDriveHelper {
     public void setAccountName(String accountName) {
         mAccountCredential.setSelectedAccountName(accountName);
     }
-
 }
 
 

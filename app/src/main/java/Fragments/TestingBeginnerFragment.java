@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
-
 import models.Tags;
+
 
 /**
  * Created by XPS on 4/28/2016.
@@ -20,7 +20,8 @@ public class TestingBeginnerFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
 
@@ -35,8 +36,12 @@ public class TestingBeginnerFragment extends Fragment {
             }
         });
 
-        wordTextView.setText(bundle.getString(Tags.WORD_VALUE_TAG));
-        translateTextView.setText(bundle.getString(Tags.WORD_TRANSLATE_TAG));
+        try {
+            wordTextView.setText(bundle.getString(Tags.WORD_VALUE_TAG));
+            translateTextView.setText(bundle.getString(Tags.WORD_TRANSLATE_TAG));
+        } catch (Exception e){
+            throw new RuntimeException();
+        }
 
         return view;
     }

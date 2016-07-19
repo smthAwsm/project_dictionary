@@ -33,11 +33,8 @@ public class IntroActivity extends AppCompatActivity {
     private ImageView[] mIndicators;
     private int page = 0;   //  to track page position
 
-    final int[] colorList = new int[]{
-            ContextCompat.getColor(this, R.color.cyan),
-            ContextCompat.getColor(this, R.color.orange),
-            ContextCompat.getColor(this, R.color.green)
-    };
+    int[] colorList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +46,12 @@ public class IntroActivity extends AppCompatActivity {
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black_trans80));
         }
+
+        colorList = new int[]{
+                ContextCompat.getColor(this, R.color.cyan),
+                ContextCompat.getColor(this, R.color.orange),
+                ContextCompat.getColor(this, R.color.green)
+        };
 
         setContentView(R.layout.activity_pager);
         setupComponents();
@@ -74,6 +77,12 @@ public class IntroActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(page);
         mViewPager.addOnPageChangeListener(mOnPageChangeListener);
+
+        mIndicators = new ImageView[]{
+                (ImageView) findViewById(R.id.intro_indicator_0),
+                (ImageView) findViewById(R.id.intro_indicator_1),
+                (ImageView) findViewById(R.id.intro_indicator_2)
+        };
         updateIndicators(page);
 
         mSkipBtn = (Button) findViewById(R.id.intro_btn_skip);
@@ -81,6 +90,7 @@ public class IntroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+                startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
             }
         });
 
@@ -94,11 +104,6 @@ public class IntroActivity extends AppCompatActivity {
         });
 
         mCoordinator = (CoordinatorLayout) findViewById(R.id.main_content);
-        mIndicators = new ImageView[]{
-                (ImageView) findViewById(R.id.intro_indicator_0),
-                (ImageView) findViewById(R.id.intro_indicator_1),
-                (ImageView) findViewById(R.id.intro_indicator_2)
-        };
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener =

@@ -1,12 +1,12 @@
 package helpers;
 
-/**
- * Created by XPS on 07/17/2016.
- */
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.GridView;
+
+/**
+ * Created by XPS on 07/17/2016.
+ */
 
 public class MeasurableGridView extends GridView {
     public MeasurableGridView(Context context) {
@@ -26,14 +26,11 @@ public class MeasurableGridView extends GridView {
         int heightSpec;
 
         if (getLayoutParams().height == LayoutParams.WRAP_CONTENT) {
-
             heightSpec = MeasureSpec.makeMeasureSpec(
                     Integer.MAX_VALUE/2, MeasureSpec.AT_MOST);
-        }
-        else {
+        } else {
             heightSpec = heightMeasureSpec;
         }
-
         super.onMeasure(widthMeasureSpec, heightSpec);
     }
 }

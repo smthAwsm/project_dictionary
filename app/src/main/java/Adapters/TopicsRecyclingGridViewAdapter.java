@@ -1,10 +1,8 @@
 package adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
-import dialogs.RUDTopicDialog;
+import dialogs.UpdateTopicDialog;
 import models.Tags;
 import models.Topic;
 import activities.TopicsActivity;
@@ -65,7 +63,7 @@ public class TopicsRecyclingGridViewAdapter extends
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                RUDTopicDialog updateTopicDialog = new RUDTopicDialog();
+                UpdateTopicDialog updateTopicDialog = new UpdateTopicDialog();
                 Bundle bundle = new Bundle();
                 bundle.putLong(Tags.TOPIC_TAG, topic.getId());
                 updateTopicDialog.setArguments(bundle);

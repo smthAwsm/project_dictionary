@@ -39,7 +39,7 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
             Bundle bundle = getArguments();
             mDictionaryID = bundle.getLong(Tags.DICTIONARY_TAG);
         } catch (Exception e){
-            mDictionaryID = 0;
+            mDictionaryID = -1;
         }
 
         mContextActivity = (DictionariesActivity) getActivity();
@@ -85,9 +85,9 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
                         editDictionary.save();
 
                         mContextActivity.updateData();
-                        mContextActivity.updateViewData();
-                        dismiss();
                         mContextActivity.loadAppropriateFragment();
+                        dismiss();
+                        mContextActivity.updateViewData();
                     }
                 });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

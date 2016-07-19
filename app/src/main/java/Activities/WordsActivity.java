@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,7 +19,7 @@ import android.widget.Toast;
 import com.study.xps.projectdictionary.R;
 import dialogs.TestStartDialog;
 import fragments.EmptyFragment;
-import fragments.WordsListFragment;
+import fragments.WordsRecyclerListFragment;
 import helpers.ActivityDataInterface;
 import models.Tags;
 import models.Word;
@@ -37,7 +36,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
-    private WordsListFragment mWordsFragment;
+    private WordsRecyclerListFragment mWordsFragment;
     private RecyclerView mWordsRecyclerViewView;
     private List<Integer> mShapeColors;
     private String mCurrentTopicName;
@@ -95,7 +94,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         try{
             mShapeColors = (ArrayList<Integer>) savedInstanceState
                                     .getSerializable(Tags.MATERIAL_COLORS);
-            mWordsFragment = (WordsListFragment) getSupportFragmentManager()
+            mWordsFragment = (WordsRecyclerListFragment) getSupportFragmentManager()
                                 .getFragment(savedInstanceState,Tags.WORDS_FRAGMENT);
         } catch(Exception e){
             e.printStackTrace();
@@ -107,7 +106,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         if(sWordList.isEmpty()) {
 
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
-            if(f != null && f instanceof WordsListFragment){
+            if(f != null && f instanceof WordsRecyclerListFragment){
                 EmptyFragment emptyFragment = new EmptyFragment();
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.replace(R.id.mainFragmentContainer,
@@ -127,7 +126,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof EmptyFragment){
                 if (mWordsFragment == null)
-                    mWordsFragment = new WordsListFragment();
+                    mWordsFragment = new WordsRecyclerListFragment();
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.replace(R.id.mainFragmentContainer,
                         mWordsFragment, Tags.SUCCESS_QUERY_TAG);
@@ -135,7 +134,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 getSupportFragmentManager().executePendingTransactions();
             }
             if(f == null ){
-                mWordsFragment = new WordsListFragment();
+                mWordsFragment = new WordsRecyclerListFragment();
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.add(R.id.mainFragmentContainer,
                         mWordsFragment, Tags.SUCCESS_QUERY_TAG);

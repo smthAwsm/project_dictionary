@@ -1,6 +1,5 @@
 package models;
 
-
 import com.orm.SugarRecord;
 
 import java.text.SimpleDateFormat;
@@ -10,18 +9,12 @@ import java.util.Calendar;
  * Created by XPS on 4/10/2016.
  */
 
-
 public class Dictionary extends SugarRecord{
 
-    private static final String LOG_TAG = "DATABASE LOGING";
-
-    //private Long id;
     private String dictionaryName;
     private String creationDate;
     //private Language languageFrom;
     //private Language TranslationTo;
-
-
 
     public Dictionary(){
 
@@ -32,13 +25,6 @@ public class Dictionary extends SugarRecord{
         creationDate = getDate();
     }
 
-    public Dictionary(int dsa,String asd,String as){ //TODO delete
-
-    }
-
-    //public Long getId() {
-    //    return id;
-    //}
     public String getName(){
         return dictionaryName;
     }

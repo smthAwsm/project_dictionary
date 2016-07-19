@@ -1,7 +1,5 @@
 package fragments;
 
-
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,24 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.study.xps.projectdictionary.R;
-
-import java.util.List;
-
 import adapters.WordsRecyclingViewAdapter;
 import dialogs.NewWordDialog;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
 
+import java.util.List;
+
+
 /**
  * Created by XPS on 4/26/2016.
  */
-public class WordsListFragment extends Fragment {
+public class WordsRecyclerListFragment extends Fragment {
 
-    private RecyclerView wordsList;
-    private WordsActivity parent;
-    List<Word> wordData;
-    private WordsRecyclingViewAdapter viewAdapter;
+    private WordsActivity mContexActivity;
+    private RecyclerView mWordsList;
+    private WordsRecyclingViewAdapter mRecyclingViewAdapter;
+    private List<Word> mWordsData;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -40,30 +38,31 @@ public class WordsListFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_words_list, container, false);
-        parent = (WordsActivity) getActivity();
+
         addWordViewListeners(view);
-        wordData = parent.getActivityData();
 
-        wordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
-
-        viewAdapter = new WordsRecyclingViewAdapter(wordData,parent);
-        viewAdapter.setHasStableIds(false);
-        wordsList.setAdapter(viewAdapter);
-        wordsList.setLayoutManager(new LinearLayoutManager(parent));
+        mContexActivity = (WordsActivity) getActivity();
+        mWordsData = mContexActivity.getActivityData();
+        mWordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
+        mRecyclingViewAdapter = new WordsRecyclingViewAdapter(mWordsData, mContexActivity);
+        mRecyclingViewAdapter.setHasStableIds(false);
+        mWordsList.setAdapter(mRecyclingViewAdapter);
+        mWordsList.setLayoutManager(new LinearLayoutManager(mContexActivity));
 
         return view;
     }
 
     private void addWordViewListeners(View view){
 
-        FloatingActionButton addDictionaryButton = (FloatingActionButton) view.findViewById(R.id.addNewWordFAB);
+        FloatingActionButton addDictionaryButton = (FloatingActionButton)
+                view.findViewById(R.id.addNewWordFAB);
         addDictionaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment wordDialog = new NewWordDialog();
-                //wordDialog.show(getFragmentManager(), Tags.NEW_WORD_DIALOG);
                 wordDialog.show(getFragmentManager(),Tags.NEW_WORD_DIALOG);
             }
         });
@@ -71,6 +70,6 @@ public class WordsListFragment extends Fragment {
 
 
     public WordsRecyclingViewAdapter getAdapter() {
-        return viewAdapter;
+        return mRecyclingViewAdapter;
     }
 }
