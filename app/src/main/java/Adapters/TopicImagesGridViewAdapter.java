@@ -20,21 +20,20 @@ import java.util.List;
  */
 public class TopicImagesGridViewAdapter extends BaseAdapter {
 
-    Context context;
-    List<Integer> imagesList;
-    LayoutInflater inflater;
-    Holder holder;
+    private Context mContext;
+    private List<Integer> mTopicIconsList;
+    private LayoutInflater mLayoutInflater;
+    private Holder mHolder;
 
     public TopicImagesGridViewAdapter(Context context, List<Integer> imagesID){
-        this.context = context;
-        imagesList = imagesID;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        holder = new Holder();
+        this.mContext = context;
+        mTopicIconsList = imagesID;
+        mHolder = new Holder();
     }
 
     @Override
     public int getCount() {
-        return imagesList.size();
+        return mTopicIconsList.size();
     }
 
     @Override
@@ -49,11 +48,13 @@ public class TopicImagesGridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View gridViewItem = inflater.inflate(R.layout.dialog_topic_child_grid_item,null);
+        mLayoutInflater = (LayoutInflater)
+                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View gridViewItem = mLayoutInflater.
+                inflate(R.layout.dialog_topic_child_grid_item,null);
 
-        holder.topicImage = (ImageView) gridViewItem.findViewById(R.id.childGridItemImage);
-        loadBitmap(imagesList.get(position),holder.topicImage);
-        //holder.topicImage.setImageResource(imagesList.get(position));
+        mHolder.topicImage = (ImageView) gridViewItem.findViewById(R.id.childGridItemImage);
+        loadBitmap(mTopicIconsList.get(position), mHolder.topicImage);
 
         return gridViewItem;
     }
@@ -69,43 +70,43 @@ public class TopicImagesGridViewAdapter extends BaseAdapter {
     }
 
     class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
-        private final WeakReference<ImageView> imageViewReference;
-        private int data = 0;
+        private final WeakReference<ImageView> mImageViewWeakReference;
+        private int mResId = 0;
 
         public BitmapWorkerTask(ImageView imageView) {
-            imageViewReference = new WeakReference<ImageView>(imageView);
+            mImageViewWeakReference = new WeakReference<>(imageView);
         }
 
         @Override
         protected Bitmap doInBackground(Integer... params) {
-            data = params[0];
-            return decodeSampledBitmapFromResource(context.getResources(), data, 50, 50);
+            mResId = params[0];
+            return decodeSampledBitmapFromResource(mContext.getResources(), mResId, 50, 50);
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            if (imageViewReference != null && bitmap != null) {
-                final ImageView imageView = imageViewReference.get();
+            if (mImageViewWeakReference != null && bitmap != null) {
+                final ImageView imageView = mImageViewWeakReference.get();
                 if (imageView != null) {
                     imageView.setImageBitmap(bitmap);
                 }
             }
         }
 
-        public Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                             int reqWidth, int reqHeight) {
+        public Bitmap decodeSampledBitmapFromResource(Resources res,
+                                                      int resId,int reqWidth, int reqHeight) {
 
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeResource(res, resId, options);
-
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
             options.inJustDecodeBounds = false;
+
             return BitmapFactory.decodeResource(res, resId, options);
         }
 
-        public  int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        public  int calculateInSampleSize(BitmapFactory.Options options,
+                                          int reqWidth, int reqHeight) {
             final int height = options.outHeight;
             final int width = options.outWidth;
             int inSampleSize = 1;
@@ -123,5 +124,4 @@ public class TopicImagesGridViewAdapter extends BaseAdapter {
             return inSampleSize;
         }
     }
-
 }

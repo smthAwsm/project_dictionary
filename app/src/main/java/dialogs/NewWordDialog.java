@@ -1,7 +1,6 @@
 package dialogs;
 
 import android.app.Dialog;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,14 +18,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.study.xps.projectdictionary.R;
+import models.Language;
+import models.Tags;
+import models.Word;
+import activities.WordsActivity;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.study.xps.projectdictionary.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,83 +37,75 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import models.Language;
-import models.Tags;
-import models.Word;
-import activities.WordsActivity;
-
 /**
  * Created by XPS on 4/26/2016.
  */
 public class NewWordDialog extends AppCompatDialogFragment {
 
     final String SERVICE_URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
-    final String API_KEY = "trnsl.1.1.20160509T111252Z.507a5ce07b028de4.6b97d5b3cab733a6906bf0acf91baa3320b7f9e8";
+    final String API_KEY =
+            "trnsl.1.1.20160509T111252Z.507a5ce07b028de4.6b97d5b3cab733a6906bf0acf91baa3320b7f9e8";
     final String ENCODING = "UTF-8";
-    final String PARAM_API_KEY = "key=",
-            PARAM_LANG_PAIR = "&lang=",
-            PARAM_TEXT = "&text=";
+    final String PARAM_API_KEY = "key=";
+    final String PARAM_LANG_PAIR = "&lang=";
+    final String PARAM_TEXT = "&text=";
 
-
-    private TextView okButton;
-    private TextView cancelButton;
-    private EditText valueTextBox;
-    private AutoCompleteTextView translationTextBox;
-    private long wordID;
-
-    private boolean edit;
-    private boolean isOnline = false;
-    private RequestQueue requestQueue;
-
+    private TextView mOkView;
+    private TextView mCancelView;
+    private EditText mWordTextBox;
+    private AutoCompleteTextView mTranslationTextBox;
+    private Word mEditWord;
+    private boolean mIsUpdate;
+    private boolean mIsOnline = false;
+    private long mWordId;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        requestQueue = Volley.newRequestQueue(getActivity());
         Bundle bundle = getArguments();
-        IsOnlineTask onlineStatus = new IsOnlineTask();
-        onlineStatus.execute();
-        final Word editWord;
+        new IsOnlineTask().execute();
+
         try {
-            edit = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
-            wordID = bundle.getLong(Tags.WORD_VALUE_TAG);
+            mIsUpdate = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
+            mWordId = bundle.getLong(Tags.WORD_VALUE_TAG);
         } catch (Exception e){
-            edit = false;
-            wordID = 0;
+            mIsUpdate = false;
+            mWordId = 0;
         }
-        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        final View topicDialog = inflater.inflate(R.layout.dialog_word_add,null);
 
-        okButton = (TextView) topicDialog.findViewById(R.id.newWordOK);
-        cancelButton = (TextView) topicDialog.findViewById(R.id.newWordCancel);
-        valueTextBox = (EditText) topicDialog.findViewById(R.id.wordTextBox);
-        translationTextBox = (AutoCompleteTextView) topicDialog.findViewById(R.id.translationTextBox);
+       return prepareDialog(inflater);
+    }
 
-        valueTextBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if(dialog != null)
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);  //TODO Check
+    }
 
-            }
+    private View prepareDialog(LayoutInflater inflater) {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT);
 
-            }
+        View topicDialog = inflater.inflate(R.layout.dialog_word_add,null);
+        mOkView = (TextView) topicDialog.findViewById(R.id.newWordOK);
+        mCancelView = (TextView) topicDialog.findViewById(R.id.newWordCancel);
+        mWordTextBox = (EditText) topicDialog.findViewById(R.id.wordTextBox);
+        mTranslationTextBox = (AutoCompleteTextView)
+                topicDialog.findViewById(R.id.translationTextBox);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String translation = getTranslation(s.toString());
-                if(translation != null)
-                Log.i("###### TRANSLATION ", translation);
-            }
-        });
+        mWordTextBox.addTextChangedListener(mWordValueWatcher);
 
-        if(edit) {
-            editWord = Word.findById(Word.class, wordID);
-            valueTextBox.setText(editWord.getValue());
-            translationTextBox.setText(editWord.getTranslation());
-        } else editWord = new Word();
+        if(mIsUpdate) {
+            mEditWord = Word.findById(Word.class, mWordId);
+            mWordTextBox.setText(mEditWord.getValue());
+            mTranslationTextBox.setText(mEditWord.getTranslation());
+        } else mEditWord = new Word();
 
        /* InputFilter filter = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
@@ -123,109 +118,114 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 return null;
             }
         };
-        translationTextBox.setFilters(new InputFilter[] { filter });*/
+        mTranslationTextBox.setFilters(new InputFilter[] { filter });*/
 
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WordsActivity parent = (WordsActivity) getActivity();
-                if ((!valueTextBox.getText().toString().equals("")) && (!translationTextBox.getText().toString().equals(""))){
-
-                        if(!edit)
-                        new Word(WordsActivity.sCurrentTopicId,valueTextBox.getText().toString(),translationTextBox.getText().toString()).save();
-                        if (edit){
-                            editWord.setValue(valueTextBox.getText().toString());
-                            editWord.setTranslation(translationTextBox.getText().toString());
-                            editWord.save();
-                        }
-                } else return;
-
-                        parent.updateData();
-
-                        dismiss();
-                    }
-                });
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        mOkView.setOnClickListener(mOkClickListener);
+        mCancelView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
+
         return topicDialog;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if(dialog != null)
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-    }
+    private View.OnClickListener mOkClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            WordsActivity parent = (WordsActivity) getActivity();
+            if ((!mWordTextBox.getText().toString().equals("")) &&
+                    (!mTranslationTextBox.getText().toString().equals(""))){
 
-    private String getTranslation(String word){
-        String result;
-        String restURL;
+                if(!mIsUpdate) {
+                    new Word(WordsActivity.sCurrentTopicId, mWordTextBox.getText().toString(),
+                            mTranslationTextBox.getText().toString()).save();
+                }
+                if (mIsUpdate){
+                    mEditWord.setValue(mWordTextBox.getText().toString());
+                    mEditWord.setTranslation(mTranslationTextBox.getText().toString());
+                    mEditWord.save();
+                }
+            } else return;
 
-        if (isOnline){
+            parent.updateData();
+            dismiss();
+        }
+    };
+
+    private TextWatcher mWordValueWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            getTranslationHelp(s.toString());
+        }
+    };
+
+    private void getTranslationHelp(String word){
+        String restURL = null;
+
+        if (mIsOnline){
             try {
                 String fromLan = Language.UKRAINIAN.toString();
                 String toLan   = Language.ENGLISH  .toString();
 
                 restURL = SERVICE_URL + PARAM_API_KEY + URLEncoder.encode(API_KEY,ENCODING)
-                        + PARAM_LANG_PAIR + URLEncoder.encode(fromLan,ENCODING) + URLEncoder.encode("-",ENCODING)
+                        + PARAM_LANG_PAIR + URLEncoder.encode(fromLan,ENCODING)
+                        + URLEncoder.encode("-",ENCODING)
                         + URLEncoder.encode(toLan,ENCODING)
                         + PARAM_TEXT + URLEncoder.encode(word,ENCODING);
-                Log.i("REQUEST URL ", restURL);
-                }
-                catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            result = fetchJsonResponse(restURL);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            fetchJsonResponse(restURL);
+        } else {
+            //Toast.makeText(getActivity(),
+            // getString(R.string.device_offline), Toast.LENGTH_SHORT).show();
         }
-        else {
-            Toast.makeText(getActivity(),"OFFLINE", Toast.LENGTH_SHORT).show();
-            result = null;
-        }
-       return result;
     }
 
-private String fetchJsonResponse(String url){
+    private void fetchJsonResponse(String url){
+        RequestQueue mRequestQueue = Volley.newRequestQueue(getActivity());;
+        JsonObjectRequest request = new JsonObjectRequest(url, null, mTranslateResponce,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        VolleyLog.e(error.getMessage());
+                    }
+                });
+        mRequestQueue.add(request);
+    }
 
-    final String[] translation = new String[1];
+    private Response.Listener<JSONObject> mTranslateResponce =
+            new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            String [] translation = new String[1];
+            try {
+                String result = response.getString("text");
+                translation[0] = result.replaceAll("[\\[\\]\"]","");
+                Log.i("###### TRANSLATION ", translation[0]);
 
-        JsonObjectRequest request = new JsonObjectRequest(url, null,
-        new Response.Listener<JSONObject>() {
-@Override
-public void onResponse(JSONObject response) {
-        String result = null;
-        try {
-        Log.i("RESPONCE",response.toString());
-        result = response.getString("text");
-        translation[0] = result.replaceAll("[\\[\\]\"]","");
-            Log.i("###### TRANSLATION ", translation[0]);
-
-            if(translation[0] != null){
-            ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,translation);
-            translationTextBox.setAdapter(adapter);
-            translationTextBox.setThreshold(1);
-            translationTextBox.showDropDown();}
-
-        } catch (JSONException e) {
-        Toast.makeText(getActivity(), "TRANSLATING ERROR", Toast.LENGTH_SHORT).show();
-        e.printStackTrace();
-        }
-        }},
-        new Response.ErrorListener() {
-@Override
-public void onErrorResponse(VolleyError error) {
-        VolleyLog.e(error.getMessage());
-        }});
-        requestQueue.add(request);
-    return translation[0];
-}
+                if(translation[0] != null){
+                    ArrayAdapter adapter = new ArrayAdapter(getActivity(),
+                            android.R.layout.simple_list_item_1,translation);
+                    mTranslationTextBox.setAdapter(adapter);
+                    mTranslationTextBox.setThreshold(1);
+                    mTranslationTextBox.showDropDown();
+                }
+            } catch (JSONException e) {
+                    Toast.makeText(getActivity(), "TRANSLATING ERROR",
+                            Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        };
 
     private class IsOnlineTask extends AsyncTask<Void,Void,Boolean>{
 
@@ -234,9 +234,9 @@ public void onErrorResponse(VolleyError error) {
             Runtime runtime = Runtime.getRuntime();
             try {
                 Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-                int     exitValue = ipProcess.waitFor();
+                int exitValue = ipProcess.waitFor();
                 return (exitValue == 0);
-            } catch (IOException e)          { e.printStackTrace(); }
+            } catch (IOException e) { e.printStackTrace(); }
             catch (InterruptedException e) { e.printStackTrace(); }
             return false;
         }
@@ -244,7 +244,7 @@ public void onErrorResponse(VolleyError error) {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            isOnline = aBoolean;
+            mIsOnline = aBoolean;
         }
     }
 }

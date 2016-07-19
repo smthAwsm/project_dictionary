@@ -8,31 +8,32 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
+import models.Topic;
+import models.Dictionary;
 
 import java.util.List;
 
-import models.Topic;
-import models.Dictionary;
 
 /**
  * Created by XPS on 4/9/2016.
  */
 public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
 
-    private Context context;
-    private List<Dictionary> dictionariesList;
+    private Context mContext;
+    private List<Dictionary> mDictionariesList;
     private LayoutInflater inflater;
 
     public DictionariesListViewAdapter(Context context, List<Dictionary> dictionariesList) {
         super(context,0, dictionariesList);
-        this.dictionariesList = dictionariesList;
-        this.context = context;
-        inflater = (LayoutInflater)context. getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mDictionariesList = dictionariesList;
+        this.mContext = context;
+        inflater = (LayoutInflater)context.
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return dictionariesList.size();
+        return mDictionariesList.size();
     }
 
     @Override
@@ -49,10 +50,12 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
        holder.dateTextView = (TextView) listView.findViewById(R.id.dateText);
        holder.topicsNumberTextView = (TextView) listView.findViewById(R.id.numberTopicsText);
 
-       Dictionary dictionary = dictionariesList.get(position);
+       Dictionary dictionary = mDictionariesList.get(position);
        holder.nameTextView.setText(dictionary.getName());
-       holder.dateTextView.setText(context.getString(R.string.created) +" "+ dictionary.getCreationDateString());
-       holder.topicsNumberTextView.setText(context.getString(R.string.topics) +"  "+ calculateTopics(dictionary.getId()));
+       holder.dateTextView.setText(mContext.getString(R.string.created) + " "
+               + dictionary.getCreationDateString());
+       holder.topicsNumberTextView.setText(mContext.getString(R.string.topics) +"  "
+               + calculateTopics(dictionary.getId()));
 
         return listView;
     }

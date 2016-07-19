@@ -13,34 +13,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
-
-import java.util.List;
-
 import dialogs.RUDTopicDialog;
 import models.Tags;
 import models.Topic;
 import activities.TopicsActivity;
 import activities.WordsActivity;
 
+import java.util.List;
+
 /**
  * Created by XPS on 5/8/2016.
  */
-public class TopicsRecyclingGridViewAdapter extends RecyclerView.Adapter<TopicsRecyclingGridViewAdapter.ViewHolder> {
+public class TopicsRecyclingGridViewAdapter extends
+        RecyclerView.Adapter<TopicsRecyclingGridViewAdapter.ViewHolder> {
 
-    private List<Topic> topicsInfo;
-    TopicsActivity parent;
-    Context context;
+    private List<Topic> mTopicList;
+    private TopicsActivity mContextActivity;
+
 
     public TopicsRecyclingGridViewAdapter(List<Topic> data, TopicsActivity parent){
-        topicsInfo = data;
-        this.parent = parent;
+        mTopicList = data;
+        this.mContextActivity = parent;
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContextActivity);
         View topicsView = inflater.inflate(R.layout.fragment_topics_list_item,parent,false);
         ViewHolder viewHolder = new ViewHolder(topicsView);
         return viewHolder;
@@ -48,7 +46,7 @@ public class TopicsRecyclingGridViewAdapter extends RecyclerView.Adapter<TopicsR
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Topic topic = topicsInfo.get(position);
+        final Topic topic = mTopicList.get(position);
 
         holder.topicImage.setImageResource((int) topic.getImageRecourceID());
         holder.topicName.setText(topic.getTopicName());
@@ -56,23 +54,22 @@ public class TopicsRecyclingGridViewAdapter extends RecyclerView.Adapter<TopicsR
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent topicWordsIntent = new Intent(parent, WordsActivity.class);
+                Intent topicWordsIntent = new Intent(mContextActivity, WordsActivity.class);
                 topicWordsIntent.putExtra(Tags.TOPIC_TAG,topic.getId());
                 topicWordsIntent.putExtra(Tags.TOPIC_NAME_TAG,topic.getTopicName());
-                parent.startActivity(topicWordsIntent);
-                Toast.makeText(parent,topic.getTopicName(), Toast.LENGTH_SHORT);
+                mContextActivity.startActivity(topicWordsIntent);
+                Toast.makeText(mContextActivity,topic.getTopicName(), Toast.LENGTH_SHORT);
             }
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                RUDTopicDialog rudDialog = new RUDTopicDialog();
+                RUDTopicDialog updateTopicDialog = new RUDTopicDialog();
                 Bundle bundle = new Bundle();
                 bundle.putLong(Tags.TOPIC_TAG, topic.getId());
-                rudDialog.setArguments(bundle);
-                rudDialog.show(parent.getActivityFragmentManager(),"RUD");
-                Log.d("DIALOG", "TOUCHED" );
+                updateTopicDialog.setArguments(bundle);
+                updateTopicDialog.show(mContextActivity.getActivityFragmentManager(),Tags.UPDATE_TOPIC_DIALOG);
                 return true;
             }
         });
@@ -80,15 +77,14 @@ public class TopicsRecyclingGridViewAdapter extends RecyclerView.Adapter<TopicsR
 
     @Override
     public int getItemCount() {
-        return topicsInfo.size();
+        return mTopicList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private View itemView;
         private ImageView topicImage;
         private TextView topicName;
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -98,5 +94,4 @@ public class TopicsRecyclingGridViewAdapter extends RecyclerView.Adapter<TopicsR
             topicName = (TextView) itemView.findViewById(R.id.topicText);
         }
     }
-
 }

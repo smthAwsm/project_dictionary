@@ -12,26 +12,24 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
+import dialogs.NewTopicDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dialogs.NewTopicDialog;
 
 /**
  * Created by XPS on 4/18/2016.
  */
 public class TopicsSpinnerAdapter extends BaseAdapter {
-    private Context context;
-    List<String> spinnerObject;
-    GridView imagesGrid;
-    NewTopicDialog dialog;
-    List<Integer> integers;
+    private Context mContext;
+    private GridView mTopicIconsGrid;
+    private NewTopicDialog mNewTopicDialog;
+    private List<Integer> mIconResouresId;
 
-    public TopicsSpinnerAdapter(Context context, NewTopicDialog newTopicDialog,List<String> objects) {
-        this.context=context;
-        spinnerObject = objects;
-        dialog = newTopicDialog;
+    public TopicsSpinnerAdapter(Context context, NewTopicDialog newTopicDialog) {
+        this.mContext =context;
+        this.mNewTopicDialog = newTopicDialog;
     }
 
     @Override
@@ -41,7 +39,7 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return spinnerObject.size();
+        return 1;
     }
 
     @Override
@@ -64,50 +62,47 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView==null) {
-            convertView=new TextView(context);
-            ((TextView)convertView).setText(spinnerObject.get(position));
+            convertView=new TextView(mContext);
+            ((TextView)convertView).setText(mContext.getString(R.string.select_image));
         }
         return convertView;
     }
 
 
     public View getCustomView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View topicImages = inflater.inflate(R.layout.dialog_topic_add_child,null);
+        mTopicIconsGrid = (GridView) topicImages.findViewById(R.id.topicImagesGrid);
+        fillIconsId();
 
-        //topicImages.setLayoutParams(new AbsListView.LayoutParams(topicImages.getLayoutParams()));
+        TopicImagesGridViewAdapter adapter =
+                new TopicImagesGridViewAdapter(mContext, mIconResouresId);
+        mTopicIconsGrid.setAdapter(adapter);
+        mTopicIconsGrid.setLayoutParams(
+                new AbsListView.LayoutParams(mTopicIconsGrid.getLayoutParams()));
 
-        imagesGrid = (GridView) topicImages.findViewById(R.id.topicImagesGrid);
-        fillIntegers();
-
-        TopicImagesGridViewAdapter adapter = new TopicImagesGridViewAdapter(context,integers);
-
-        imagesGrid.setAdapter(adapter);
-        imagesGrid.setLayoutParams(new AbsListView.LayoutParams(imagesGrid.getLayoutParams()));
-
-        imagesGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mTopicIconsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
-                dialog.setTopicImage(integers.get(pos));
+                mNewTopicDialog.setTopicImage(mIconResouresId.get(pos));
             }
         });
 
-        return imagesGrid;
+        return mTopicIconsGrid;
     }
 
-    private void fillIntegers(){
-        integers = new ArrayList<Integer>();
-        List<String> sad = new ArrayList<String >();
-        int arrayId = context.getResources().getIdentifier("graphics" , "array", context.getPackageName());
+    private void fillIconsId(){
+        mIconResouresId = new ArrayList<>();
+        int arrayId = mContext.getResources().
+                getIdentifier("graphics" , "array", mContext.getPackageName());
 
         if (arrayId != 0)
         {
-            TypedArray recources = context.getResources().obtainTypedArray(arrayId);
+            TypedArray recources = mContext.getResources().obtainTypedArray(arrayId);
             for (int i = 0; i < recources.length(); i++ )
-                integers.add(recources.getResourceId(i,0));
+                mIconResouresId.add(recources.getResourceId(i,0));
             recources.recycle();
         }
     }
-
-
 }

@@ -3,7 +3,6 @@ package adapters;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,33 +11,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
-
-import java.util.List;
-import java.util.Locale;
-
 import dialogs.RUDWordDialog;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
 
+import java.util.List;
+import java.util.Locale;
+
+
 /**
  * Created by XPS on 5/7/2016.
  */
-public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
+public class WordsRecyclingViewAdapter extends
+        RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
-    private List<Word> wordData;
-    private WordsActivity context;
-    private TextToSpeech textToSpeech;
+    private List<Word> mWordList;
+    private WordsActivity mContextActivity;
+    private TextToSpeech mTextToSpeech;
 
-    public WordsRecyclingViewAdapter(List<Word> wordData, WordsActivity parent){
-            this.wordData = wordData;
-            this.context = parent;
+    public WordsRecyclingViewAdapter(List<Word> mWordList, WordsActivity parent){
+            this.mWordList = mWordList;
+            this.mContextActivity = parent;
             getTTS();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContextActivity);
         View wordView = inflater.inflate(R.layout.fragment_words_list_item,parent,false);
         ViewHolder viewHolder = new ViewHolder(wordView);
 
@@ -49,28 +49,27 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        final Word word = wordData.get(position);
+        final Word word = mWordList.get(position);
         holder.bindData(word,position);
 
-        final ImageView pronounceButton = holder.pronounceButton;
-        pronounceButton.setTag(position);
-        pronounceButton.setOnClickListener(new View.OnClickListener() {
+        holder.mPronounceButton.setTag(position);
+        holder.mPronounceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String toSpeak = word.getTranslation();
-                textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+                String wordToSpeak = word.getTranslation();
+                mTextToSpeech.speak(wordToSpeak, TextToSpeech.QUEUE_FLUSH, null);
             }
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.mItemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                RUDWordDialog rudDialog = new RUDWordDialog();
+                RUDWordDialog updateWordDialog = new RUDWordDialog();
                 Bundle bundle = new Bundle();
                 bundle.putLong(Tags.WORD_TAG, word.getId());
-                rudDialog.setArguments(bundle);
-                rudDialog.show( context.getActivityFragmentManager(),"RUD");
-                Log.d("DIALOG", "TOUCHED" );
+                updateWordDialog.setArguments(bundle);
+                updateWordDialog.show( mContextActivity.
+                        getActivityFragmentManager(),Tags.UPDATE_WORD_DIALOG);
                 return true;
             }
         });
@@ -78,48 +77,45 @@ public class WordsRecyclingViewAdapter extends RecyclerView.Adapter<WordsRecycli
 
     @Override
     public int getItemCount() {
-        return wordData.size();
+        return mWordList.size();
     }
 
     private void getTTS(){
-        textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+        mTextToSpeech = new TextToSpeech(mContextActivity, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if(status == TextToSpeech.SUCCESS) {
-                    textToSpeech.setLanguage(Locale.UK);
+                    mTextToSpeech.setLanguage(Locale.UK);
                 }
             }
         });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public View itemView;
-        public ImageView pronounceButton;
-        public FrameLayout sideShape;
+        public View mItemView;
+        public ImageView mPronounceButton;
+        public FrameLayout mSideShape;
 
-        public TextView wordValue;
-        public TextView translationValue;
+        public TextView mWordTextView;
+        public TextView mTranslationTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            this.itemView = itemView;
-            pronounceButton = (ImageView) itemView.findViewById(R.id.pronounceButton);
-            wordValue = (TextView) itemView.findViewById(R.id.wordTextView);
-            translationValue = (TextView) itemView.findViewById(R.id.translationTextView);
-            sideShape = (FrameLayout) itemView.findViewById(R.id.sideShape);
+            this.mItemView = itemView;
+            mPronounceButton = (ImageView) itemView.findViewById(R.id.pronounceButton);
+            mWordTextView = (TextView) itemView.findViewById(R.id.wordTextView);
+            mTranslationTextView = (TextView) itemView.findViewById(R.id.translationTextView);
+            mSideShape = (FrameLayout) itemView.findViewById(R.id.sideShape);
         }
 
         public void bindData(Word word,int position){
+            mWordTextView.setText(word.getValue());
+            mTranslationTextView.setText(word.getTranslation());
 
-            wordValue.setText(word.getValue());
-            translationValue.setText(word.getTranslation());
-
-            int materialColor = context.getMaterialColor(position);
-            sideShape.setBackgroundColor(materialColor);
-            }
+            int materialColor = mContextActivity.getMaterialColor(position);
+            mSideShape.setBackgroundColor(materialColor);
         }
-
-
+    }
 }
 

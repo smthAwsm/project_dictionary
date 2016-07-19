@@ -5,6 +5,7 @@
     <string name="no_topics">No topics yet... Try adding first one</string>
     <string name="no_words">No words yet... Try adding first one</string>
     <string name="number_of_topics">Number of topics: </string>
+    <string name="new_topic_title">Number of topics: </string>
     <string name="created">Created </string>
     <string name="topics">Stores topics: </string>
     <string name="new_dict_title">Dictionary name</string>
@@ -35,4 +36,5 @@
     <string name="intro_feature_description_2">ololooolool</string>
     <string name="intro_feature_description_3">mafack</string>
     <string name="change_dictionary_action">Change dictionary</string>
+    <string name="device_offline">Translation unsupported. Please, check internet connection</string>
 </resources>

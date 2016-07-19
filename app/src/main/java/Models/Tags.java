@@ -27,4 +27,6 @@ public abstract class Tags {
     public static final String VOCABULARY_ADAPTER = "GET_VOC_ADAPTER";
     public static final String VOCABULARY_SHARED = "GET_SHARED_VOC";
     public static final String APP_SETTINGS = "GET_SHARED_VOC";
+    public static final String UPDATE_WORD_DIALOG = "UPDATE_WORD";
+    public static final String UPDATE_TOPIC_DIALOG = "UPDATE_TOPIC";
 }

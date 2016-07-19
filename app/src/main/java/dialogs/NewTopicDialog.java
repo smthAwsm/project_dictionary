@@ -14,119 +14,131 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.study.xps.projectdictionary.R;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-
 import models.Tags;
 import activities.TopicsActivity;
 import adapters.TopicsSpinnerAdapter;
 import models.Topic;
+
+import java.lang.reflect.Method;
+
 
 /**
  * Created by XPS on 4/18/2016.
  */
 public class NewTopicDialog extends AppCompatDialogFragment {
 
-    private ImageView topicImage;
-    private Spinner topicImagesSpinner;
-    private Button saveButton;
-    private EditText topicName;
-    private boolean update;
-    private long topicID;
+    private EditText mTopicNameEdit;
+    private ImageView mTopicIconView;
+    private Spinner mTopicImagesSpinner;
+    private Button mSaveTopicButton;
+    private Topic mEditTopic;
+    private long mTopicId;
+    private boolean mIsUpdate;
 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
-        final Topic editTopic;
 
         try {
-            update = bundle.getBoolean(Tags.TOPIC_NAME_TAG);
-            topicID = bundle.getLong(Tags.TOPIC_TAG);
+            mIsUpdate = bundle.getBoolean(Tags.TOPIC_NAME_TAG);
+            mTopicId = bundle.getLong(Tags.TOPIC_TAG);
         } catch (Exception e){
-            update = false;
-            topicID = 0;
+            mIsUpdate = false;
+            mTopicId = 0;
         }
 
-        getDialog().setTitle("New topic");
-        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        final View topicDialog = inflater.inflate(R.layout.dialog_topic_add,null);
-
-        topicImagesSpinner  = (Spinner) topicDialog.findViewById(R.id.imagesSpinner);
-        topicImage =  (ImageView) topicDialog.findViewById(R.id.imageView);
-        topicImage.setTag(R.drawable.ic_star);
-
-        topicImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                          topicImagesSpinner.performClick(); }
-        });
-
-        topicName = (EditText) topicDialog.findViewById(R.id.topicNameTextBox);
-
-        if(update){
-            editTopic = Topic.findById(Topic.class,topicID);
-            topicImage.setImageResource((int)editTopic.getImageRecourceID());
-            topicImage.setTag(editTopic.getImageRecourceID());
-            topicName.setText(editTopic.getTopicName());
-        } else  editTopic = new Topic();
-
-        saveButton = (Button) topicDialog.findViewById(R.id.buttonAddTopic);
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TopicsActivity parent = (TopicsActivity) getActivity();
-                if (parent instanceof TopicsActivity) {
-                if (!topicName.getText().toString().equals(""))
-                {
-                    if (topicImage.getTag() != null){
-                        if (!update)
-                            new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),(Integer)topicImage.getTag()).save();
-                            else {
-                                     editTopic.setTopicName(topicName.getText().toString());
-                                     editTopic.setImageRecourceID(Long.parseLong(topicImage.getTag().toString()));
-                                     editTopic.save();
-                             }
-                    } else
-                        if (!update)
-                        new Topic(parent.getCurrentDictionaryID(),topicName.getText().toString(),(Integer)topicImage.getTag()).save();
-                     else {
-                        editTopic.setTopicName(topicName.getText().toString());
-                        editTopic.setImageRecourceID((Integer)topicImage.getTag());
-                        editTopic.save();
-                     }
-                        parent.updateData();
-                    dismiss();
-                    }
-                }
-            }
-        });
-
-        ArrayList<String> string = new ArrayList<>();
-        string.add(getString(R.string.select_image));
-
-        TopicsSpinnerAdapter spinnerAdapter = new TopicsSpinnerAdapter(getActivity(),this,string);
-        topicImagesSpinner.setAdapter(spinnerAdapter);
-
-        return topicDialog;
+       return prepareDialog(inflater);
     }
+
+    private View prepareDialog(LayoutInflater inflater){
+        getDialog().setTitle(getString(R.string.new_topic_title));
+        getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT);
+
+        View updateTopicDialog = inflater.inflate(R.layout.dialog_topic_add,null);
+        mTopicImagesSpinner = (Spinner) updateTopicDialog.findViewById(R.id.imagesSpinner);
+
+        mTopicIconView =  (ImageView) updateTopicDialog.findViewById(R.id.imageView);
+        mTopicIconView.setTag(R.drawable.ic_star);
+        mTopicIconView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTopicImagesSpinner.performClick(); }
+        });
+
+        mTopicNameEdit = (EditText) updateTopicDialog.findViewById(R.id.topicNameTextBox);
+
+        if(mIsUpdate){
+            mEditTopic = Topic.findById(Topic.class, mTopicId);
+            mTopicIconView.setImageResource((int) mEditTopic.getImageRecourceID());
+            mTopicIconView.setTag(mEditTopic.getImageRecourceID());
+            mTopicNameEdit.setText(mEditTopic.getTopicName());
+        } else mEditTopic = new Topic();
+
+        mSaveTopicButton = (Button) updateTopicDialog.findViewById(R.id.buttonAddTopic);
+        mSaveTopicButton.setOnClickListener(saveTopicListener);
+
+        TopicsSpinnerAdapter spinnerAdapter = new TopicsSpinnerAdapter(getActivity(),this);
+        mTopicImagesSpinner.setAdapter(spinnerAdapter);
+
+        return updateTopicDialog;
+    }
+
+    View.OnClickListener saveTopicListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TopicsActivity contextActivity;
+
+            try {
+                contextActivity = (TopicsActivity) getActivity();
+            } catch (ClassCastException e){
+                throw new ClassCastException();
+            }
+
+            if (!mTopicNameEdit.getText().toString().equals("")) {
+                if (mTopicIconView.getTag() != null){
+                    if (!mIsUpdate)
+                        new Topic(contextActivity.getCurrentDictionaryID(),
+                                mTopicNameEdit.getText().toString(),
+                                (Integer) mTopicIconView.getTag()).save();
+                    else {
+                        mEditTopic.setTopicName(mTopicNameEdit.getText().toString());
+                        mEditTopic.setImageRecourceID(
+                                Long.parseLong(mTopicIconView.getTag().toString()));
+                        mEditTopic.save();
+                    }
+                } else if (!mIsUpdate) {
+                    new Topic(contextActivity.getCurrentDictionaryID(),
+                            mTopicNameEdit.getText().toString(),
+                            (Integer) mTopicIconView.getTag()).save();
+                } else {
+                        mEditTopic.setTopicName(mTopicNameEdit.getText().toString());
+                        mEditTopic.setImageRecourceID((Integer) mTopicIconView.getTag());
+                        mEditTopic.save();
+                }
+                    contextActivity.updateData();
+                    dismiss();
+            }
+        }
+    };
 
     @Override
     public void onStart() {
         super.onStart();
-     Dialog dialog = getDialog();
+        Dialog dialog = getDialog();
         if(dialog != null)
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
 
     }
 
     public void setTopicImage(int recourceID){
-        topicImage.setImageResource(recourceID);
-        topicImage.setTag(recourceID);
-        hideSpinnerDropDown(topicImagesSpinner);
+        mTopicIconView.setImageResource(recourceID);
+        mTopicIconView.setTag(recourceID);
+        hideSpinnerDropDown(mTopicImagesSpinner);
     }
 
     public static void hideSpinnerDropDown(Spinner spinner) {
@@ -142,7 +154,7 @@ public class NewTopicDialog extends AppCompatDialogFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Tags.TOPIC_IMAGE_RESOURCE,(Integer)topicImage.getTag());
+        outState.putInt(Tags.TOPIC_IMAGE_RESOURCE,(Integer) mTopicIconView.getTag());
     }
 
     @Override
@@ -150,11 +162,11 @@ public class NewTopicDialog extends AppCompatDialogFragment {
         super.onViewStateRestored(savedInstanceState);
         try {
             Integer imageResource = savedInstanceState.getInt(Tags.TOPIC_IMAGE_RESOURCE);
-            topicImage.setImageResource(imageResource);
-            topicImage.setTag(imageResource);
+            mTopicIconView.setImageResource(imageResource);
+            mTopicIconView.setTag(imageResource);
         } catch (NullPointerException e){
-
+            mTopicIconView.setImageResource(R.drawable.ic_star);
+            mTopicIconView.setTag(R.drawable.ic_star);
         }
-
     }
 }

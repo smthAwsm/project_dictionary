@@ -20,7 +20,7 @@ import android.widget.ListView;
 import com.study.xps.projectdictionary.R;
 import java.util.List;
 
-import dialogs.RUDDictionaryDialog;
+import dialogs.UpdateDictionaryDialog;
 import models.Dictionary;
 import models.Tags;
 import activities.DictionariesActivity;
@@ -56,7 +56,7 @@ public class DictionariesListFragment extends ListFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                RUDDictionaryDialog rudDialog = new RUDDictionaryDialog();
+                UpdateDictionaryDialog rudDialog = new UpdateDictionaryDialog();
                 Bundle bundle = new Bundle();
                 bundle.putLong(Tags.DICTIONARY_TAG, dictionariesInfo.get(pos).getId());
                 rudDialog.setArguments(bundle);
