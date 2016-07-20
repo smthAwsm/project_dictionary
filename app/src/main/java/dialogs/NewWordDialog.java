@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
+
 import models.Language;
 import models.Tags;
 import models.Word;
@@ -42,22 +43,24 @@ import java.net.URLEncoder;
  */
 public class NewWordDialog extends AppCompatDialogFragment {
 
-    final String SERVICE_URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
-    final String API_KEY =
+    private final String SERVICE_URL = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
+    private final String API_KEY =
             "trnsl.1.1.20160509T111252Z.507a5ce07b028de4.6b97d5b3cab733a6906bf0acf91baa3320b7f9e8";
-    final String ENCODING = "UTF-8";
-    final String PARAM_API_KEY = "key=";
-    final String PARAM_LANG_PAIR = "&lang=";
-    final String PARAM_TEXT = "&text=";
+    private final String ENCODING = "UTF-8";
+    private final String PARAM_API_KEY = "key=";
+    private final String PARAM_LANG_PAIR = "&lang=";
+    private final String PARAM_TEXT = "&text=";
+    private final long TIMEOUT = 500;
 
     private TextView mOkView;
     private TextView mCancelView;
     private EditText mWordTextBox;
     private AutoCompleteTextView mTranslationTextBox;
     private Word mEditWord;
+    private Boolean mIsOnline = false;
     private boolean mIsUpdate;
-    private boolean mIsOnline = false;
     private long mWordId;
+    private static DelayedTranslation sDelayedTranslationTask;
 
     @Nullable
     @Override
@@ -84,7 +87,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
         Dialog dialog = getDialog();
         if(dialog != null)
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);  //TODO Check
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     private View prepareDialog(LayoutInflater inflater) {
@@ -163,7 +166,13 @@ public class NewWordDialog extends AppCompatDialogFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            getTranslationHelp(s.toString());
+
+            if(sDelayedTranslationTask != null){
+                sDelayedTranslationTask.cancel(true);
+            }
+
+            sDelayedTranslationTask = new DelayedTranslation(s.toString());
+            sDelayedTranslationTask.execute();
         }
     };
 
@@ -196,7 +205,12 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        VolleyLog.e(error.getMessage());
+                        try {
+                            VolleyLog.e(error.getMessage());
+                        } catch (NullPointerException e){
+                            VolleyLog.e("Error getting message");
+                        }
+
                     }
                 });
         mRequestQueue.add(request);
@@ -227,7 +241,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
             }
         };
 
-    private class IsOnlineTask extends AsyncTask<Void,Void,Boolean>{
+    private class IsOnlineTask extends AsyncTask<Void,Void,Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -236,15 +250,57 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
                 int exitValue = ipProcess.waitFor();
                 return (exitValue == 0);
-            } catch (IOException e) { e.printStackTrace(); }
-            catch (InterruptedException e) { e.printStackTrace(); }
+            } catch (IOException e) {
+                e.printStackTrace(); }
+            catch (InterruptedException e) {
+                e.printStackTrace(); }
             return false;
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            mIsOnline = aBoolean;
+            mIsOnline = aBoolean.booleanValue();
+        }
+    }
+
+    private class DelayedTranslation extends AsyncTask {
+        private String mText;
+
+        DelayedTranslation(String text){
+            this.mText = text;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            int timeCount = 0;
+            while (timeCount <= TIMEOUT) {
+                try {
+                    Thread.sleep(100);
+                    timeCount+=100;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (isCancelled()) break;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            getTranslationHelp(mText);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            Log.e(Tags.LOG_TAG,"CANCELED azzazazazaza");
         }
     }
 }

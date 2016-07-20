@@ -52,7 +52,6 @@ public class IntroActivity extends AppCompatActivity {
                 ContextCompat.getColor(this, R.color.orange),
                 ContextCompat.getColor(this, R.color.green)
         };
-
         setContentView(R.layout.activity_pager);
         setupComponents();
     }
@@ -137,7 +136,6 @@ public class IntroActivity extends AppCompatActivity {
                     mNextBtn.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
                     mFinishBtn.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
                 }
-
                 @Override
                 public void onPageScrollStateChanged(int state) {}
             };

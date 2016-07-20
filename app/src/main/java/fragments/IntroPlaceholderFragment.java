@@ -18,9 +18,9 @@ public class IntroPlaceholderFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "SELECTION_NUMBER";
     private ImageView mFragmentDrawable;
     private int[] mIcons = new int[]{
-            R.drawable.ic_flight_24dp,
-            R.drawable.ic_mail_24dp,
-            R.drawable.ic_explore_24dp};
+            R.drawable.ic_accessibility,
+            R.drawable.ic_cloud_done,
+            R.drawable.ic_verified_user};
 
     private int[] mLabel = new int[]{
             R.string.intro_feature_label_1,

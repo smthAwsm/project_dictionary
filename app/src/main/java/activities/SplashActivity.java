@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity implements EasyPermissions
         setContentView(R.layout.splash_layout);
 
         SharedPreferences sharedPref = getSharedPreferences(Tags.APP_SETTINGS,MODE_PRIVATE);
-        long currentDictionary = sharedPref.getLong(Tags.VOCABULARY_SHARED, -1);
+        long currentDictionary = sharedPref.getLong(Tags.APP_SETTINGS, -1);
         new BackgroundStartTask(currentDictionary).execute();
     }
 

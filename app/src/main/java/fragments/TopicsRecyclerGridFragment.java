@@ -45,7 +45,7 @@ public class TopicsRecyclerGridFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
         mRecyclerView.setAdapter(mTopicsGridRecycler);
 
-        final GridLayoutManager layoutManager = new GridLayoutManager(mContexActivity,1);
+        final GridLayoutManager layoutManager = new GridLayoutManager(mContexActivity,5);
         mRecyclerView.setLayoutManager(layoutManager);
 
         mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(
