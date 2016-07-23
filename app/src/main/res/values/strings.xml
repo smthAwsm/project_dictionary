@@ -6,6 +6,9 @@
     <string name="topics">Stores topics: </string>
     <string name="new_dict_title">Dictionary name</string>
     <string name="no_dictionaries">No dictionaries yet... Try adding first one</string>
+    <string name="from_language">From language</string>
+    <string name="to_language">To language</string>
+
 
     <string name="topics_title">Topics</string>
     <string name="topic_hint">Topic name</string>

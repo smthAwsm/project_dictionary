@@ -3,6 +3,7 @@ package adapters;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,15 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 import dialogs.UpdateWordDialog;
+import models.Language;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 /**
@@ -33,6 +37,12 @@ public class WordsRecyclingViewAdapter extends
     public WordsRecyclingViewAdapter(List<Word> mWordList, WordsActivity parent){
             this.mWordList = mWordList;
             this.mContextActivity = parent;
+            Locale[] azza = Locale.getAvailableLocales();
+
+        Set<String> lan = new HashSet();
+
+        for (Locale loc : azza)
+            lan.add(loc.getLanguage());
             getTTS();
     }
 
@@ -44,7 +54,6 @@ public class WordsRecyclingViewAdapter extends
 
         return viewHolder;
     }
-
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
@@ -76,6 +85,12 @@ public class WordsRecyclingViewAdapter extends
     }
 
     @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        if(mTextToSpeech != null) mTextToSpeech.shutdown();
+    }
+
+    @Override
     public int getItemCount() {
         return mWordList.size();
     }
@@ -86,6 +101,7 @@ public class WordsRecyclingViewAdapter extends
             public void onInit(int status) {
                 if(status == TextToSpeech.SUCCESS) {
                     mTextToSpeech.setLanguage(Locale.UK);
+                    mTextToSpeech.setLanguage(new Locale(Language.SLOVENIAN.toString()));
                 }
             }
         });

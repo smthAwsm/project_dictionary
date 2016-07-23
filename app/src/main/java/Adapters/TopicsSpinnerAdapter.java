@@ -28,7 +28,7 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     private List<Integer> mIconResouresId;
 
     public TopicsSpinnerAdapter(Context context, NewTopicDialog newTopicDialog) {
-        this.mContext =context;
+        this.mContext = context;
         this.mNewTopicDialog = newTopicDialog;
     }
 
@@ -48,6 +48,16 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     }
 
     @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView==null) {
+            convertView= new TextView(mContext);
+            ((TextView)convertView).setText(mContext.getString(R.string.select_image));
+        }
+        return convertView;
+    }
+
+    @Override
     public View getDropDownView(int position, View convertView,
                                 ViewGroup parent) {
         return getCustomView(position, convertView, parent);
@@ -56,16 +66,6 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        if (convertView==null) {
-            convertView=new TextView(mContext);
-            ((TextView)convertView).setText(mContext.getString(R.string.select_image));
-        }
-        return convertView;
     }
 
 
