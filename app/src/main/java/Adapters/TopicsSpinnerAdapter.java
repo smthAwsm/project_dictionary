@@ -23,7 +23,6 @@ import java.util.List;
  */
 public class TopicsSpinnerAdapter extends BaseAdapter {
     private Context mContext;
-    private GridView mTopicIconsGrid;
     private NewTopicDialog mNewTopicDialog;
     private List<Integer> mIconResouresId;
 
@@ -70,11 +69,10 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
 
 
     public View getCustomView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mContext.
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
 
         View topicImages = inflater.inflate(R.layout.dialog_topic_add_child,null);
-        mTopicIconsGrid = (GridView) topicImages.findViewById(R.id.topicImagesGrid);
+        GridView mTopicIconsGrid = (GridView) topicImages.findViewById(R.id.topicImagesGrid);
         fillIconsId();
 
         TopicImagesGridViewAdapter adapter =

@@ -12,6 +12,7 @@ import models.Topic;
 import models.Dictionary;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 
 /**
@@ -21,14 +22,11 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
 
     private Context mContext;
     private List<Dictionary> mDictionariesList;
-    private LayoutInflater inflater;
 
     public DictionariesListViewAdapter(Context context, List<Dictionary> dictionariesList) {
         super(context,0, dictionariesList);
         this.mDictionariesList = dictionariesList;
         this.mContext = context;
-        inflater = (LayoutInflater)context.
-                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -43,23 +41,16 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-       Holder holder = new Holder();
-       View listView = inflater.inflate(R.layout.fragment_vocabulary_list_item,null);
-
-       holder.nameTextView = (TextView) listView.findViewById(R.id.dictionaryNameText);
-       holder.dateTextView = (TextView) listView.findViewById(R.id.dateText);
-       holder.topicsNumberTextView = (TextView) listView.findViewById(R.id.numberTopicsText);
-
        Dictionary dictionary = mDictionariesList.get(position);
+
+       Holder holder = new Holder();
        holder.nameTextView.setText(dictionary.getName());
        holder.dateTextView.setText(mContext.getString(R.string.created) + " "
                + dictionary.getCreationDateString());
        holder.topicsNumberTextView.setText(mContext.getString(R.string.topics) +"  "
                + calculateTopics(dictionary.getId()));
-
-        return listView;
+       return holder.listView;
     }
-
 
     private long calculateTopics(long ID){
               return Topic.count(Topic.class,"dictionary_ID = " + ID,null );
@@ -67,8 +58,17 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
 
     private class Holder
     {
+        View listView;
         TextView nameTextView;
         TextView dateTextView;
         TextView topicsNumberTextView;
+
+        public Holder() {
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            this.listView = inflater.inflate(R.layout.fragment_vocabulary_list_item,null);
+            this.nameTextView = (TextView) listView.findViewById(R.id.dictionaryNameText);
+            this.dateTextView = (TextView) listView.findViewById(R.id.dateText);
+            this.topicsNumberTextView = (TextView) listView.findViewById(R.id.numberTopicsText);
+        }
     }
 }

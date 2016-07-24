@@ -15,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.study.xps.projectdictionary.R;
+
+import adapters.DictionaryLanguageSpinnerAdapter;
 import dialogs.UpdateDictionaryDialog;
 import models.Dictionary;
 import models.Tags;
@@ -24,7 +27,6 @@ import activities.DictionariesActivity;
 import activities.TopicsActivity;
 
 import java.util.List;
-
 
 /**
  * Created by XPS on 4/9/2016.
@@ -96,11 +98,23 @@ public class DictionariesListFragment extends ListFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContextActivity,
                 R.style.AppCompatAlertDialogStyle);
         builder.setTitle(getString(R.string.new_dict_title));
-        View dictionaryName = LayoutInflater.from(mContextActivity).
+        View dialogView = LayoutInflater.from(mContextActivity).
                 inflate(R.layout.dialog_dictionary_add,null);
-        final EditText input = (EditText) dictionaryName.findViewById(R.id.dictionaryNameText);
+        final EditText input = (EditText) dialogView.findViewById(R.id.dictionaryNameText);
 
-        builder.setView(dictionaryName);
+        DictionaryLanguageSpinnerAdapter spinnerFromAdapter =
+                new DictionaryLanguageSpinnerAdapter(mContextActivity);
+        final Spinner languageFromSpinner = (Spinner) dialogView.
+                findViewById(R.id.languageFromSpinner);
+        languageFromSpinner.setAdapter(spinnerFromAdapter);
+
+        DictionaryLanguageSpinnerAdapter spinnerToAdapter =
+                new DictionaryLanguageSpinnerAdapter(mContextActivity);
+        final Spinner languageToSpinner = (Spinner) dialogView.
+                findViewById(R.id.languageToSpinner);
+        languageToSpinner.setAdapter(spinnerToAdapter);
+
+        builder.setView(dialogView);
 
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
@@ -111,7 +125,6 @@ public class DictionariesListFragment extends ListFragment {
 
                 mContextActivity.updateData();
                 mContextActivity.updateViewData();
-
             }
         });
         builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

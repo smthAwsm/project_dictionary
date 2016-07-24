@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="80dp"
         android:layout_height="60dp"
-        android:id="@+id/imageView2"
+        android:id="@+id/flagImageView"
         android:layout_alignParentLeft="true"
         android:layout_margin="5dp"
         android:layout_alignParentTop="true"
@@ -18,9 +18,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView4"
+        android:id="@+id/languageTextView"
         android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/imageView2"
-        android:layout_toEndOf="@+id/imageView2"/>
+        android:layout_toRightOf="@+id/flagImageView"
+        android:layout_toEndOf="@+id/flagImageView"/>
 </RelativeLayout>

@@ -22,9 +22,9 @@
             style="@style/TextAppearance.AppCompat.Headline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/white"
-            tools:text="Page One"
             android:layout_above="@+id/selection_description"
             android:layout_centerHorizontal="true"/>
 

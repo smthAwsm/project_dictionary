@@ -67,7 +67,8 @@ public class TopicsRecyclingGridViewAdapter extends
                 Bundle bundle = new Bundle();
                 bundle.putLong(Tags.TOPIC_TAG, topic.getId());
                 updateTopicDialog.setArguments(bundle);
-                updateTopicDialog.show(mContextActivity.getActivityFragmentManager(),Tags.UPDATE_TOPIC_DIALOG);
+                updateTopicDialog.show(mContextActivity.getActivityFragmentManager(),
+                        Tags.UPDATE_TOPIC_DIALOG);
                 return true;
             }
         });
