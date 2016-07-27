@@ -13,8 +13,8 @@ public class Dictionary extends SugarRecord{
 
     private String dictionaryName;
     private String creationDate;
-    //private Language languageFrom;
-    //private Language TranslationTo;
+    //private Languages languageFrom;
+    //private Languages TranslationTo;
 
     public Dictionary(){
 

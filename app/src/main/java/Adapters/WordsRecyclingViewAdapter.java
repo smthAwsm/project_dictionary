@@ -3,7 +3,6 @@ package adapters;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 import dialogs.UpdateWordDialog;
-import models.Language;
+import models.Languages;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
@@ -101,7 +100,6 @@ public class WordsRecyclingViewAdapter extends
             public void onInit(int status) {
                 if(status == TextToSpeech.SUCCESS) {
                     mTextToSpeech.setLanguage(Locale.UK);
-                    mTextToSpeech.setLanguage(new Locale(Language.SLOVENIAN.toString()));
                 }
             }
         });

@@ -4,4 +4,28 @@
     <item>RENAME</item>
     <item>DELETE</item>
    </array>
+
+    <array name="languages">
+        <item name ="english">en</item>
+        <item name ="french">fr</item>
+        <item name ="italian">it</item>
+        <item name ="turkish">tr</item>
+        <item name ="german">de</item>
+        <item name ="russian">ru</item>
+        <item name ="spanish">es</item>
+        <item name ="japanese">ja</item>
+        <item name ="ukrainian">uk</item>
+    </array>
+
+    <integer-array name="flags">
+        <item>@drawable/gb</item>
+        <item>@drawable/fr</item>
+        <item>@drawable/it</item>
+        <item>@drawable/tr</item>
+        <item>@drawable/de</item>
+        <item>@drawable/ru</item>
+        <item>@drawable/es</item>
+        <item>@drawable/jp</item>
+        <item>@drawable/ua</item>
+    </integer-array>
 </resources>

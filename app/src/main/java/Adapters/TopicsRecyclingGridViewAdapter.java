@@ -28,7 +28,6 @@ public class TopicsRecyclingGridViewAdapter extends
     private List<Topic> mTopicList;
     private TopicsActivity mContextActivity;
 
-
     public TopicsRecyclingGridViewAdapter(List<Topic> data, TopicsActivity parent){
         mTopicList = data;
         this.mContextActivity = parent;
@@ -80,7 +79,6 @@ public class TopicsRecyclingGridViewAdapter extends
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         private View itemView;
         private ImageView topicImage;
         private TextView topicName;

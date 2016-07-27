@@ -27,7 +27,7 @@
         android:layout_alignStart="@+id/dictionaryNameText"
         android:layout_marginBottom="25dp"/>
 
-    <Spinner
+    <helpers.DropCheckingSpinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/languageToSpinner"
@@ -46,7 +46,7 @@
         android:layout_alignStart="@+id/textView2"
         android:layout_marginBottom="25dp"/>
 
-    <Spinner
+    <helpers.DropCheckingSpinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/languageFromSpinner"

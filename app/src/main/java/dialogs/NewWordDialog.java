@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 
-import models.Language;
+import models.Languages;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
@@ -181,8 +181,8 @@ public class NewWordDialog extends AppCompatDialogFragment {
 
         if (mIsOnline){
             try {
-                String fromLan = Language.UKRAINIAN.toString();
-                String toLan   = Language.ENGLISH  .toString();
+                String fromLan = Languages.UKRAINIAN.toString();
+                String toLan   = Languages.ENGLISH  .toString();
 
                 restURL = SERVICE_URL + PARAM_API_KEY + URLEncoder.encode(API_KEY,ENCODING)
                         + PARAM_LANG_PAIR + URLEncoder.encode(fromLan,ENCODING)

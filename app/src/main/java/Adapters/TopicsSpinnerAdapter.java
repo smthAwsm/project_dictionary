@@ -73,7 +73,8 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
 
         View topicImages = inflater.inflate(R.layout.dialog_topic_add_child,null);
         GridView mTopicIconsGrid = (GridView) topicImages.findViewById(R.id.topicImagesGrid);
-        fillIconsId();
+        mIconResouresId = new ArrayList<>();
+        fillIconsId(mIconResouresId);
 
         TopicImagesGridViewAdapter adapter =
                 new TopicImagesGridViewAdapter(mContext, mIconResouresId);
@@ -90,8 +91,7 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
         return mTopicIconsGrid;
     }
 
-    private void fillIconsId(){
-        mIconResouresId = new ArrayList<>();
+    private void fillIconsId(List<Integer> iconsList){
         int arrayId = mContext.getResources().
                 getIdentifier("graphics" , "array", mContext.getPackageName());
 
@@ -99,7 +99,7 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
         {
             TypedArray recources = mContext.getResources().obtainTypedArray(arrayId);
             for (int i = 0; i < recources.length(); i++ )
-                mIconResouresId.add(recources.getResourceId(i,0));
+                iconsList.add(recources.getResourceId(i,0));
             recources.recycle();
         }
     }
