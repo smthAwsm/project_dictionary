@@ -10,9 +10,13 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.study.xps.projectdictionary.R;
+
+import adapters.DictionaryLanguageSpinnerAdapter;
 import models.Dictionary;
+import models.Language;
 import models.Tags;
 import models.Topic;
 import models.Word;
@@ -31,6 +35,7 @@ import java.util.List;
 public class UpdateDictionaryDialog extends AppCompatDialogFragment {
 
     private DictionariesActivity mContextActivity;
+    private List<Language> mLanguages;
     private long mDictionaryID;
 
     @Override
@@ -62,18 +67,30 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
     };
 
     private void createUpdateDictionaryDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContextActivity,
                 R.style.AppCompatAlertDialogStyle);
         builder.setTitle(getString(R.string.new_dict_title));
-
-        View dictionaryUpdateDialog = LayoutInflater.from(getActivity()).
+        View dialogView = LayoutInflater.from(mContextActivity).
                 inflate(R.layout.dialog_dictionary_add,null);
-        final EditText dictionaryNameInput = (EditText) dictionaryUpdateDialog.
-                findViewById(R.id.dictionaryNameText);
+        final EditText dictionaryNameInput = (EditText) dialogView.findViewById(R.id.dictionaryNameText);
+
+        DictionaryLanguageSpinnerAdapter spinnerFromAdapter =
+                new DictionaryLanguageSpinnerAdapter(mContextActivity,mLanguages);
+        final Spinner languageFromSpinner = (Spinner) dialogView.
+                findViewById(R.id.languageFromSpinner);
+        languageFromSpinner.setAdapter(spinnerFromAdapter);
+
+        DictionaryLanguageSpinnerAdapter spinnerToAdapter =
+                new DictionaryLanguageSpinnerAdapter(mContextActivity,mLanguages);
+        final Spinner translationToSpinner = (Spinner) dialogView.
+                findViewById(R.id.languageToSpinner);
+        translationToSpinner.setAdapter(spinnerToAdapter);
+
+        builder.setView(dialogView);
+
         final Dictionary editDictionary = Dictionary.
                 findById(Dictionary.class, mDictionaryID);
         dictionaryNameInput.setText(editDictionary.getName());
-        builder.setView(dictionaryUpdateDialog);
 
         builder.setPositiveButton(getString(R.string.ok),
                 new DialogInterface.OnClickListener() {

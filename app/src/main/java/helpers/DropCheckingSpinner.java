@@ -1,6 +1,7 @@
 package helpers;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.Spinner;
 
 /**
@@ -14,7 +15,15 @@ public class DropCheckingSpinner extends Spinner {
         super(context);
     }
 
-    @Override
+    public DropCheckingSpinner(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public DropCheckingSpinner(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+        @Override
     public boolean performClick() {
         mOpenInitiated = true;
         if (mListener != null) {
@@ -40,7 +49,6 @@ public class DropCheckingSpinner extends Spinner {
 
     /**
      * A boolean flag indicating that the Spinner triggered an open event.
-     *
      * @return true for opened Spinner
      */
     public boolean hasBeenOpened() {

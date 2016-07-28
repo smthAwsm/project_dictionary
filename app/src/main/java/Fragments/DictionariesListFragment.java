@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +20,16 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.study.xps.projectdictionary.R;
-
 import adapters.DictionaryLanguageSpinnerAdapter;
 import dialogs.UpdateDictionaryDialog;
 import models.Dictionary;
+import models.Language;
+import models.Languages;
 import models.Tags;
 import activities.DictionariesActivity;
 import activities.TopicsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +39,7 @@ public class DictionariesListFragment extends ListFragment {
     private ListView mDictionariesListView;
     private DictionariesActivity mContextActivity;
     private List<Dictionary> mDictionariesList;
+    private List<Language> mLanguages;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class DictionariesListFragment extends ListFragment {
         mContextActivity = (DictionariesActivity)getActivity();
         mDictionariesList = mContextActivity.getActivityData();
         addDictionaryListListeners(view);
+        mLanguages = new ArrayList<>();
+        fillLanguagesData(mLanguages);
         return view;
     }
 
@@ -103,16 +110,16 @@ public class DictionariesListFragment extends ListFragment {
         final EditText input = (EditText) dialogView.findViewById(R.id.dictionaryNameText);
 
         DictionaryLanguageSpinnerAdapter spinnerFromAdapter =
-                new DictionaryLanguageSpinnerAdapter(mContextActivity);
+                new DictionaryLanguageSpinnerAdapter(mContextActivity,mLanguages);
         final Spinner languageFromSpinner = (Spinner) dialogView.
                 findViewById(R.id.languageFromSpinner);
         languageFromSpinner.setAdapter(spinnerFromAdapter);
 
         DictionaryLanguageSpinnerAdapter spinnerToAdapter =
-                new DictionaryLanguageSpinnerAdapter(mContextActivity);
-        final Spinner languageToSpinner = (Spinner) dialogView.
+                new DictionaryLanguageSpinnerAdapter(mContextActivity,mLanguages);
+        final Spinner translationToSpinner = (Spinner) dialogView.
                 findViewById(R.id.languageToSpinner);
-        languageToSpinner.setAdapter(spinnerToAdapter);
+        translationToSpinner.setAdapter(spinnerToAdapter);
 
         builder.setView(dialogView);
 
@@ -120,9 +127,14 @@ public class DictionariesListFragment extends ListFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String dictionaryName = input.getText().toString();
-                Dictionary newDictionary = new Dictionary(dictionaryName);
-                newDictionary.save();
-
+                int from = languageFromSpinner.getSelectedItemPosition();
+                int to = translationToSpinner.getSelectedItemPosition();
+                if (!dictionaryName.equals("") && to > 0) {
+                    Dictionary newDictionary = new Dictionary(dictionaryName,
+                            mLanguages.get(from).getLanguage().toString(),
+                            mLanguages.get(to).getLanguage().toString());
+                    newDictionary.save();
+                }
                 mContextActivity.updateData();
                 mContextActivity.updateViewData();
             }
@@ -134,5 +146,30 @@ public class DictionariesListFragment extends ListFragment {
             }
         });
         builder.show();
+    }
+
+    private void fillLanguagesData(List<Language> languagesList){
+        int arrayLanguagesId = mContextActivity.getResources().
+                getIdentifier("languages" , "array", mContextActivity.getPackageName());
+        int arrayFlagsId = mContextActivity.getResources().
+                getIdentifier("flags" , "array", mContextActivity.getPackageName());
+
+        if (arrayLanguagesId != 0 && arrayFlagsId !=0)
+        {
+            TypedArray languageRecources = mContextActivity.getResources().
+                    obtainTypedArray(arrayLanguagesId);
+            String[] languageStrings = languageRecources.getResources().
+                    getStringArray(arrayLanguagesId);
+            TypedArray flagRecources = mContextActivity.getResources().
+                    obtainTypedArray(arrayFlagsId);
+
+            for (int i = 0; i < languageRecources.length(); i++ ){
+                Languages language = Languages.fromString(languageStrings[i]);
+                Integer flagImageId = flagRecources.getResourceId(i,0);
+                languagesList.add(new Language(language,flagImageId));
+            }
+            languageRecources.recycle();
+            flagRecources.recycle();
+        }
     }
 }
