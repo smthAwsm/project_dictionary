@@ -21,6 +21,7 @@ import dialogs.TestStartDialog;
 import fragments.EmptyFragment;
 import fragments.WordsRecyclerListFragment;
 import helpers.ActivityDataInterface;
+import helpers.GlobalStorage;
 import models.Tags;
 import models.Word;
 
@@ -32,7 +33,7 @@ import java.util.List;
 /**
  * Created by XPS on 4/25/2016.
  */
-public class WordsActivity extends AppCompatActivity implements ActivityDataInterface {
+public class WordsActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
@@ -40,9 +41,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     private RecyclerView mWordsRecyclerViewView;
     private List<Integer> mShapeColors;
     private String mCurrentTopicName;
-
-    public static List<Word> sWordList = new ArrayList<>();;
-    public static long sCurrentTopicId;
+    private GlobalStorage mGlobalStorage;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -53,11 +52,12 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(mCurrentTopicName);
 
-        sCurrentTopicId = getIntent().getLongExtra(Tags.TOPIC_TAG,0);
+        mGlobalStorage = GlobalStorage.getStorage();
+        long currentTopicId = getIntent().getLongExtra(Tags.TOPIC_TAG,0);
+        mGlobalStorage.setCurrentTopicId(currentTopicId);
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,7 +69,8 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_test:
-                if (sWordList.size() > 8){
+                int wordsListSize = mGlobalStorage.getWordsData().size();
+                if (wordsListSize > 8){
                 DialogFragment testDialog = new TestStartDialog();
                 testDialog.show(getSupportFragmentManager(), Tags.NEW_WORD_DIALOG);}
                 else Toast.makeText(getApplicationContext(),
@@ -102,9 +103,7 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
     }
 
     public void loadAppropriateFragment(List<Word> dbWords){
-    sWordList = dbWords;
-        if(sWordList.isEmpty()) {
-
+        if(dbWords.isEmpty()) {
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof WordsRecyclerListFragment){
                 EmptyFragment emptyFragment = new EmptyFragment();
@@ -145,32 +144,27 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         }
     }
 
-    @Override
     public void updateData() {
-      new LoadWords().execute(sCurrentTopicId);
+      new LoadWords().execute(mGlobalStorage.getCurrentTopicId());
     }
 
-    @Override
     public void updateViewData() {
         if(mWordsRecyclerViewView != null){
             mWordsFragment.getAdapter().notifyDataSetChanged();
         }
     }
 
-    @Override
-    public List<Word> getActivityData() { return sWordList; }
-
-    @Override
     public FragmentManager getActivityFragmentManager() { return mFragmentManager; }
 
     public int getMaterialColor(int position){
-        if(mShapeColors != null && sWordList.size() <= mShapeColors.size()) {
+        int wordsListSize = mGlobalStorage.getWordsData().size();
+        if(mShapeColors != null && wordsListSize <= mShapeColors.size()) {
             return mShapeColors.get(position);
         } else {
-            if(sWordList.size() > 0){
+            if(wordsListSize > 0){
                 if(mShapeColors == null)
                     mShapeColors = new ArrayList<>();
-                addMatColor(mShapeColors, sWordList.size());
+                addMatColor(mShapeColors, wordsListSize);
                 return mShapeColors.get(position);
             }
         }
@@ -193,11 +187,11 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
                 }
             }
             else {
-                int diff = colorsNumber - resultArray.size();
-                if(diff !=0 ) {
+                int colorsToGenerate = colorsNumber - resultArray.size();
+                if(colorsToGenerate !=0 ) {
                     List<Integer> temp  = new ArrayList<Integer>();
 
-                    for (int i = 0; i < diff; i++){
+                    for (int i = 0; i < colorsToGenerate; i++){
                         int index = (int) (Math.random() * colors.length());
                         temp.add(colors.getColor(index, Color.BLACK));
                     }
@@ -208,7 +202,6 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
         }
     }
 
-
     class LoadWords extends AsyncTask<Long,Void,List<Word>> {
         @Override
         protected void onPreExecute() {
@@ -217,14 +210,8 @@ public class WordsActivity extends AppCompatActivity implements ActivityDataInte
 
         @Override
         protected List<Word> doInBackground(Long... params) {
-            try {
-                List<Word> wordsFound = Word.find(Word.class, "topic_ID = "+ sCurrentTopicId +"");
-                sWordList.clear();
-                sWordList.addAll(wordsFound);
-            } catch (Exception e){
-                sWordList = new ArrayList<Word>();
-            }
-            return sWordList;
+            mGlobalStorage.updateWordsData();
+            return mGlobalStorage.getWordsData();
         }
 
         @Override

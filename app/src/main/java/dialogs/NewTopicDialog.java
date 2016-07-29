@@ -1,9 +1,11 @@
 package dialogs;
 
 import android.app.Dialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.study.xps.projectdictionary.R;
+
+import helpers.GlobalStorage;
 import models.Tags;
 import activities.TopicsActivity;
 import adapters.TopicsSpinnerAdapter;
@@ -34,7 +38,6 @@ public class NewTopicDialog extends AppCompatDialogFragment {
     private Topic mEditTopic;
     private long mTopicId;
     private boolean mIsUpdate;
-
 
     @Nullable
     @Override
@@ -73,10 +76,16 @@ public class NewTopicDialog extends AppCompatDialogFragment {
 
         if(mIsUpdate){
             mEditTopic = Topic.findById(Topic.class, mTopicId);
-            mTopicIconView.setImageResource((int) mEditTopic.getImageRecourceID());
-            mTopicIconView.setTag(mEditTopic.getImageRecourceID());
-            mTopicNameEdit.setText(mEditTopic.getTopicName());
-        } else mEditTopic = new Topic();
+            int topicIconResourceId = (int) mEditTopic.getImageRecourceID();
+            mTopicIconView.setImageResource(topicIconResourceId);
+            mTopicIconView.setTag(topicIconResourceId);
+            String topicName = mEditTopic.getTopicName();
+            mTopicNameEdit.setText(topicName);
+            mTopicNameEdit.setSelection(topicName.length());
+        } else {
+            mEditTopic = new Topic();
+            mTopicIconView.setImageResource(R.drawable.ic_star);
+        }
 
         mSaveTopicButton = (Button) updateTopicDialog.findViewById(R.id.buttonAddTopic);
         mSaveTopicButton.setOnClickListener(saveTopicListener);
@@ -99,9 +108,10 @@ public class NewTopicDialog extends AppCompatDialogFragment {
             }
 
             if (!mTopicNameEdit.getText().toString().equals("")) {
+                GlobalStorage globalStorage = GlobalStorage.getStorage();
                 if (mTopicIconView.getTag() != null){
                     if (!mIsUpdate)
-                        new Topic(contextActivity.getCurrentDictionaryID(),
+                        new Topic(globalStorage.getCurrentDictionaryID(),
                                 mTopicNameEdit.getText().toString(),
                                 (Integer) mTopicIconView.getTag()).save();
                     else {
@@ -111,7 +121,7 @@ public class NewTopicDialog extends AppCompatDialogFragment {
                         mEditTopic.save();
                     }
                 } else if (!mIsUpdate) {
-                    new Topic(contextActivity.getCurrentDictionaryID(),
+                    new Topic(globalStorage.getCurrentDictionaryID(),
                             mTopicNameEdit.getText().toString(),
                             (Integer) mTopicIconView.getTag()).save();
                 } else {
@@ -129,10 +139,10 @@ public class NewTopicDialog extends AppCompatDialogFragment {
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        if(dialog != null)
+        if(dialog != null) {
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        }
     }
 
     public void setTopicImage(int recourceID){
@@ -148,8 +158,8 @@ public class NewTopicDialog extends AppCompatDialogFragment {
             method.invoke(spinner);
         } catch (Exception e) {
         e.printStackTrace();
+        }
     }
-}
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -165,8 +175,7 @@ public class NewTopicDialog extends AppCompatDialogFragment {
             mTopicIconView.setImageResource(imageResource);
             mTopicIconView.setTag(imageResource);
         } catch (NullPointerException e){
-            mTopicIconView.setImageResource(R.drawable.ic_star);
-            mTopicIconView.setTag(R.drawable.ic_star);
+            Log.e("RESOURCE ERROR","Icon resource not found!");
         }
     }
 }

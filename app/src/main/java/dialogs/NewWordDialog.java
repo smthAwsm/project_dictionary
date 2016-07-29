@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 
+import helpers.GlobalStorage;
 import models.Languages;
 import models.Tags;
 import models.Word;
@@ -54,13 +55,12 @@ public class NewWordDialog extends AppCompatDialogFragment {
 
     private TextView mOkView;
     private TextView mCancelView;
-    private EditText mWordTextBox;
-    private AutoCompleteTextView mTranslationTextBox;
+    private EditText mWordTextEdit;
+    private AutoCompleteTextView mTranslationTextView;
     private Word mEditWord;
     private Boolean mIsOnline = false;
     private boolean mIsUpdate;
     private long mWordId;
-    private static DelayedTranslation sDelayedTranslationTask;
 
     @Nullable
     @Override
@@ -98,16 +98,20 @@ public class NewWordDialog extends AppCompatDialogFragment {
         View topicDialog = inflater.inflate(R.layout.dialog_word_add,null);
         mOkView = (TextView) topicDialog.findViewById(R.id.newWordOK);
         mCancelView = (TextView) topicDialog.findViewById(R.id.newWordCancel);
-        mWordTextBox = (EditText) topicDialog.findViewById(R.id.wordTextBox);
-        mTranslationTextBox = (AutoCompleteTextView)
+        mWordTextEdit = (EditText) topicDialog.findViewById(R.id.wordTextBox);
+        mTranslationTextView = (AutoCompleteTextView)
                 topicDialog.findViewById(R.id.translationTextBox);
 
-        mWordTextBox.addTextChangedListener(mWordValueWatcher);
+        mWordTextEdit.addTextChangedListener(mWordValueWatcher);
 
         if(mIsUpdate) {
             mEditWord = Word.findById(Word.class, mWordId);
-            mWordTextBox.setText(mEditWord.getValue());
-            mTranslationTextBox.setText(mEditWord.getTranslation());
+            String wordValue = mEditWord.getValue();
+            mWordTextEdit.setText(wordValue);
+            mWordTextEdit.setSelection(wordValue.length());
+            String translationValue = mEditWord.getTranslation();
+            mTranslationTextView.setText(translationValue);
+            mTranslationTextView.setSelection(translationValue.length());
         } else mEditWord = new Word();
 
        /* InputFilter filter = new InputFilter() {
@@ -121,7 +125,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 return null;
             }
         };
-        mTranslationTextBox.setFilters(new InputFilter[] { filter });*/
+        mTranslationTextView.setFilters(new InputFilter[] { filter });*/
 
         mOkView.setOnClickListener(mOkClickListener);
         mCancelView.setOnClickListener(new View.OnClickListener() {
@@ -138,16 +142,17 @@ public class NewWordDialog extends AppCompatDialogFragment {
         @Override
         public void onClick(View v) {
             WordsActivity parent = (WordsActivity) getActivity();
-            if ((!mWordTextBox.getText().toString().equals("")) &&
-                    (!mTranslationTextBox.getText().toString().equals(""))){
+            if ((!mWordTextEdit.getText().toString().equals("")) &&
+                    (!mTranslationTextView.getText().toString().equals(""))){
 
                 if(!mIsUpdate) {
-                    new Word(WordsActivity.sCurrentTopicId, mWordTextBox.getText().toString(),
-                            mTranslationTextBox.getText().toString()).save();
+                    long currentTopicId = GlobalStorage.getStorage().getCurrentTopicId();
+                    new Word(currentTopicId, mWordTextEdit.getText().toString(),
+                            mTranslationTextView.getText().toString()).save();
                 }
                 if (mIsUpdate){
-                    mEditWord.setValue(mWordTextBox.getText().toString());
-                    mEditWord.setTranslation(mTranslationTextBox.getText().toString());
+                    mEditWord.setValue(mWordTextEdit.getText().toString());
+                    mEditWord.setTranslation(mTranslationTextView.getText().toString());
                     mEditWord.save();
                 }
             } else return;
@@ -158,6 +163,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
     };
 
     private TextWatcher mWordValueWatcher = new TextWatcher() {
+        private DelayedTranslation mDelayedTranslationTask;
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
@@ -166,13 +172,11 @@ public class NewWordDialog extends AppCompatDialogFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-
-            if(sDelayedTranslationTask != null){
-                sDelayedTranslationTask.cancel(true);
+            if(mDelayedTranslationTask != null){
+                mDelayedTranslationTask.cancel(true);
             }
-
-            sDelayedTranslationTask = new DelayedTranslation(s.toString());
-            sDelayedTranslationTask.execute();
+            mDelayedTranslationTask = new DelayedTranslation(s.toString());
+            mDelayedTranslationTask.execute();
         }
     };
 
@@ -229,9 +233,9 @@ public class NewWordDialog extends AppCompatDialogFragment {
                 if(translation[0] != null){
                     ArrayAdapter adapter = new ArrayAdapter(getActivity(),
                             android.R.layout.simple_list_item_1,translation);
-                    mTranslationTextBox.setAdapter(adapter);
-                    mTranslationTextBox.setThreshold(1);
-                    mTranslationTextBox.showDropDown();
+                    mTranslationTextView.setAdapter(adapter);
+                    mTranslationTextView.setThreshold(1);
+                    mTranslationTextView.showDropDown();
                 }
             } catch (JSONException e) {
                     Toast.makeText(getActivity(), "TRANSLATING ERROR",
@@ -266,7 +270,6 @@ public class NewWordDialog extends AppCompatDialogFragment {
 
     private class DelayedTranslation extends AsyncTask {
         private String mText;
-
         DelayedTranslation(String text){
             this.mText = text;
         }
@@ -300,7 +303,7 @@ public class NewWordDialog extends AppCompatDialogFragment {
         @Override
         protected void onCancelled() {
             super.onCancelled();
-            Log.e(Tags.LOG_TAG,"CANCELED azzazazazaza");
+            Log.e(Tags.LOG_TAG,"CANCELED");
         }
     }
 }

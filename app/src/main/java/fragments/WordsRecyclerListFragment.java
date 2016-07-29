@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.study.xps.projectdictionary.R;
 import adapters.WordsRecyclingViewAdapter;
 import dialogs.NewWordDialog;
+import helpers.GlobalStorage;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
@@ -29,7 +30,6 @@ public class WordsRecyclerListFragment extends Fragment {
     private WordsActivity mContexActivity;
     private RecyclerView mWordsList;
     private WordsRecyclingViewAdapter mRecyclingViewAdapter;
-    private List<Word> mWordsData;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class WordsRecyclerListFragment extends Fragment {
         addWordViewListeners(view);
 
         mContexActivity = (WordsActivity) getActivity();
-        mWordsData = mContexActivity.getActivityData();
+        List<Word> wordsData = GlobalStorage.getStorage().getWordsData();
         mWordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
-        mRecyclingViewAdapter = new WordsRecyclingViewAdapter(mWordsData, mContexActivity);
+        mRecyclingViewAdapter = new WordsRecyclingViewAdapter(wordsData, mContexActivity);
         mRecyclingViewAdapter.setHasStableIds(false);
         mWordsList.setAdapter(mRecyclingViewAdapter);
         mWordsList.setLayoutManager(new LinearLayoutManager(mContexActivity));
@@ -56,7 +56,6 @@ public class WordsRecyclerListFragment extends Fragment {
     }
 
     private void addWordViewListeners(View view){
-
         FloatingActionButton addDictionaryButton = (FloatingActionButton)
                 view.findViewById(R.id.addNewWordFAB);
         addDictionaryButton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +66,6 @@ public class WordsRecyclerListFragment extends Fragment {
             }
         });
     }
-
 
     public WordsRecyclingViewAdapter getAdapter() {
         return mRecyclingViewAdapter;

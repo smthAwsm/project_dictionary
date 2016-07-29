@@ -18,7 +18,6 @@
         <meta-data android:name="VERSION" android:value="1" />
         <meta-data android:name="QUERY_LOG" android:value="true" />
 
-
         <activity
             android:name="activities.SplashActivity" android:theme="@style/AppThemeNoBar">
             <intent-filter>
@@ -51,5 +50,4 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
     </application>
-
 </manifest>

@@ -15,6 +15,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
+
+import helpers.GlobalStorage;
 import models.Tags;
 import activities.TestingActivity;
 import activities.WordsActivity;
@@ -34,30 +36,30 @@ public class TestStartDialog extends DialogFragment {
         View.OnClickListener cardClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long currentTopicId = GlobalStorage.getStorage().getCurrentTopicId();
                 switch (v.getId()) {
                     case R.id.testingLevelBeginer:
                         Intent intentBegin = new Intent(getActivity(), TestingActivity.class);
-                        intentBegin.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
+                        intentBegin.putExtra(Tags.TOPIC_TAG, currentTopicId);
                         intentBegin.putExtra(Tags.TESTING_TYPE_TAG,0);
                         startActivity(intentBegin);
                         dismiss();
                         break;
                     case R.id.testingLevelNormal:
                         Intent intentNorm = new Intent(getActivity(), TestingActivity.class);
-                        intentNorm.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
+                        intentNorm.putExtra(Tags.TOPIC_TAG, currentTopicId);
                         intentNorm.putExtra(Tags.TESTING_TYPE_TAG,1);
                         startActivity(intentNorm);
                         dismiss();
                         break;
                     case R.id.testingLevelAdvanced:
                         Intent intentAdvan = new Intent(getActivity(), TestingActivity.class);
-                        intentAdvan.putExtra(Tags.TOPIC_TAG, WordsActivity.sCurrentTopicId);
+                        intentAdvan.putExtra(Tags.TOPIC_TAG, currentTopicId);
                         intentAdvan.putExtra(Tags.TESTING_TYPE_TAG,2);
                         startActivity(intentAdvan);
                         dismiss();
                         break;
                 }
-
             }
         };
 

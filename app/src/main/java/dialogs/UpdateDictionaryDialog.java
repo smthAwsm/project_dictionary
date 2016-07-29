@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import com.study.xps.projectdictionary.R;
 
 import adapters.DictionaryLanguageSpinnerAdapter;
+import helpers.GlobalStorage;
 import models.Dictionary;
 import models.Language;
 import models.Tags;
@@ -35,7 +36,7 @@ import java.util.List;
 public class UpdateDictionaryDialog extends AppCompatDialogFragment {
 
     private DictionariesActivity mContextActivity;
-    private List<Language> mLanguages;
+    private List<Language> mLanguages; //TODO DELETE
     private long mDictionaryID;
 
     @Override
@@ -101,7 +102,8 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
                         editDictionary.setDictionaryName(dictionaryName);
                         editDictionary.save();
 
-                        mContextActivity.updateData();
+                        GlobalStorage mGlobalStorage = GlobalStorage.getStorage();
+                        mGlobalStorage.updateDictionariesData();
                         mContextActivity.loadAppropriateFragment();
                         dismiss();
                         mContextActivity.updateViewData();
@@ -140,7 +142,8 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
             }
         });
 
-        mContextActivity.updateData();
+        GlobalStorage mGlobalStorage = GlobalStorage.getStorage();
+        mGlobalStorage.updateDictionariesData();
         mContextActivity.updateViewData();
         dismiss();
         mContextActivity.loadAppropriateFragment();

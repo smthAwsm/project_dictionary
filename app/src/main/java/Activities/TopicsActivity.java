@@ -16,24 +16,23 @@ import com.study.xps.projectdictionary.R;
 import fragments.EmptyFragment;
 import fragments.TopicsRecyclerGridFragment;
 import helpers.ActivityDataInterface;
+import helpers.GlobalStorage;
 import models.Tags;
 import models.Topic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * Created by XPS on 4/12/2016.
  */
-public class TopicsActivity extends AppCompatActivity implements ActivityDataInterface{
+public class TopicsActivity extends AppCompatActivity {
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private TopicsRecyclerGridFragment mTopicsRecyclerGridFragment;
     private RecyclerView mTopicsView;
-    private static List<Topic> sTopicList;
-    private long mCurrentDictionaryID;
+    private GlobalStorage mGlobalStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,9 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(getString(R.string.topics_title));
 
-        sTopicList = new ArrayList<>();
-        mCurrentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
+        mGlobalStorage = GlobalStorage.getStorage();
+        long currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
+        mGlobalStorage.setCurrentDictionaryID(currentDictionaryID);
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }
@@ -67,8 +67,7 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     }
 
     public void loadAppropriateFragment(List<Topic> dbData){
-        sTopicList = dbData;
-        if(sTopicList.isEmpty()) {
+        if(dbData.isEmpty()) {
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof TopicsRecyclerGridFragment){
                 EmptyFragment noTopicsFragments = new EmptyFragment();
@@ -110,7 +109,7 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
     }
 
     public void updateData(){
-        new LoadTopics().execute(mCurrentDictionaryID);
+        new LoadTopics().execute(mGlobalStorage.getCurrentDictionaryID());
     }
 
     public void updateViewData(){
@@ -119,40 +118,20 @@ public class TopicsActivity extends AppCompatActivity implements ActivityDataInt
         }
     }
 
-    public long getCurrentDictionaryID() {
-        return mCurrentDictionaryID;
-    }
-    public List<Topic> getActivityData() {
-        return sTopicList;
-    }
     public FragmentManager getActivityFragmentManager() {
         return mFragmentManager;
     }
 
-    class LoadTopics extends AsyncTask<Long,Void,List<Topic>>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
+    class LoadTopics extends AsyncTask<Long,Void,List<Topic>> {
         @Override
         protected List<Topic> doInBackground(Long... params) {
-
-            try {
-                List <Topic> topicsFound = Topic.find(Topic.class,
-                        "dictionary_ID = " + mCurrentDictionaryID +"");
-                sTopicList.clear();
-                sTopicList.addAll(topicsFound);
-            } catch (Exception e){
-                sTopicList = new ArrayList<Topic>();
-            }
-            return sTopicList;
+            mGlobalStorage.updateTopicsData(mGlobalStorage.getCurrentDictionaryID());
+            return mGlobalStorage.getTopicsData();
         }
 
         @Override
         protected void onPostExecute(List<Topic> topics) {
             super.onPostExecute(topics);
-
             loadAppropriateFragment(topics);
             updateViewData();
         }

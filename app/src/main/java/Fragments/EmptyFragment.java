@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.study.xps.projectdictionary.R;
 import dialogs.NewTopicDialog;
 import dialogs.NewWordDialog;
+import helpers.GlobalStorage;
 import models.Dictionary;
 import models.Tags;
 import activities.DictionariesActivity;
@@ -82,45 +83,11 @@ public class EmptyFragment extends Fragment {
             listener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DictionariesActivity parent = (DictionariesActivity) getActivity();
-                    createDictionaryAlert(parent);
+                    DictionariesActivity context = (DictionariesActivity) getActivity();
+                    context.createDictionaryAlert();
                 }
             };
         }
         return listener;
     }
-
-    private void createDictionaryAlert(final DictionariesActivity contextActivity){
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(contextActivity);
-        builder.setTitle(getString(R.string.new_dict_title));
-
-        final EditText mDictionaryNameEdit = new EditText(contextActivity);
-        mDictionaryNameEdit.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(mDictionaryNameEdit);
-
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String dictionaryName = mDictionaryNameEdit.getText().toString();
-                Dictionary newDictionary = new Dictionary(dictionaryName);
-                newDictionary.save();
-
-                contextActivity.updateData();
-                contextActivity.loadAppropriateFragment();
-            }
-        });
-        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-    }
-
-
-
-
-
 }

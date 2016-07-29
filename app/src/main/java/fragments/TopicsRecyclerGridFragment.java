@@ -15,6 +15,7 @@ import android.view.ViewTreeObserver;
 import com.study.xps.projectdictionary.R;
 import adapters.TopicsRecyclingGridViewAdapter;
 import dialogs.NewTopicDialog;
+import helpers.GlobalStorage;
 import models.Tags;
 import activities.TopicsActivity;
 
@@ -40,8 +41,9 @@ public class TopicsRecyclerGridFragment extends Fragment {
         mContexActivity = (TopicsActivity) getActivity();
         addTopicListListeners(view);
 
+        GlobalStorage globalStorage = GlobalStorage.getStorage();
         mTopicsGridRecycler = new TopicsRecyclingGridViewAdapter(
-                mContexActivity.getActivityData(), mContexActivity);
+               globalStorage.getTopicsData() , mContexActivity);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
         mRecyclerView.setAdapter(mTopicsGridRecycler);
 
