@@ -81,7 +81,7 @@ public class WordsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
+/*    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
          outState.putSerializable(Tags.MATERIAL_COLORS, (Serializable) mShapeColors);
@@ -100,7 +100,7 @@ public class WordsActivity extends AppCompatActivity {
         } catch(Exception e){
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void loadAppropriateFragment(List<Word> dbWords){
         if(dbWords.isEmpty()) {
@@ -211,13 +211,13 @@ public class WordsActivity extends AppCompatActivity {
         @Override
         protected List<Word> doInBackground(Long... params) {
             mGlobalStorage.updateWordsData();
-            return mGlobalStorage.getWordsData();
+            List<Word> wordsData = mGlobalStorage.getWordsData();
+            return wordsData;
         }
 
         @Override
         protected void onPostExecute(List<Word> wordList) {
             super.onPostExecute(wordList);
-
             loadAppropriateFragment(wordList);
             updateViewData();
         }

@@ -64,7 +64,7 @@ public class NewTopicDialog extends AppCompatDialogFragment {
         View updateTopicDialog = inflater.inflate(R.layout.dialog_topic_add,null);
         mTopicImagesSpinner = (Spinner) updateTopicDialog.findViewById(R.id.imagesSpinner);
 
-        mTopicIconView =  (ImageView) updateTopicDialog.findViewById(R.id.imageView);
+        mTopicIconView =  (ImageView) updateTopicDialog.findViewById(R.id.languageFromImageView);
         mTopicIconView.setTag(R.drawable.ic_star);
         mTopicIconView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -36,7 +36,6 @@ import java.util.List;
 public class UpdateDictionaryDialog extends AppCompatDialogFragment {
 
     private DictionariesActivity mContextActivity;
-    private List<Language> mLanguages; //TODO DELETE
     private long mDictionaryID;
 
     @Override
@@ -76,13 +75,13 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
         final EditText dictionaryNameInput = (EditText) dialogView.findViewById(R.id.dictionaryNameText);
 
         DictionaryLanguageSpinnerAdapter spinnerFromAdapter =
-                new DictionaryLanguageSpinnerAdapter(mContextActivity,mLanguages);
+                new DictionaryLanguageSpinnerAdapter(mContextActivity);
         final Spinner languageFromSpinner = (Spinner) dialogView.
                 findViewById(R.id.languageFromSpinner);
         languageFromSpinner.setAdapter(spinnerFromAdapter);
 
         DictionaryLanguageSpinnerAdapter spinnerToAdapter =
-                new DictionaryLanguageSpinnerAdapter(mContextActivity,mLanguages);
+                new DictionaryLanguageSpinnerAdapter(mContextActivity);
         final Spinner translationToSpinner = (Spinner) dialogView.
                 findViewById(R.id.languageToSpinner);
         translationToSpinner.setAdapter(spinnerToAdapter);
@@ -92,6 +91,7 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
         final Dictionary editDictionary = Dictionary.
                 findById(Dictionary.class, mDictionaryID);
         dictionaryNameInput.setText(editDictionary.getName());
+        dictionaryNameInput.setSelection(editDictionary.getName().length());
 
         builder.setPositiveButton(getString(R.string.ok),
                 new DialogInterface.OnClickListener() {

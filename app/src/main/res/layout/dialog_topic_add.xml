@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/imageView"
+        android:id="@+id/languageFromImageView"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"/>
 
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@android:string/ok"
         android:id="@+id/buttonAddTopic"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/languageFromImageView"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 
@@ -25,18 +25,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imagesSpinner"
-        android:layout_below="@+id/imageView"
-        android:layout_alignStart="@+id/imageView"
+        android:layout_below="@+id/languageFromImageView"
+        android:layout_alignStart="@+id/languageFromImageView"
         android:layout_toStartOf="@+id/buttonAddTopic"
-        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignLeft="@+id/languageFromImageView"
         android:layout_toLeftOf="@+id/buttonAddTopic" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView">
+        android:layout_alignBottom="@+id/languageFromImageView"
+        android:layout_toEndOf="@+id/languageFromImageView"
+        android:layout_toRightOf="@+id/languageFromImageView">
 
         <AutoCompleteTextView
             android:id="@+id/topicNameTextBox"
@@ -48,8 +48,8 @@
             android:singleLine="true"
             android:focusable="true"
             android:layout_above="@+id/imagesSpinner"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toRightOf="@+id/imageView" />
+            android:layout_toEndOf="@+id/languageFromImageView"
+            android:layout_toRightOf="@+id/languageFromImageView" />
     </android.support.design.widget.TextInputLayout>
 </RelativeLayout>
 

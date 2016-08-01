@@ -1,15 +1,19 @@
 package helpers;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.speech.tts.TextToSpeech;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import models.Dictionary;
 import models.Language;
-import models.Languages;
+import models.TranslateApiLanguage;
 import models.Topic;
 import models.Word;
 
@@ -23,6 +27,7 @@ public class GlobalStorage {
     private List<Topic> mTopicList;
     private List<Word> mWordsList;
 
+    private TextToSpeech mTextToSpeech;
     private long mCurrentDictionaryID;
     private long mCurrentTopicId;
 
@@ -43,6 +48,7 @@ public class GlobalStorage {
         mDictionariesList = Dictionary.listAll(Dictionary.class);
     }
     public List<Dictionary> getDictionariesData() {
+        if(mDictionariesList == null) updateDictionariesData();
         return mDictionariesList;
     }
     public long getCurrentDictionaryID() {
@@ -50,6 +56,12 @@ public class GlobalStorage {
     }
     public void setCurrentDictionaryID(long currentDictionaryID) {
         mCurrentDictionaryID = currentDictionaryID;
+    }
+    public Dictionary getCurrentDictionary(){
+        List<Dictionary> currentDictionary = Dictionary.find(Dictionary.class,"ID = " + mCurrentDictionaryID);
+                //Topic.find(Topic.class,
+                //"dictionary_ID = " + currentDictionaryID + "");
+        return currentDictionary.get(0);
     }
 
     public void updateTopicsData(long currentDictionaryID ) {
@@ -63,10 +75,11 @@ public class GlobalStorage {
                     "dictionary_ID = " + currentDictionaryID + "");
             mTopicList.addAll(topicsFound);
         } catch (Exception e) {
-            mTopicList = new ArrayList<Topic>();
+            mTopicList = new ArrayList<>();
         }
     }
     public List<Topic> getTopicsData() {
+        if(mTopicList == null) updateTopicsData(mCurrentDictionaryID);
         return mTopicList;
     }
     public long getCurrentTopicId() {
@@ -77,19 +90,24 @@ public class GlobalStorage {
     }
 
     public void updateWordsData() {
+        if(mWordsList != null){
+            mWordsList.clear();
+        } else {
+            mWordsList = new ArrayList<>();
+        }
         try {
             List<Word> wordsFound = Word.find(Word.class, "topic_ID = "+ mCurrentTopicId +"");
-            mWordsList.clear();
             mWordsList.addAll(wordsFound);
         } catch (Exception e){
-            mWordsList = new ArrayList<Word>();
+            mWordsList = new ArrayList<>();
         }
     }
     public List<Word> getWordsData() {
+        if(mWordsList == null) updateWordsData();
         return mWordsList;
     }
 
-    private void fillLanguagesData(Context context){
+    public List<Language> getUsedLanguagesList(Context context){
         int arrayLanguagesId = context.getResources().
                 getIdentifier("languages" , "array", context.getPackageName());
         int arrayFlagsId = context.getResources().
@@ -104,21 +122,50 @@ public class GlobalStorage {
             TypedArray flagRecources = context.getResources().
                     obtainTypedArray(arrayFlagsId);
 
-            mLanguagesList = new ArrayList<>();
+            List<Language> languagesList = new ArrayList<>();
             for (int i = 0; i < languageRecources.length(); i++ ){
-                Languages language = Languages.fromString(languageStrings[i]);
+                TranslateApiLanguage language = TranslateApiLanguage.fromString(languageStrings[i]);
                 Integer flagImageId = flagRecources.getResourceId(i,0);
-                mLanguagesList.add(new Language(language,flagImageId));
+                languagesList.add(new Language(language,flagImageId));
             }
             languageRecources.recycle();
             flagRecources.recycle();
+            return languagesList;
         }
+        return null;
     }
 
-    public List<Language> getLanguagesList(Context context){
-        if(mLanguagesList == null || !(mLanguagesList.size() > 0)){
-            fillLanguagesData(context);
+    public void loadSupportedLanguagesList(final Context context){
+        mTextToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                Locale[] locales = Locale.getAvailableLocales();
+                Set<String> localeSet = new HashSet<>();
+                for (Locale locale : locales) {
+                    int res = mTextToSpeech.isLanguageAvailable(locale);
+                    if (res == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                        localeSet.add(locale.getLanguage());
+                    }
+                }
+
+                int i = 0;
+
+                List<Language> usedLanguagesList = getUsedLanguagesList(context);
+                for (Language lan : usedLanguagesList){
+                    String language = lan.getLanguage().toString();
+                    for (String supportedLanguage : localeSet){
+                        if(language.equals(supportedLanguage)){
+                            mLanguagesList.add(lan);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public List<Language> getLanguagesList() {
+        if (mLanguagesList != null && mLanguagesList.size() > 0) {
             return mLanguagesList;
-        } else return mLanguagesList;
+        } else return mLanguagesList = new ArrayList<>();
     }
 }

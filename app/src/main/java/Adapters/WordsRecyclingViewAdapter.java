@@ -12,15 +12,12 @@ import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 import dialogs.UpdateWordDialog;
-import models.Languages;
+import helpers.GlobalStorage;
 import models.Tags;
 import models.Word;
 import activities.WordsActivity;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 
 /**
@@ -29,20 +26,34 @@ import java.util.Set;
 public class WordsRecyclingViewAdapter extends
         RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
-    private List<Word> mWordList;
     private WordsActivity mContextActivity;
     private TextToSpeech mTextToSpeech;
+    private GlobalStorage mGlobalStorage;
 
-    public WordsRecyclingViewAdapter(List<Word> mWordList, WordsActivity parent){
-            this.mWordList = mWordList;
-            this.mContextActivity = parent;
-            Locale[] azza = Locale.getAvailableLocales();
+    public WordsRecyclingViewAdapter(WordsActivity parent){
+        mGlobalStorage = GlobalStorage.getStorage();
+        this.mContextActivity = parent;
 
-        Set<String> lan = new HashSet();
+//        Dictionary dic = mGlobalStorage.getCurrentDictionary();
 
-        for (Locale loc : azza)
-            lan.add(loc.getLanguage());
-            getTTS();
+//        Locale[] azza = Locale.getAvailableLocales();
+//        Set<String> lan = new HashSet();
+//
+//        for (Locale loc : azza)
+//            lan.add(loc.getLanguage());
+
+
+
+//        mTts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+//            @Override
+//            public void onInit(int status) {
+//                if(status == TextToSpeech.SUCCESS) {
+//                    mTts.setLanguage(Locale.UK);
+//                }
+//            }
+//        });
+
+        getTTS();
     }
 
     @Override
@@ -57,7 +68,7 @@ public class WordsRecyclingViewAdapter extends
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        final Word word = mWordList.get(position);
+        final Word word = mGlobalStorage.getWordsData().get(position);
         holder.bindData(word,position);
 
         holder.mPronounceButton.setTag(position);
@@ -91,7 +102,7 @@ public class WordsRecyclingViewAdapter extends
 
     @Override
     public int getItemCount() {
-        return mWordList.size();
+        return mGlobalStorage.getWordsData().size();
     }
 
     private void getTTS(){

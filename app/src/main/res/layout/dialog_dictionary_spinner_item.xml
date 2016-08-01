@@ -19,6 +19,7 @@
         android:text="Medium Text"
         android:id="@+id/languageTextView"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="14dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/flagImageView"
         android:layout_toEndOf="@+id/flagImageView"/>

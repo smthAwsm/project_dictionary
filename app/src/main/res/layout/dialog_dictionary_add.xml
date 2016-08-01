@@ -16,16 +16,22 @@
         android:inputType="text"
         android:hint="@string/new_dict_title"/>
 
+    <helpers.DropCheckingSpinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/languageFromSpinner"
+        android:layout_below="@+id/dictionaryNameText"
+        android:layout_toRightOf="@+id/textView2"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/from_language"
         android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/languageFromSpinner"
+        android:layout_alignTop="@+id/languageFromSpinner"
         android:layout_alignLeft="@+id/dictionaryNameText"
-        android:layout_alignStart="@+id/dictionaryNameText"
-        android:layout_marginBottom="25dp"/>
+        android:layout_marginTop="20dp"/>
 
     <helpers.DropCheckingSpinner
         android:layout_width="wrap_content"
@@ -33,7 +39,7 @@
         android:id="@+id/languageToSpinner"
         android:layout_below="@+id/languageFromSpinner"
         android:layout_alignLeft="@+id/languageFromSpinner"
-        android:layout_toRightOf="@+id/textView2"/>
+        android:layout_alignStart="@+id/languageFromSpinner"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,17 +47,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/to_language"
         android:id="@+id/textView3"
-        android:layout_alignBottom="@+id/languageToSpinner"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_marginBottom="25dp"/>
-
-    <helpers.DropCheckingSpinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/languageFromSpinner"
-        android:layout_below="@+id/dictionaryNameText"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2"/>
+        android:layout_alignTop="@+id/languageToSpinner"
+        android:layout_toLeftOf="@+id/languageToSpinner"
+        android:layout_marginTop="20dp"/>
 
 </RelativeLayout>

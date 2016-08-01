@@ -8,11 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="26dp"
         android:text="____________________"
         android:id="@+id/dictionaryNameText"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"/>
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_toLeftOf="@+id/languageFromImageView"
+        android:layout_toStartOf="@+id/languageFromImageView"/>
 
 
     <TextView
@@ -21,11 +25,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/topics"
         android:id="@+id/numberTopicsText"
+        android:textSize="20dp"
+        android:layout_marginLeft="14dp"
         android:layout_below="@+id/dictionaryNameText"
         android:layout_alignLeft="@+id/dictionaryNameText"
-        android:layout_alignStart="@+id/dictionaryNameText"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_alignStart="@+id/dictionaryNameText"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,10 +37,39 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="________"
         android:id="@+id/dateText"
-        android:layout_below="@+id/dictionaryNameText"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="10dp"/>
+        android:textSize="14dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/numberTopicsText"
+        android:layout_alignLeft="@+id/numberTopicsText"
+        android:layout_alignStart="@+id/numberTopicsText"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:id="@+id/languageToImageView"
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:id="@+id/imageView3"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/languageToImageView"
+        android:src="@drawable/ic_trending_flat_black_24dp"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:id="@+id/languageFromImageView"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="14dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/imageView3"
+        android:layout_toStartOf="@+id/imageView3"/>
 
 </RelativeLayout>

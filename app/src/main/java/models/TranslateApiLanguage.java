@@ -1,9 +1,9 @@
 package models;
 
 /**
- * Languages - an enum of language codes supported by the Yandex API
+ * TranslateApiLanguage - an enum of language codes supported by the Yandex API
  */
-public enum Languages {
+public enum TranslateApiLanguage {
   ALBANIAN("sq"),
   ARMENIAN("hy"),
   AZERBAIJANI("az"),
@@ -43,13 +43,13 @@ public enum Languages {
   private final String language;
 
 
-  private Languages(final String pLanguage) {
+  private TranslateApiLanguage(final String pLanguage) {
     language = pLanguage;
   }
 
-  public static Languages fromString(final String pLanguage) {
-  Languages  result = null;
-      for (Languages l: values()){
+  public static TranslateApiLanguage fromString(final String pLanguage) {
+  TranslateApiLanguage result = null;
+      for (TranslateApiLanguage l: values()){
           if(l.language.equals(pLanguage)){
               result = l;
           }
@@ -59,7 +59,7 @@ public enum Languages {
 
   @Override
   public String toString() {
-    return name();
+    return language;
   }
 
 }

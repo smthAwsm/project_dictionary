@@ -5,9 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
+
+import helpers.GlobalStorage;
+import models.Language;
 import models.Topic;
 import models.Dictionary;
 
@@ -49,6 +53,15 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
                + dictionary.getCreationDateString());
        holder.topicsNumberTextView.setText(mContext.getString(R.string.topics) +"  "
                + calculateTopics(dictionary.getId()));
+       for(Language lan : holder.languagesList){
+           String dictionaryLanguage = lan.getLanguage().name();
+           if(dictionaryLanguage.equals(dictionary.getLanguageFrom())){
+               holder.languageFromImageView.setImageResource(lan.getFlagRecourceId());
+           }
+           if(dictionaryLanguage.equals(dictionary.getTranslationTo())){
+               holder.languageToImageView.setImageResource(lan.getFlagRecourceId());
+           }
+       }
        return holder.listView;
     }
 
@@ -62,13 +75,19 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
         TextView nameTextView;
         TextView dateTextView;
         TextView topicsNumberTextView;
+        ImageView languageFromImageView;
+        ImageView languageToImageView;
+        List<Language> languagesList;
 
         public Holder() {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             this.listView = inflater.inflate(R.layout.fragment_vocabulary_list_item,null);
             this.nameTextView = (TextView) listView.findViewById(R.id.dictionaryNameText);
             this.dateTextView = (TextView) listView.findViewById(R.id.dateText);
+            this.languageFromImageView = (ImageView) listView.findViewById(R.id.languageFromImageView);
+            this.languageToImageView = (ImageView) listView.findViewById(R.id.languageToImageView);
             this.topicsNumberTextView = (TextView) listView.findViewById(R.id.numberTopicsText);
+            this.languagesList =  GlobalStorage.getStorage().getUsedLanguagesList(mContext);
         }
     }
 }

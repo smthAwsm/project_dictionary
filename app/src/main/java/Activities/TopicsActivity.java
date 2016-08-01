@@ -3,6 +3,7 @@ package activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,13 +16,12 @@ import android.view.MenuItem;
 import com.study.xps.projectdictionary.R;
 import fragments.EmptyFragment;
 import fragments.TopicsRecyclerGridFragment;
-import helpers.ActivityDataInterface;
 import helpers.GlobalStorage;
+import models.Language;
 import models.Tags;
 import models.Topic;
 
 import java.util.List;
-
 
 /**
  * Created by XPS on 4/12/2016.
@@ -42,11 +42,16 @@ public class TopicsActivity extends AppCompatActivity {
         supportActionBar.setTitle(getString(R.string.topics_title));
 
         mGlobalStorage = GlobalStorage.getStorage();
+        if(mGlobalStorage.getLanguagesList().size() == 0){
+            mGlobalStorage.loadSupportedLanguagesList(this);
+        }
+
         long currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
         mGlobalStorage.setCurrentDictionaryID(currentDictionaryID);
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

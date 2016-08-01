@@ -28,7 +28,7 @@ import java.util.List;
 public class WordsRecyclerListFragment extends Fragment {
 
     private WordsActivity mContexActivity;
-    private RecyclerView mWordsList;
+    private RecyclerView mWordsRecyclerView;
     private WordsRecyclingViewAdapter mRecyclingViewAdapter;
 
     @Override
@@ -45,12 +45,11 @@ public class WordsRecyclerListFragment extends Fragment {
         addWordViewListeners(view);
 
         mContexActivity = (WordsActivity) getActivity();
-        List<Word> wordsData = GlobalStorage.getStorage().getWordsData();
-        mWordsList = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
-        mRecyclingViewAdapter = new WordsRecyclingViewAdapter(wordsData, mContexActivity);
+        mWordsRecyclerView = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
+        mRecyclingViewAdapter = new WordsRecyclingViewAdapter(mContexActivity);
         mRecyclingViewAdapter.setHasStableIds(false);
-        mWordsList.setAdapter(mRecyclingViewAdapter);
-        mWordsList.setLayoutManager(new LinearLayoutManager(mContexActivity));
+        mWordsRecyclerView.setAdapter(mRecyclingViewAdapter);
+        mWordsRecyclerView.setLayoutManager(new LinearLayoutManager(mContexActivity));
 
         return view;
     }

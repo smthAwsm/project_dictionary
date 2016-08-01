@@ -14,10 +14,11 @@ public class Dictionary extends SugarRecord{
 
     private String dictionaryName;
     private String creationDate;
+
     private String languageFrom;
     private String translationTo;
 
-    public Dictionary(){    }
+    public Dictionary(){ }
 
     public Dictionary(String name){
         dictionaryName = name;
@@ -47,5 +48,14 @@ public class Dictionary extends SugarRecord{
         }   catch (Exception e){
             return df.format(new Date("1970-01-01"));
         }
+    }
+
+
+    public String getLanguageFrom() {
+        return languageFrom;
+    }
+
+    public String getTranslationTo() {
+        return translationTo;
     }
 }

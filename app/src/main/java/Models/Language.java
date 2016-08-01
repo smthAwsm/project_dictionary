@@ -4,15 +4,15 @@ package models;
  * Created by XPS on 07/27/2016.
  */
 public class Language {
-    private Languages mLanguage;
-
+    private TranslateApiLanguage mLanguage;
     private Integer mFlagRecourceId;
-    public Language(Languages language,Integer flagRecourceId) {
+
+    public Language(TranslateApiLanguage language, Integer flagRecourceId) {
         this.mLanguage = language;
         this.mFlagRecourceId = flagRecourceId;
     }
 
-    public Language(Languages language) {
+    public Language(TranslateApiLanguage language) {
         this.mLanguage = language;
     }
 
@@ -20,7 +20,7 @@ public class Language {
         this.mFlagRecourceId = flagRecourceId;
     }
 
-    public Languages getLanguage() {
+    public TranslateApiLanguage getLanguage() {
         return mLanguage;
     }
 

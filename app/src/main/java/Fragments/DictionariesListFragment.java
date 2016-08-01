@@ -1,36 +1,27 @@
 package fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.study.xps.projectdictionary.R;
-import adapters.DictionaryLanguageSpinnerAdapter;
+
 import dialogs.UpdateDictionaryDialog;
 import helpers.GlobalStorage;
 import models.Dictionary;
-import models.Language;
-import models.Languages;
 import models.Tags;
 import activities.DictionariesActivity;
 import activities.TopicsActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
