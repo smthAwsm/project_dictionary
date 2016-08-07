@@ -8,15 +8,19 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
+
+import adapters.WordsRecyclingViewAdapter;
 import dialogs.TestStartDialog;
 import fragments.EmptyFragment;
 import fragments.WordsRecyclerListFragment;
@@ -63,8 +67,26 @@ public class WordsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.words_menu, menu);
-        return true;
+        MenuItem searchItem = menu.findItem(R.id.action_word_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mWordsFragment.getAdapter().filter(query,mGlobalStorage);
+                mWordsFragment.getWordsRecyclerView().scrollToPosition(0);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mWordsFragment.getAdapter().filter(newText,mGlobalStorage);
+                mWordsFragment.getWordsRecyclerView().scrollToPosition(0);
+                return true;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -76,6 +98,7 @@ public class WordsActivity extends AppCompatActivity {
                 else Toast.makeText(getApplicationContext(),
                                     getString(R.string.more_words),Toast.LENGTH_SHORT).show();
                     return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -145,12 +168,14 @@ public class WordsActivity extends AppCompatActivity {
     }
 
     public void updateData() {
-      new LoadWords().execute(mGlobalStorage.getCurrentTopicId());
+        new LoadWords().execute(mGlobalStorage.getCurrentTopicId());
     }
 
     public void updateViewData() {
         if(mWordsRecyclerViewView != null){
-            mWordsFragment.getAdapter().notifyDataSetChanged();
+            WordsRecyclingViewAdapter adapter = mWordsFragment.getAdapter();
+            adapter.updateWordAdapterData();
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -180,7 +205,6 @@ public class WordsActivity extends AppCompatActivity {
             TypedArray colors = getResources().obtainTypedArray(arrayId);
 
             if (resultArray.size() ==  0){
-                //resultArray = new ArrayList<>();
                 for (int i = 0; i < colorsNumber; i++){
                     int index = (int) (Math.random() * colors.length());
                     resultArray.add(colors.getColor(index, Color.BLACK));

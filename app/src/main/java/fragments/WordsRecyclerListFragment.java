@@ -41,7 +41,6 @@ public class WordsRecyclerListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_words_list, container, false);
-
         addWordViewListeners(view);
 
         mContexActivity = (WordsActivity) getActivity();
@@ -68,5 +67,9 @@ public class WordsRecyclerListFragment extends Fragment {
 
     public WordsRecyclingViewAdapter getAdapter() {
         return mRecyclingViewAdapter;
+    }
+
+    public RecyclerView getWordsRecyclerView() {
+        return mWordsRecyclerView;
     }
 }

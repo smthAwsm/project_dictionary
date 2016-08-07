@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.speech.tts.TextToSpeech;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -147,7 +146,7 @@ public class GlobalStorage {
                         localeSet.add(locale.getLanguage());
                     }
                 }
-
+                mTextToSpeech.shutdown();
                 int i = 0;
 
                 List<Language> usedLanguagesList = getUsedLanguagesList(context);

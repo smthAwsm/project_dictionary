@@ -17,6 +17,8 @@ import models.Tags;
 import models.Word;
 import activities.WordsActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -27,33 +29,22 @@ public class WordsRecyclingViewAdapter extends
         RecyclerView.Adapter<WordsRecyclingViewAdapter.ViewHolder> {
 
     private WordsActivity mContextActivity;
+    private List<Word> mWordsList;
     private TextToSpeech mTextToSpeech;
     private GlobalStorage mGlobalStorage;
 
     public WordsRecyclingViewAdapter(WordsActivity parent){
         mGlobalStorage = GlobalStorage.getStorage();
         this.mContextActivity = parent;
-
-//        Dictionary dic = mGlobalStorage.getCurrentDictionary();
-
-//        Locale[] azza = Locale.getAvailableLocales();
-//        Set<String> lan = new HashSet();
-//
-//        for (Locale loc : azza)
-//            lan.add(loc.getLanguage());
-
-
-
-//        mTts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-//            @Override
-//            public void onInit(int status) {
-//                if(status == TextToSpeech.SUCCESS) {
-//                    mTts.setLanguage(Locale.UK);
-//                }
-//            }
-//        });
-
+        updateWordAdapterData();;
         getTTS();
+    }
+
+    public void updateWordAdapterData(){
+        if(mWordsList == null)
+            mWordsList = new ArrayList<>();
+        mWordsList.clear();
+        mWordsList.addAll(mGlobalStorage.getWordsData());
     }
 
     @Override
@@ -68,7 +59,7 @@ public class WordsRecyclingViewAdapter extends
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        final Word word = mGlobalStorage.getWordsData().get(position);
+        final Word word = mWordsList.get(position);
         holder.bindData(word,position);
 
         holder.mPronounceButton.setTag(position);
@@ -102,7 +93,7 @@ public class WordsRecyclingViewAdapter extends
 
     @Override
     public int getItemCount() {
-        return mGlobalStorage.getWordsData().size();
+        return mWordsList.size();
     }
 
     private void getTTS(){
@@ -114,6 +105,78 @@ public class WordsRecyclingViewAdapter extends
                 }
             }
         });
+    }
+
+    public void filter(String wordQuery, GlobalStorage dataStorage){
+        List<Word> wordsList = dataStorage.getWordsData();
+
+        if(wordQuery != "") {
+            List<Word> filteringResult = new ArrayList<>();
+            for (Word word : wordsList) {
+                if (word.getValue().contains(wordQuery)) {
+                    filteringResult.add(word);
+                }
+            }
+            if(mWordsList!= null){
+                animateTo(filteringResult);
+                mWordsList.clear();
+                mWordsList.addAll(filteringResult);
+                return;
+            }
+        } else {
+                mWordsList.clear();
+                mWordsList.addAll(wordsList);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void animateTo(List<Word> models) {
+        applyAndAnimateRemovals(models);
+        applyAndAnimateAdditions(models);
+        applyAndAnimateMovedItems(models);
+    }
+
+    private void applyAndAnimateRemovals(List<Word> newModels) {
+        for (int i = mWordsList.size() - 1; i >= 0; i--) {
+            final Word model = mWordsList.get(i);
+            if (!newModels.contains(model)) {
+                removeItem(i);
+            }
+        }
+    }
+    public Word removeItem(int position) {
+        final Word model = mWordsList.remove(position);
+        notifyItemRemoved(position);
+        return model;
+    }
+
+    private void applyAndAnimateAdditions(List<Word> newModels) {
+        for (int i = 0, count = newModels.size(); i < count; i++) {
+            final Word model = newModels.get(i);
+            if (!mWordsList.contains(model)) {
+                addItem(i, model);
+            }
+        }
+    }
+    public void addItem(int position, Word model) {
+        mWordsList.add(position, model);
+        notifyItemInserted(position);
+    }
+
+    private void applyAndAnimateMovedItems(List<Word> newModels) {
+        for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
+            final Word model = newModels.get(toPosition);
+            final int fromPosition = mWordsList.indexOf(model);
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
+    }
+
+    public void moveItem(int fromPosition, int toPosition) {
+        final Word model = mWordsList.remove(fromPosition);
+        mWordsList.add(toPosition, model);
+        notifyItemMoved(fromPosition, toPosition);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
