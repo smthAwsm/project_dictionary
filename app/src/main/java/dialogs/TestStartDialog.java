@@ -31,6 +31,7 @@ public class TestStartDialog extends DialogFragment {
                              Bundle savedInstanceState) {
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT);
+        getDialog().setTitle(getString(R.string.testing_level));
         final View testingDialog = inflater.inflate(R.layout.dialog_words_testing, null);
 
         View.OnClickListener cardClick = new View.OnClickListener() {

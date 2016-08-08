@@ -9,13 +9,11 @@
         android:layout_height="match_parent"
         android:layout_weight="0.5" />
 
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0.5"
-        android:textSize="60dp"
+        android:textSize="@dimen/large_regular_text_size"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/wordTextView"
@@ -34,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0.5"
-        android:textSize="60dp"
+        android:textSize="@dimen/large_regular_text_size"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:layout_gravity="center"

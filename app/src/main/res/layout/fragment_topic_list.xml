@@ -10,9 +10,9 @@
         android:layout_height="match_parent"
         android:id="@+id/topicsRecyclerView"
         android:numColumns="auto_fit"
-        android:minHeight="200dp"
-        android:verticalSpacing="5dp"
-        android:horizontalSpacing="5dp"
+        android:minHeight="@dimen/card_width"
+        android:verticalSpacing="@dimen/grid_items_spacing"
+        android:horizontalSpacing="@dimen/grid_items_spacing"
         android:layout_gravity="left" />
 
 
@@ -25,6 +25,6 @@
         android:src="@drawable/ic_add_white"
         app:layout_anchor="@id/topicsRecyclerView"
         app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="20dp"/>
+        android:layout_margin="@dimen/activity_horizontal_margin"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -16,10 +16,12 @@
     <string name="select_image">Select image</string>
     <string name="cancel">CANCEL </string>
     <string name="ok">OK</string>
+    <string name="save">SAVE</string>
     <string name="no_topics">No topics yet... Try adding first one</string>
 
     <string name="words_title">Words</string>
     <string name="word_hint">Word</string>
+    <string name="new_word">New word</string>
     <string name="translation_hint">Translation</string>
     <string name="device_offline">Translation unsupported. Please, check internet your connection</string>
     <string name="testing">Testing</string>

@@ -6,37 +6,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/topic_image_size"
+        android:layout_height="@dimen/topic_image_size"
         android:id="@+id/languageFromImageView"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginTop="@dimen/dialog_margin"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@android:string/ok"
         android:id="@+id/buttonAddTopic"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="@string/save"
+        android:textSize="@dimen/medium_text_size"
+        android:textColor="@color/colorPrimary"
         android:layout_below="@+id/languageFromImageView"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_margin_half"
+        android:layout_marginRight="@dimen/activity_margin_half"/>
 
     <Spinner
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:id="@+id/imagesSpinner"
         android:layout_below="@+id/languageFromImageView"
-        android:layout_alignStart="@+id/languageFromImageView"
-        android:layout_toStartOf="@+id/buttonAddTopic"
+        android:layout_marginTop="@dimen/dialog_title_margin"
+        android:layout_marginRight="@dimen/activity_margin_half"
+        android:layout_toLeftOf="@+id/buttonAddTopic"
         android:layout_alignLeft="@+id/languageFromImageView"
-        android:layout_toLeftOf="@+id/buttonAddTopic" />
+        android:layout_alignStart="@+id/languageFromImageView"/>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/languageFromImageView"
         android:layout_toEndOf="@+id/languageFromImageView"
-        android:layout_toRightOf="@+id/languageFromImageView">
+        android:layout_toRightOf="@+id/languageFromImageView"
+        android:layout_marginRight="@dimen/dialog_margin">
 
         <AutoCompleteTextView
             android:id="@+id/topicNameTextBox"

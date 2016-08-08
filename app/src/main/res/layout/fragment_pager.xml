@@ -2,17 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_horizontal_margin"
-    tools:context="activities.IntroActivity$PlaceholderFragment">
+    android:padding="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:id="@+id/section_img"
-            android:layout_width="192dp"
-            android:layout_height="192dp"
+            android:layout_width="@dimen/intro_graphics_size"
+            android:layout_height="@dimen/intro_graphics_size"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:alpha="0.30"
-            android:background="@drawable/ic_flight_24dp"
             android:scaleType="fitCenter"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
@@ -23,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/activity_margin_half"
             android:textColor="@android:color/white"
             android:layout_above="@+id/selection_description"
             android:layout_centerHorizontal="true"/>

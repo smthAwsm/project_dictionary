@@ -1,6 +1,8 @@
 package adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import com.study.xps.projectdictionary.R;
 import helpers.DropCheckingSpinner;
 import helpers.GlobalStorage;
 import helpers.OnSpinnerEventsListener;
+import helpers.RoundImageCornersHelper;
 import models.Language;
 
 import java.lang.reflect.Method;
@@ -25,6 +28,7 @@ public class DictionaryLanguageSpinnerAdapter extends BaseAdapter {
     private Context mContext;
     private DropCheckingSpinner mParent;
     private GlobalStorage mGlobalStorage;
+    private final int ROUNDING_VALUE = 360;
 
     public DictionaryLanguageSpinnerAdapter(Context context) {
         this.mContext = context;
@@ -66,7 +70,12 @@ public class DictionaryLanguageSpinnerAdapter extends BaseAdapter {
         TextView languageTextView = (TextView) childView.findViewById(R.id.languageTextView);
         languageTextView.setText(language.getLanguage().name());
         ImageView countryFlag = (ImageView) childView.findViewById(R.id.flagImageView);
-        countryFlag.setBackgroundResource(language.getFlagRecourceId());
+
+        Bitmap flag = BitmapFactory.decodeResource(
+                mContext.getResources(),language.getFlagRecourceId());
+
+        countryFlag.setImageBitmap(RoundImageCornersHelper.
+                getRoundedCornerBitmap(flag, ROUNDING_VALUE));
 
         childView.setOnClickListener(new View.OnClickListener() {
             @Override

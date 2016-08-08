@@ -17,8 +17,8 @@
         android:id="@+id/normalWordtextView"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.7"
-        android:layout_marginLeft="24dp"
-        android:textSize="40dp" />
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:textSize="@dimen/regular_text_size" />
 
 
     <LinearLayout
@@ -32,60 +32,58 @@
             android:layout_weight="0.95"/>
 
         <RadioGroup
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_gravity="left"
-        android:layout_weight="0.2"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_gravity="left"
+            android:layout_weight="0.2"
             android:id="@+id/optionRadioGroup">
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/testRadioButton1"
-        android:layout_gravity="left"
-        android:textColor="@color/separator"
-        android:textSize="24dp"
-        android:layout_marginBottom="20dp"
-        android:checked="false" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testRadioButton1"
+            android:layout_gravity="left"
+            android:textColor="@color/separator"
+            android:textSize="@dimen/medium_text_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:checked="false" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/testRadioButton2"
-        android:layout_gravity="left"
-        android:textColor="@color/separator"
-        android:textSize="24dp"
-        android:layout_marginBottom="20dp"
-        android:checked="false" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testRadioButton2"
+            android:layout_gravity="left"
+            android:textColor="@color/separator"
+            android:textSize="@dimen/medium_text_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:checked="false" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/testRadioButton3"
-        android:layout_gravity="left"
-        android:textColor="@color/separator"
-        android:textSize="24dp"
-        android:layout_marginBottom="20dp"
-        android:checked="false" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testRadioButton3"
+            android:layout_gravity="left"
+            android:textColor="@color/separator"
+            android:textSize="@dimen/medium_text_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:checked="false" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/testRadioButton4"
-        android:layout_gravity="left"
-        android:textColor="@color/separator"
-        android:textSize="24dp"
-        android:layout_marginBottom="20dp"
-        android:checked="false" />
-    </RadioGroup>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testRadioButton4"
+            android:layout_gravity="left"
+            android:textColor="@color/separator"
+            android:textSize="@dimen/medium_text_size"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:checked="false" />
+        </RadioGroup>
 
     </LinearLayout>
-
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.6"/>
-
 
 </LinearLayout>

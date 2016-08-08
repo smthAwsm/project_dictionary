@@ -9,21 +9,23 @@
         android:id="@+id/topicGridItemCard"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_gravity="center_horizontal"
-        android:layout_width="200dp"
-        android:layout_height="250dp"
+        android:layout_width="@dimen/card_width"
+        android:layout_height="@dimen/card_height"
         card_view:cardUseCompatPadding="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="@dimen/grid_items_spacing"
         card_view:elevation="5dp">
+
         <RelativeLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent">
             <ImageView
-                android:layout_width="190dp"
-                android:layout_height="190dp"
+                android:layout_width="@dimen/intro_graphics_size"
+                android:layout_height="@dimen/intro_graphics_size"
                 android:id="@+id/topicImage"
                 android:src="@drawable/ic_add"
-                android:layout_margin="5dp"
+                android:layout_margin="@dimen/grid_items_spacing"
                 android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true" />
 

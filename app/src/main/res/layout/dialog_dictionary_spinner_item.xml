@@ -5,11 +5,11 @@
                 android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_width="60dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/flagImageView"
         android:layout_alignParentLeft="true"
-        android:layout_margin="14dp"
+        android:layout_margin="@dimen/list_item_margin"
         android:layout_alignParentTop="true"/>
 
     <TextView
@@ -18,9 +18,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/languageTextView"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="14dp"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/flagImageView"
-        android:layout_toEndOf="@+id/flagImageView"/>
+        android:layout_marginLeft="@dimen/list_text_margin"
+        android:layout_marginRight="@dimen/list_item_margin"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
-    android:background="@color/cyan"
     android:layout_height="match_parent"
+    android:background="@color/cyan"
     tools:context="activities.IntroActivity">
-
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="?attr/actionBarSize" />
-
 
     <View
         android:layout_width="match_parent"
@@ -33,7 +32,6 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingStart="@dimen/activity_horizontal_margin">
 
-
         <Button
             android:id="@+id/intro_btn_skip"
             style="@style/Widget.AppCompat.Button.Borderless"
@@ -51,16 +49,16 @@
 
             <ImageView
                 android:id="@+id/intro_indicator_0"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_width="@dimen/activity_margin_half"
+                android:layout_height="@dimen/activity_margin_half"
                 android:layout_marginEnd="@dimen/activity_margin_half"
                 android:layout_marginRight="@dimen/activity_margin_half"
                 android:background="@drawable/indicator_unselected" />
 
             <ImageView
                 android:id="@+id/intro_indicator_1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_width="@dimen/activity_margin_half"
+                android:layout_height="@dimen/activity_margin_half"
                 android:layout_marginEnd="@dimen/activity_margin_half"
                 android:layout_marginRight="@dimen/activity_margin_half"
                 android:background="@drawable/indicator_unselected" />
@@ -68,8 +66,8 @@
             <ImageView
                 android:id="@+id/intro_indicator_2"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_width="@dimen/activity_margin_half"
+                android:layout_height="@dimen/activity_margin_half"
                 android:background="@drawable/indicator_unselected" />
 
         </LinearLayout>
@@ -94,9 +92,6 @@
             android:padding="@dimen/activity_horizontal_margin"
             android:src="@drawable/ic_chevron_right_24dp"
             android:tint="@android:color/white" />
-
-
     </FrameLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

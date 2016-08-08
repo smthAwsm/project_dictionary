@@ -22,9 +22,8 @@
             android:textColor="@color/colorPrimary"
             android:id="@+id/valueTextView"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="24dp"
-            android:textSize="40dp" />
-
+            android:layout_marginLeft="@dimen/dialog_margin"
+            android:textSize="@dimen/regular_text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,21 +35,20 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"/>
 
-      <EditText
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:layout_weight="0.15"
-          android:textColor="@color/separator"
-          android:layout_marginRight="24dp"
-          android:id="@+id/translationEdit"
-          android:textSize="40dp" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:textColor="@color/separator"
+                android:layout_marginRight="@dimen/dialog_margin"
+                android:id="@+id/translationEdit"
+                android:textSize="@dimen/regular_text_size" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.6"/>
-
 
     </LinearLayout>
 

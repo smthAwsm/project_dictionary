@@ -7,9 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dictionaryNameText"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/dialog_title_margin"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -30,8 +30,8 @@
         android:text="@string/from_language"
         android:id="@+id/textView2"
         android:layout_alignTop="@+id/languageFromSpinner"
-        android:layout_alignLeft="@+id/dictionaryNameText"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginTop="@dimen/spinner_midle_offset"/>
 
     <helpers.DropCheckingSpinner
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
         android:text="@string/to_language"
         android:id="@+id/textView3"
         android:layout_alignTop="@+id/languageToSpinner"
-        android:layout_toLeftOf="@+id/languageToSpinner"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginTop="@dimen/spinner_midle_offset"/>
 
 </RelativeLayout>

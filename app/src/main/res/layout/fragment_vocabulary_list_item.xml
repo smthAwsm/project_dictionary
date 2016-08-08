@@ -8,16 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="26dp"
-        android:text="____________________"
+        android:textSize="@dimen/medium_text_size"
         android:id="@+id/dictionaryNameText"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/list_item_margin"
+        android:layout_marginTop="@dimen/list_item_margin"
+        android:layout_marginBottom="@dimen/activity_margin_half"
+        android:layout_marginRight="@dimen/activity_margin_half"
         android:layout_toLeftOf="@+id/languageFromImageView"
         android:layout_toStartOf="@+id/languageFromImageView"/>
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,8 +23,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/topics"
         android:id="@+id/numberTopicsText"
-        android:textSize="20dp"
-        android:layout_marginLeft="14dp"
+        android:textSize="@dimen/medium_text_size"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_below="@+id/dictionaryNameText"
         android:layout_alignLeft="@+id/dictionaryNameText"
         android:layout_alignStart="@+id/dictionaryNameText"/>
@@ -34,12 +32,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="________"
         android:id="@+id/dateText"
-        android:textSize="14dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="@dimen/small_text_size"
+        android:layout_marginTop="@dimen/activity_margin_half"
+        android:layout_marginBottom="@dimen/activity_margin_half"
         android:layout_below="@+id/numberTopicsText"
         android:layout_alignLeft="@+id/numberTopicsText"
         android:layout_alignStart="@+id/numberTopicsText"/>
@@ -48,9 +45,9 @@
         android:layout_width="40dp"
         android:layout_height="25dp"
         android:id="@+id/languageToImageView"
-        android:layout_marginRight="14dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"/>
 
@@ -66,8 +63,8 @@
         android:layout_width="40dp"
         android:layout_height="25dp"
         android:id="@+id/languageFromImageView"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/imageView3"
         android:layout_toStartOf="@+id/imageView3"/>

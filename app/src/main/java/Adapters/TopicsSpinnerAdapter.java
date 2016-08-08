@@ -9,7 +9,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.study.xps.projectdictionary.R;
 import dialogs.NewTopicDialog;
@@ -48,11 +47,10 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         if (convertView==null) {
-            convertView= new TextView(mContext);
-            ((TextView)convertView).setText(mContext.getString(R.string.select_image));
+            convertView = new View(mContext);
         }
+
         return convertView;
     }
 
@@ -66,7 +64,6 @@ public class TopicsSpinnerAdapter extends BaseAdapter {
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
-
 
     public View getCustomView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(mContext);

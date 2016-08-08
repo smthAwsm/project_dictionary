@@ -9,7 +9,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/app_name"
         android:id="@+id/textView"
-        android:textSize="72dp"
+        android:textSize="@dimen/large_regular_text_size"
         android:textColor="@color/colorPrimaryDark"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"

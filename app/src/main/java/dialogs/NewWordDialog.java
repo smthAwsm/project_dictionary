@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +54,8 @@ public class NewWordDialog extends AppCompatDialogFragment {
     private final String PARAM_TEXT = "&text=";
     private final long TIMEOUT = 500;
 
-    private TextView mOkView;
-    private TextView mCancelView;
+    private Button mOkView;
+    private Button mCancelView;
     private EditText mWordTextEdit;
     private AutoCompleteTextView mTranslationTextView;
     private Word mEditWord;
@@ -94,10 +95,11 @@ public class NewWordDialog extends AppCompatDialogFragment {
 
         getDialog().getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT);
+        getDialog().setTitle(getString(R.string.new_word));
 
         View topicDialog = inflater.inflate(R.layout.dialog_word_add,null);
-        mOkView = (TextView) topicDialog.findViewById(R.id.newWordOK);
-        mCancelView = (TextView) topicDialog.findViewById(R.id.newWordCancel);
+        mOkView = (Button) topicDialog.findViewById(R.id.newWordOK);
+        mCancelView = (Button) topicDialog.findViewById(R.id.newWordCancel);
         mWordTextEdit = (EditText) topicDialog.findViewById(R.id.wordTextBox);
         mTranslationTextView = (AutoCompleteTextView)
                 topicDialog.findViewById(R.id.translationTextBox);

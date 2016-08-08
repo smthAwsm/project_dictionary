@@ -20,7 +20,7 @@
                android:layout_height="match_parent">
 
                <FrameLayout
-                   android:layout_width="25dp"
+                   android:layout_width="@dimen/dialog_margin"
                    android:layout_height="match_parent"
                    android:id="@+id/sideShape"
                    android:layout_alignParentTop="true"
@@ -37,9 +37,9 @@
                    android:layout_alignParentTop="true"
                    android:layout_toLeftOf="@+id/pronounceButton"
                    android:layout_toRightOf="@id/sideShape"
-                   android:layout_marginLeft="10dp"
-                   android:layout_marginRight="10dp"
-                   android:layout_marginTop="10dp"
+                   android:layout_marginLeft="@dimen/activity_margin_half"
+                   android:layout_marginRight="@dimen/activity_margin_half"
+                   android:layout_marginTop="@dimen/activity_margin_half"
                    android:ellipsize="end"
                    android:maxLines="5"
                    />
@@ -52,8 +52,8 @@
                    android:layout_below="@+id/wordTextView"
                    android:layout_toRightOf="@id/sideShape"
                    android:layout_toLeftOf="@+id/pronounceButton"
-                   android:layout_marginTop="10dp"
-                   android:layout_marginBottom="10dp"/>
+                   android:layout_marginTop="@dimen/activity_margin_half"
+                   android:layout_marginBottom="@dimen/activity_margin_half"/>
 
                <TextView
                    android:layout_width="wrap_content"
@@ -64,8 +64,8 @@
                    android:layout_below="@+id/word_item_separator"
                    android:layout_toLeftOf="@+id/pronounceButton"
                    android:layout_toRightOf="@id/sideShape"
-                   android:layout_marginLeft="10dp"
-                   android:layout_marginRight="10dp"/>
+                   android:layout_marginLeft="@dimen/activity_margin_half"
+                   android:layout_marginRight="@dimen/activity_margin_half"/>
 
 
                <ImageView

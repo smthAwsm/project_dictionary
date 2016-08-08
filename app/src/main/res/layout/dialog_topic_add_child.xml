@@ -8,13 +8,13 @@
     android:id="@+id/topicImagesGrid"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:columnWidth="50dp"
+    android:columnWidth="@dimen/topic_icons_column_width"
     android:drawSelectorOnTop="true"
     android:gravity="center"
     android:numColumns="auto_fit"
     android:stretchMode="columnWidth"
-    android:verticalSpacing="5dp"
+    android:verticalSpacing="@dimen/grid_items_spacing"
+    android:horizontalSpacing="@dimen/grid_items_spacing"
     android:focusable="true"
     android:clickable="true"/>
 </LinearLayout>

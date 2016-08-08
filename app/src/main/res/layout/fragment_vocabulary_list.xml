@@ -23,7 +23,7 @@
         android:src="@drawable/ic_add_white"
         app:layout_anchor="@android:id/list"
         app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="20dp"/>
+        android:layout_margin="@dimen/activity_horizontal_margin"/>
 
 
 </android.support.design.widget.CoordinatorLayout>

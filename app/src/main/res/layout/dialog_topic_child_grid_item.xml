@@ -4,8 +4,8 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
+        android:layout_width="@dimen/topic_icons_column_width"
+        android:layout_height="@dimen/topic_icons_column_width"
+        android:layout_margin="@dimen/activity_margin_half"
         android:id="@+id/childGridItemImage" />
 </RelativeLayout>
