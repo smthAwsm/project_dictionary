@@ -106,7 +106,7 @@ public class GlobalStorage {
         return mWordsList;
     }
 
-    public List<Language> getUsedLanguagesList(Context context){
+    public List<Language> getUsedLanguagesData(Context context){
         int arrayLanguagesId = context.getResources().
                 getIdentifier("languages" , "array", context.getPackageName());
         int arrayFlagsId = context.getResources().
@@ -134,7 +134,7 @@ public class GlobalStorage {
         return null;
     }
 
-    public void loadSupportedLanguagesList(final Context context){
+    public void loadSupportedLanguagesData(final Context context){
         mTextToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -149,7 +149,7 @@ public class GlobalStorage {
                 mTextToSpeech.shutdown();
                 int i = 0;
 
-                List<Language> usedLanguagesList = getUsedLanguagesList(context);
+                List<Language> usedLanguagesList = getUsedLanguagesData(context);
                 for (Language lan : usedLanguagesList){
                     String language = lan.getLanguage().toString();
                     for (String supportedLanguage : localeSet){
@@ -162,7 +162,7 @@ public class GlobalStorage {
         });
     }
 
-    public List<Language> getLanguagesList() {
+    public List<Language> getLanguagesData() {
         if (mLanguagesList != null && mLanguagesList.size() > 0) {
             return mLanguagesList;
         } else return mLanguagesList = new ArrayList<>();

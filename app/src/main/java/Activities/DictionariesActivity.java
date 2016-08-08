@@ -1,14 +1,12 @@
 package activities;
 
 import android.content.DialogInterface;
-import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -19,17 +17,12 @@ import adapters.DictionariesListViewAdapter;
 import adapters.DictionaryLanguageSpinnerAdapter;
 import fragments.DictionariesListFragment;
 import fragments.EmptyFragment;
-import helpers.ActivityDataInterface;
 import helpers.GlobalStorage;
 import models.Dictionary;
 import models.Language;
 import models.Tags;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 public class DictionariesActivity extends AppCompatActivity {
 
@@ -45,8 +38,8 @@ public class DictionariesActivity extends AppCompatActivity {
         supportActionBar.setTitle(R.string.dictionaries_title);
 
         GlobalStorage globalStorage = GlobalStorage.getStorage();
-        if(globalStorage.getLanguagesList().size() == 0){
-            globalStorage.loadSupportedLanguagesList(this);
+        if(globalStorage.getLanguagesData().size() == 0){
+            globalStorage.loadSupportedLanguagesData(this);
         }
 
         mFragmentManager = getSupportFragmentManager();
@@ -134,7 +127,7 @@ public class DictionariesActivity extends AppCompatActivity {
                 inflate(R.layout.dialog_dictionary_add,null);
         final EditText input = (EditText) dialogView.findViewById(R.id.dictionaryNameText);
 
-        final List<Language> languageList = GlobalStorage.getStorage().getLanguagesList();
+        final List<Language> languageList = GlobalStorage.getStorage().getLanguagesData();
         DictionaryLanguageSpinnerAdapter spinnerFromAdapter =
                 new DictionaryLanguageSpinnerAdapter(this);
         final Spinner languageFromSpinner = (Spinner) dialogView.

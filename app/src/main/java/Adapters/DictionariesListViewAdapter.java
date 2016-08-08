@@ -16,7 +16,6 @@ import models.Topic;
 import models.Dictionary;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 
 /**
@@ -87,7 +86,7 @@ public class DictionariesListViewAdapter extends ArrayAdapter<Dictionary> {
             this.languageFromImageView = (ImageView) listView.findViewById(R.id.languageFromImageView);
             this.languageToImageView = (ImageView) listView.findViewById(R.id.languageToImageView);
             this.topicsNumberTextView = (TextView) listView.findViewById(R.id.numberTopicsText);
-            this.languagesList =  GlobalStorage.getStorage().getUsedLanguagesList(mContext);
+            this.languagesList =  GlobalStorage.getStorage().getUsedLanguagesData(mContext);
         }
     }
 }

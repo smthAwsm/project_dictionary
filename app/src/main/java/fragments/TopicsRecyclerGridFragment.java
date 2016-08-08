@@ -42,8 +42,7 @@ public class TopicsRecyclerGridFragment extends Fragment {
         addTopicListListeners(view);
 
         GlobalStorage globalStorage = GlobalStorage.getStorage();
-        mTopicsGridRecycler = new TopicsRecyclingGridViewAdapter(
-               globalStorage.getTopicsData() , mContexActivity);
+        mTopicsGridRecycler = new TopicsRecyclingGridViewAdapter(mContexActivity);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
         mRecyclerView.setAdapter(mTopicsGridRecycler);
 

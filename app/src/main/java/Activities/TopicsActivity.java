@@ -3,21 +3,21 @@ package activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 import fragments.EmptyFragment;
 import fragments.TopicsRecyclerGridFragment;
 import helpers.GlobalStorage;
-import models.Language;
 import models.Tags;
 import models.Topic;
 
@@ -38,12 +38,13 @@ public class TopicsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_container_layout);
-        android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
+        ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setTitle(getString(R.string.topics_title));
 
         mGlobalStorage = GlobalStorage.getStorage();
-        if(mGlobalStorage.getLanguagesList().size() == 0){
-            mGlobalStorage.loadSupportedLanguagesList(this);
+        if(mGlobalStorage.getLanguagesData().size() == 0){
+            mGlobalStorage.loadSupportedLanguagesData(this);
         }
 
         long currentDictionaryID = getIntent().getLongExtra(Tags.DICTIONARY_TAG,0);
@@ -63,9 +64,13 @@ public class TopicsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_change_current_dictionary:
+            case android.R.id.home:
                 finish();
                 startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
+                return true;
+            case R.id.action_settings:
+                Toast.makeText(this,"SETTING",Toast.LENGTH_SHORT).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

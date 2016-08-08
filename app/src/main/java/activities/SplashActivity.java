@@ -21,7 +21,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * Created by XPS on 4/9/2016.
  */
-public class SplashActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class SplashActivity extends AppCompatActivity
+        implements EasyPermissions.PermissionCallbacks {
 
     private final SplashActivity mContext = this;
     private GoogleDriveHelper mGoogleDriveHelper;

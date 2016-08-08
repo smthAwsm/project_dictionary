@@ -57,8 +57,6 @@ public class WordsActivity extends AppCompatActivity {
         supportActionBar.setTitle(mCurrentTopicName);
 
         mGlobalStorage = GlobalStorage.getStorage();
-        long currentTopicId = getIntent().getLongExtra(Tags.TOPIC_TAG,0);
-        mGlobalStorage.setCurrentTopicId(currentTopicId);
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }
@@ -88,15 +86,10 @@ public class WordsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) { //TODO Add settings
         switch (item.getItemId()) {
-            case R.id.action_test:
-                int wordsListSize = mGlobalStorage.getWordsData().size();
-                if (wordsListSize > 8){
-                DialogFragment testDialog = new TestStartDialog();
-                testDialog.show(getSupportFragmentManager(), Tags.NEW_WORD_DIALOG);}
-                else Toast.makeText(getApplicationContext(),
-                                    getString(R.string.more_words),Toast.LENGTH_SHORT).show();
+            case R.id.action_settings:
+               Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
                     return true;
 
             default:

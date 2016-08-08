@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_change_current_dictionary"
-        android:title="@string/change_dictionary_action"
-        android:menuCategory="container" />
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_white"
+        android:title="@string/testing"
+        app:showAsAction="ifRoom"/>
 </menu>

@@ -25,6 +25,7 @@
     <string name="translation_hint">Translation</string>
     <string name="device_offline">Translation unsupported. Please, check internet your connection</string>
     <string name="testing">Testing</string>
+    <string name="settings">Settings</string>
     <string name="more_words">Try adding more words</string>
     <string name="no_words">No words yet... Try adding first one</string>
 

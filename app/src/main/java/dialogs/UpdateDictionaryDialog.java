@@ -1,9 +1,9 @@
 package dialogs;
 
-
 import android.app.Dialog;
-
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -17,7 +17,6 @@ import com.study.xps.projectdictionary.R;
 import adapters.DictionaryLanguageSpinnerAdapter;
 import helpers.GlobalStorage;
 import models.Dictionary;
-import models.Language;
 import models.Tags;
 import models.Topic;
 import models.Word;
@@ -28,7 +27,6 @@ import com.orm.query.Condition;
 import com.orm.query.Select;
 
 import java.util.List;
-
 
 /**
  * Created by XPS on 4/28/2016.
@@ -72,7 +70,8 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
         builder.setTitle(getString(R.string.new_dict_title));
         View dialogView = LayoutInflater.from(mContextActivity).
                 inflate(R.layout.dialog_dictionary_add,null);
-        final EditText dictionaryNameInput = (EditText) dialogView.findViewById(R.id.dictionaryNameText);
+        final EditText dictionaryNameInput = (EditText)
+                dialogView.findViewById(R.id.dictionaryNameText);
 
         DictionaryLanguageSpinnerAdapter spinnerFromAdapter =
                 new DictionaryLanguageSpinnerAdapter(mContextActivity);
@@ -142,10 +141,23 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
             }
         });
 
+        checkSavedDictionary(mContextActivity,editDictionary);
         GlobalStorage mGlobalStorage = GlobalStorage.getStorage();
         mGlobalStorage.updateDictionariesData();
         mContextActivity.updateViewData();
         dismiss();
         mContextActivity.loadAppropriateFragment();
+    }
+
+    private void checkSavedDictionary(Context context,Dictionary dictionaryToDelete){
+        SharedPreferences sharedPref =
+                context.getSharedPreferences(Tags.APP_SETTINGS,context.MODE_PRIVATE);
+        long currentDictionary = sharedPref.getLong(Tags.APP_SETTINGS, -1);
+
+        if(dictionaryToDelete.getId() == currentDictionary){
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.remove(Tags.APP_SETTINGS);
+            editor.apply();
+        }
     }
 }

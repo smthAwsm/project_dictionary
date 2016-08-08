@@ -37,7 +37,7 @@ public class DictionaryLanguageSpinnerAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mGlobalStorage.getLanguagesList().size();
+        return mGlobalStorage.getLanguagesData().size();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class DictionaryLanguageSpinnerAdapter extends BaseAdapter {
     private View getCustomView(int position, View convertView, ViewGroup parent){
         final int viewPosition = position;
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        Language language = mGlobalStorage.getLanguagesList().get(position);
+        Language language = mGlobalStorage.getLanguagesData().get(position);
 
         final View childView = inflater.inflate(R.layout.dialog_dictionary_spinner_item,null);
         TextView languageTextView = (TextView) childView.findViewById(R.id.languageTextView);
