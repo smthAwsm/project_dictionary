@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.study.xps.projectdictionary.R;
 
+import helpers.DriveTasksGenerator;
 import models.Tags;
 
 /**
@@ -14,7 +15,7 @@ import models.Tags;
  */
 public class SplashActivity extends DriveOperationsActivity {
 
-    private static final int SPLASH_TIME = 2000;
+    private static final int SPLASH_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,9 @@ public class SplashActivity extends DriveOperationsActivity {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
+            prepareTaskExecution(DriveTasksGenerator.DriveTask.LIST_FILES_TASK);
 
+/*
             if(mDictionaryId == -1){
                 startActivity(new Intent(getApplicationContext(),IntroActivity.class));
             } else {
@@ -60,6 +63,7 @@ public class SplashActivity extends DriveOperationsActivity {
                 startActivity(dictionaryTopicsIntent);
             }
             finish();
+*/
         }
     }
 }

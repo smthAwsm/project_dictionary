@@ -42,7 +42,7 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
         new Utils.IsOnlineTask(new Utils.IsOnlineResultListener() {
             @Override
             public void setOnlineStatus(boolean result) {
-                mIsOnline = result;
+                mIsOnline = result; //TODO fix online status check
             }
         }).execute();
         mAccountCredential = GoogleAccountCredential.usingOAuth2(
@@ -50,19 +50,17 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
                 .setBackOff(new ExponentialBackOff());
     }
 
-    public boolean isApiPrepared(){
-        if(prepareApi()) return true;
-        else return false;
-    }
-
-    public boolean prepareApi(){
+    public boolean aquireApi(){
         if(!isGooglePlayServicesAvailable()){
             acquireGooglePlayServices();
         } else if(mAccountCredential.getSelectedAccountName() == null){
             mContext.chooseAccount();
-        } else if(mIsOnline){
+        } else if(!mIsOnline){
             Toast.makeText(mContext,"No inet connection",Toast.LENGTH_SHORT).show();
-        } else return true;
+        } else {
+            getApiClient();
+            return true;
+        }
         return false;
     }
 

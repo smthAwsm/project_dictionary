@@ -87,6 +87,7 @@ public class DriveOperationsActivity extends AppCompatActivity
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mGoogleDriveHelper.setAccountName(accountName);
+                mGoogleDriveHelper.aquireApi();
                 return;
             } else {
                 // Start a dialog from which the user can choose an account
@@ -107,14 +108,7 @@ public class DriveOperationsActivity extends AppCompatActivity
     protected void prepareTaskExecution(DriveTask task){
         mCurrentDriveTask = task;
         acquireDriveHelper();
-        int breakCounter = 0;
-        for (;;){
-            if(++breakCounter > 5) return;
-            if(mGoogleDriveHelper.isApiPrepared()){
-                mGoogleDriveHelper.getApiClient();
-                return;
-            }
-        }
+        mGoogleDriveHelper.aquireApi();
     }
 
     private boolean acquireDriveHelper(){
@@ -162,7 +156,11 @@ public class DriveOperationsActivity extends AppCompatActivity
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-
+        switch (requestCode){
+            case REQUEST_PERMISSION_GET_ACCOUNTS:
+                mGoogleDriveHelper.aquireApi();
+                break;
+        }
     }
 
     @Override
