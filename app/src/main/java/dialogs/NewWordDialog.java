@@ -16,12 +16,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 
 import helpers.GlobalStorage;
+import helpers.Utils;
 import models.TranslateApiLanguage;
 import models.Tags;
 import models.Word;
@@ -36,7 +36,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -69,7 +68,12 @@ public class NewWordDialog extends AppCompatDialogFragment {
                              Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
-        new IsOnlineTask().execute();
+        new Utils.IsOnlineTask(new Utils.IsOnlineResultListener() {
+            @Override
+            public void setOnlineStatus(boolean result) {
+                mIsOnline = result;
+            }
+        }).execute();
 
         try {
             mIsUpdate = bundle.getBoolean(Tags.SUCCESS_QUERY_TAG);
@@ -247,28 +251,6 @@ public class NewWordDialog extends AppCompatDialogFragment {
             }
         };
 
-    private class IsOnlineTask extends AsyncTask<Void,Void,Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-                int exitValue = ipProcess.waitFor();
-                return (exitValue == 0);
-            } catch (IOException e) {
-                e.printStackTrace(); }
-            catch (InterruptedException e) {
-                e.printStackTrace(); }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            mIsOnline = aBoolean.booleanValue();
-        }
-    }
 
     private class DelayedTranslation extends AsyncTask {
         private String mText;

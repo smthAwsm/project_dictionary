@@ -29,8 +29,8 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'com.github.satyan:sugar:1.5'
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.google.android.gms:play-services-auth:9.0.2'
-    compile 'pub.devrel:easypermissions:0.1.5'
+    compile 'pub.devrel:easypermissions:0.1.9'
+    compile 'com.google.android.gms:play-services-drive:8.4.0'
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }

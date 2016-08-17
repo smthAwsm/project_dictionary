@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.orm.SugarDb;
 import com.study.xps.projectdictionary.R;
 
 import adapters.WordsRecyclingViewAdapter;
@@ -193,8 +194,7 @@ public class WordsActivity extends AppCompatActivity {
     {
         int arrayId = getResources().getIdentifier("mdcolors" , "array", getPackageName());
 
-        if (arrayId != 0)
-        {
+        if (arrayId != 0) {
             TypedArray colors = getResources().obtainTypedArray(arrayId);
 
             if (resultArray.size() ==  0){

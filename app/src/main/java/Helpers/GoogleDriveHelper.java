@@ -2,60 +2,84 @@ package helpers;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
-import com.study.xps.projectdictionary.R;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 import java.util.Arrays;
+
+import activities.DriveOperationsActivity;
 
 /**
  * Created by XPS on 07/10/2016.
  */
 
-public class GoogleDriveHelper {
-    private GoogleAccountCredential mAccountCredential;
-    private Activity mContext;
+public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
-    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final String CALLBACK_TAG = "API CONNECTION CALLBACK";
+    private static final int REQUEST_CODE_RESOLUTION = 1;
     private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    private static final String PREF_ACCOUNT_NAME = "JUST_LEARN_IT_DICTIONARY";
     private static final String[] SCOPES = {DriveScopes.DRIVE_METADATA_READONLY};
 
-    public GoogleDriveHelper(Activity context){
-        this.mContext = context;
+    private final DriveOperationsActivity mContext;
+    private GoogleAccountCredential mAccountCredential;
+    private GoogleApiClient mGoogleApiClient;
+    private Boolean mIsOnline = false;
+
+    public GoogleDriveHelper(DriveOperationsActivity context) {
+        mContext = context;
+        new Utils.IsOnlineTask(new Utils.IsOnlineResultListener() {
+            @Override
+            public void setOnlineStatus(boolean result) {
+                mIsOnline = result;
+            }
+        }).execute();
         mAccountCredential = GoogleAccountCredential.usingOAuth2(
-                mContext,
-                Arrays.asList(SCOPES))
+                mContext, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
-        callApi();
     }
 
-    public void callApi(){
+    public boolean isApiPrepared(){
+        if(prepareApi()) return true;
+        else return false;
+    }
+
+    public boolean prepareApi(){
+        if(!isGooglePlayServicesAvailable()){
+            acquireGooglePlayServices();
+        } else if(mAccountCredential.getSelectedAccountName() == null){
+            mContext.chooseAccount();
+        } else if(mIsOnline){
+            Toast.makeText(mContext,"No inet connection",Toast.LENGTH_SHORT).show();
+        } else return true;
+        return false;
+    }
+
+    /*public void callApi(){
         if(!isGooglePlayAvailable()){
             acquireGooglePlayServices();
         } else if(mAccountCredential.getSelectedAccountName() == null){
-            chooseAccout();
-        } else if (!isDeviceOnline()) {
+            mContext.chooseAccout();
+        } else if (!Utils.isDeviceOnline(mContext)) {
             Toast.makeText(mContext, mContext.getString(R.string.no_inet),
                     Toast.LENGTH_SHORT).show();
         } else Toast.makeText(mContext,"TASK START",Toast.LENGTH_LONG).show();
-    }
+    }*/
 
-    private boolean isGooglePlayAvailable(){
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        final int connectionStatusCode = googleApiAvailability.
-                isGooglePlayServicesAvailable(mContext);
+    private boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        final int connectionStatusCode = apiAvailability.isGooglePlayServicesAvailable(mContext);
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
 
@@ -64,50 +88,69 @@ public class GoogleDriveHelper {
         final int connectionStatusCode = googleApiAvailability.
                 isGooglePlayServicesAvailable(mContext);
         if(googleApiAvailability.isUserResolvableError(connectionStatusCode))
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode,mContext);
     }
 
-    private void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode){
+    public static void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode,
+                                                                     Activity context){
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         Dialog dialog = googleApiAvailability.getErrorDialog(
-                mContext,
+                context,
                 connectionStatusCode,
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
     }
 
-    private boolean isDeviceOnline(){
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager .getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
-    private void chooseAccout(){
-        if(EasyPermissions.hasPermissions(mContext, android.Manifest.permission.GET_ACCOUNTS)){
-            String accountName = mContext.getPreferences(Context.MODE_PRIVATE)
-                    .getString(PREF_ACCOUNT_NAME,null);
-            if(accountName != null){
-                mAccountCredential.setSelectedAccountName(accountName);
-                callApi();
-            } else {
-                mContext.startActivityForResult(
-                        mAccountCredential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
-            }
-        } else {
-                EasyPermissions.requestPermissions(
-                        mContext,
-                        mContext.getString(R.string.account_permission),
-                        REQUEST_PERMISSION_GET_ACCOUNTS,
-                        android.Manifest.permission.GET_ACCOUNTS);
-            }
+    public GoogleApiClient getApiClient(){
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(mContext)
+                    .addApi(Drive.API)
+                    .addScope(Drive.SCOPE_FILE)
+                    .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
         }
+        mGoogleApiClient.connect();
+        return mGoogleApiClient;
+    }
 
     public void setAccountName(String accountName) {
         mAccountCredential.setSelectedAccountName(accountName);
     }
+
+    public Intent getAccountChoosingIntent() {
+        return mAccountCredential.newChooseAccountIntent();
+    }
+
+//region Connection Callbacks
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.i(CALLBACK_TAG, "GoogleApiClient connected");
+        mContext.launchDriveTaskExecutionTask();
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.i(CALLBACK_TAG, "GoogleApiClient connection suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i(CALLBACK_TAG, "GoogleApiClient connection failed: " + result.toString());
+        if (!result.hasResolution()) {
+            GoogleApiAvailability.getInstance().getErrorDialog(mContext,
+                    result.getErrorCode(), 0).show();
+            return;
+        }
+        try {
+            result.startResolutionForResult(mContext , REQUEST_CODE_RESOLUTION);
+        } catch (IntentSender.SendIntentException e) {
+            Log.e(CALLBACK_TAG, "Exception while starting resolution activity", e);
+        }
+    }
+//endregion
+
 }
 
 
