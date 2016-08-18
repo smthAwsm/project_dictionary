@@ -50,11 +50,11 @@ public class DriveTasksGenerator {
         switch (operation){
             case LIST_FILES_TASK:
                 return new ListFilesTask();
+                //return new CreateFolderTask();
             case APP_FOLDER_BACKUP_TASK:
-                String mimeType = "text/xml";
+                String mimeType = "application/x-sqlite3";
                 java.io.File fileContent = new java.io.File(Environment.getDataDirectory().getPath()
-                                + "/data/com.example.xps.drivetest/shared_prefs/MainActivity.xml");
-                                //+ "/data/com.example.xps.drivetest/databases/Dictionaries.db");
+                                + "/data/com.study.xps.projectdictionary/databases/Dictionaries.db");
                 String name = fileContent.getName();
                 return new BackupDbOnDrive(name,mimeType,fileContent);
             case APP_FOLDER_RESTORE_TASK:
@@ -117,11 +117,13 @@ public class DriveTasksGenerator {
                     }
                 };
     }
+
     private class BackupDbOnDrive extends AsyncTask<Void, Void, Void>{
         private final String title;
         private final String mimeType;
         private final java.io.File file;
-        DriveFolder mFolder;
+        private DriveFolder mFolder;
+        private DriveFile mDbOldFile;
 
         public BackupDbOnDrive(String title, String mimeType, java.io.File file) {
             this.title = title;
@@ -139,18 +141,14 @@ public class DriveTasksGenerator {
         protected Void doInBackground(Void... params) {
                 if(mApiClient != null && title!= null && mimeType!= null && file!= null){
                     //try {
-                    retrieveNextPage();
+                    Query query = new Query.Builder()
+                            .build();
+                    Drive.DriveApi.query(mApiClient, query)
+                            .setResultCallback(metadataBufferCallback);
 
                     //} catch (Exception e) {e.printStackTrace();}
                 }
             return null;
-        }
-
-        private void retrieveNextPage() {
-            Query query = new Query.Builder()
-                    .build();
-            Drive.DriveApi.query(mApiClient, query)
-                    .setResultCallback(metadataBufferCallback);
         }
 
         private final ResultCallback<DriveApi.MetadataBufferResult> metadataBufferCallback = new
@@ -162,7 +160,7 @@ public class DriveTasksGenerator {
                             return;
                         }
                         for (Metadata res : result.getMetadataBuffer()){
-                            if (res.getTitle().equals("NEW TEST FOLDER!!!") && res.isFolder()) {
+                            if (res.getTitle().equals("DB BACKUP TEST FOLDER") && res.isFolder()) {
                                 mFolder = res.getDriveId().asDriveFolder();
                             }
 
@@ -171,10 +169,31 @@ public class DriveTasksGenerator {
                                     " Id " + res.getDriveId().encodeToString());
                         }
 
+                        mFolder.listChildren(mApiClient).setResultCallback(searchOldDbFilesCallback);
+                    }
+                };
+
+        ResultCallback<DriveApi.MetadataBufferResult> searchOldDbFilesCallback =
+                new ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(@NonNull DriveApi.MetadataBufferResult metadataBufferResult) {
+                        if (!metadataBufferResult.getStatus().isSuccess()) {
+                            Log.e("LIST OLD FILES CALLBACK","Problem while retrieving files");
+                            return;
+                        }
+
+                        MetadataBuffer buffer = metadataBufferResult.getMetadataBuffer();
+                        for (Metadata data : buffer){
+                            if(data.getTitle().equals("Dictionaries.db")){
+                                mDbOldFile = data.getDriveId().asDriveFile();
+                            }
+                        }
+
                         Drive.DriveApi.newDriveContents(mApiClient)
                                 .setResultCallback(driveContentsCallback);
                     }
                 };
+
 
         ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback =
                 new ResultCallback<DriveApi.DriveContentsResult>() {
@@ -183,11 +202,10 @@ public class DriveTasksGenerator {
                 DriveContents contents = driveContentsResult != null &&
                         driveContentsResult.getStatus().isSuccess() ?
                         driveContentsResult.getDriveContents() : null;
-                if(contents != null ){
-                    try{
+                if(contents != null ) {
+                    try {
                         OutputStream outputStream = contents.getOutputStream();
-                        if(outputStream != null)
-                            try{
+                        if(outputStream != null){
                                 InputStream inputStream = new FileInputStream(file);
                                 byte[] buf = new byte[4096];
                                 int c;
@@ -195,12 +213,10 @@ public class DriveTasksGenerator {
                                     outputStream.write(buf,0,c);
                                     outputStream.flush();
                                 }
-                                //inputStream.close();
-                                //outputStream.close(); //TODO ??? while
-                            } catch (IOException e) {e.printStackTrace();}
-                            finally {
-                                outputStream.close();
-                            }
+                            inputStream.close();
+                        }
+                        outputStream.close();
+                    }  catch (IOException e) { e.printStackTrace(); }
 
                         MetadataChangeSet metaSet = new MetadataChangeSet.Builder().
                                 setTitle(title).
@@ -214,7 +230,6 @@ public class DriveTasksGenerator {
                        /* DriveFolder driveFolder = Drive.DriveApi.getAppFolder(mApiClient);
                         driveFolder.createFile(mApiClient,metaSet,contents).
                                 setResultCallback(mFileResultCallback);*/
-                    } catch (Exception e) { e.printStackTrace();}
             }
         }
     };
@@ -228,6 +243,10 @@ public class DriveTasksGenerator {
                             driveFileResult.getStatus().isSuccess() ?
                             driveFileResult.getDriveFile() : null;
                     if(driveFile != null){
+                        if (mDbOldFile != null) {
+                            mDbOldFile.delete(mApiClient);
+                            Log.i("OLD FILE DELETING","OK");
+                        }
                         driveFile.getMetadata(mApiClient).setResultCallback(mMetadataResultCallback);
                     }
                 }
@@ -249,6 +268,8 @@ public class DriveTasksGenerator {
     }
     private class RestoreDbFromDrive extends AsyncTask<Void, Void, Void>{
 
+        private DriveFolder mFolder;
+
         @Override
         protected void onPreExecute() {
             Log.i(START_TAG,"Restore files from app folder task started");
@@ -258,13 +279,44 @@ public class DriveTasksGenerator {
         @Override
         protected Void doInBackground(Void... params) {
             if (mApiClient != null && mApiClient.isConnected()) {
-                try {
+                retrieveNextPage();
+                /*try {
                     DriveFolder driveFolder = Drive.DriveApi.getAppFolder(mApiClient);
                     driveFolder.listChildren(mApiClient).setResultCallback(metadataResult);
-                } catch (Exception e) {e.printStackTrace();}
+                } catch (Exception e) {e.printStackTrace();}*/
             }
             return null;
         }
+
+        private void retrieveNextPage() {
+            Query query = new Query.Builder()
+                    .build();
+            Drive.DriveApi.query(mApiClient, query)
+                    .setResultCallback(metadataBufferCallback);
+        }
+
+        private final ResultCallback<DriveApi.MetadataBufferResult> metadataBufferCallback = new
+                ResultCallback<DriveApi.MetadataBufferResult>() {
+                    @Override
+                    public void onResult(DriveApi.MetadataBufferResult result) {
+                        if (!result.getStatus().isSuccess()) {
+                            Log.e("LIST FILES CALLBACK","Problem while retrieving files");
+                            return;
+                        }
+                        for (Metadata res : result.getMetadataBuffer()){
+                            if (res.getTitle().equals("DB BACKUP TEST FOLDER") && res.isFolder()) {
+                                mFolder = res.getDriveId().asDriveFolder();
+                            }
+
+                            Log.i("######RESULT","Name "  + res.getOriginalFilename() +
+                                    " Title "+ res.getTitle() +
+                                    " Id " + res.getDriveId().encodeToString());
+                        }
+
+                        mFolder.listChildren(mApiClient).setResultCallback(metadataResult);
+                    }
+                };
+
 
         final private ResultCallback<DriveApi.MetadataBufferResult> metadataResult = new
                 ResultCallback<DriveApi.MetadataBufferResult>() {
@@ -295,15 +347,25 @@ public class DriveTasksGenerator {
                     DriveContents contents = driveContentsResult.getDriveContents();
                     InputStream stream = contents.getInputStream();
                     java.io.File file = new java.io.File(Environment.getDataDirectory().getPath()
-                            + "/data/com.example.xps.drivetest/databases/Dictionaries.db");
+                            + "/data/com.study.xps.projectdictionary/databases/Dictionaries.db");
                     try {
                         writeToFile(stream, file);
-                    } catch (IOException e) { e.printStackTrace(); }
+                        Log.i("RESTORE TASK",SUCCESS);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e("RESTORE TASK","ERROR");
+                    }
                     contents.discard(mApiClient);
                 }
             }
         };
         public void writeToFile(InputStream stream, java.io.File file) throws IOException {
+
+            java.io.File f = new java.io.File(Environment.getDataDirectory().getPath() +
+                 "/data/com.study.xps.projectdictionary/databases");
+            if (!f.isDirectory()) {
+                if(!f.mkdir()) throw new IOException("Failed to create DB folder");
+            }
 
             if (!file.exists()) {
                 file.createNewFile();
@@ -322,6 +384,35 @@ public class DriveTasksGenerator {
                     outputStream.close();
                 }
             }
+        }
+    }
+
+    private class CreateFolderTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            Log.i(START_TAG,"Create folder task started");
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                    .setTitle("DB BACKUP TEST FOLDER").build();
+            mApiClient.isConnected();
+            Drive.DriveApi.getRootFolder(mApiClient).createFolder(mApiClient,metadataChangeSet)
+                    .setResultCallback(new ResultCallback<DriveFolder.DriveFolderResult>() {
+                        @Override
+                        public void onResult(@NonNull DriveFolder.DriveFolderResult driveFolderResult) {
+                            if (!driveFolderResult.getStatus().isSuccess()) {
+                                Log.e("CREATE FOLDER CALLBACK",
+                                        "Error while trying to create the folder");
+                                return;
+                            }
+                            Log.i(SUCCESS,"Folder created!!! ID = " + driveFolderResult.
+                                    getDriveFolder().getDriveId());
+                        }
+                    });
+            return null;
         }
     }
 

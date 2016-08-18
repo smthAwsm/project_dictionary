@@ -35,16 +35,9 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
     private final DriveOperationsActivity mContext;
     private GoogleAccountCredential mAccountCredential;
     private GoogleApiClient mGoogleApiClient;
-    private Boolean mIsOnline = false;
 
     public GoogleDriveHelper(DriveOperationsActivity context) {
         mContext = context;
-        new Utils.IsOnlineTask(new Utils.IsOnlineResultListener() {
-            @Override
-            public void setOnlineStatus(boolean result) {
-                mIsOnline = result; //TODO fix online status check
-            }
-        }).execute();
         mAccountCredential = GoogleAccountCredential.usingOAuth2(
                 mContext, Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
@@ -55,7 +48,7 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
             acquireGooglePlayServices();
         } else if(mAccountCredential.getSelectedAccountName() == null){
             mContext.chooseAccount();
-        } else if(!mIsOnline){
+        } else if(!Utils.isDeviceOnline(mContext)){
             Toast.makeText(mContext,"No inet connection",Toast.LENGTH_SHORT).show();
         } else {
             getApiClient();

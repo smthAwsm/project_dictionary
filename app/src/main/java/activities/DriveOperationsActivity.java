@@ -13,6 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.study.xps.projectdictionary.R;
+
 import java.util.List;
 
 import helpers.DriveTasksGenerator;
@@ -31,7 +33,7 @@ public class DriveOperationsActivity extends AppCompatActivity
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    public static final int REQUEST_PERMISSION_WRITE_STORAGE = 1004;
     private String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -53,7 +55,7 @@ public class DriveOperationsActivity extends AppCompatActivity
                                     "Google Play Services on your device and relaunch this app.",
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    prepareTaskExecution(mCurrentDriveTask);
+                    executeDriveTask(mCurrentDriveTask);
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
@@ -68,13 +70,13 @@ public class DriveOperationsActivity extends AppCompatActivity
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mGoogleDriveHelper.setAccountName(accountName);
-                        prepareTaskExecution(mCurrentDriveTask);
+                        executeDriveTask(mCurrentDriveTask);
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    prepareTaskExecution(mCurrentDriveTask);
+                    executeDriveTask(mCurrentDriveTask);
                 }
                 break;
         }
@@ -105,7 +107,7 @@ public class DriveOperationsActivity extends AppCompatActivity
         }
     }
 
-    protected void prepareTaskExecution(DriveTask task){
+    protected void executeDriveTask(DriveTask task){
         mCurrentDriveTask = task;
         acquireDriveHelper();
         mGoogleDriveHelper.aquireApi();
@@ -124,25 +126,22 @@ public class DriveOperationsActivity extends AppCompatActivity
         return true;
     }
 
+    @AfterPermissionGranted(REQUEST_PERMISSION_WRITE_STORAGE)
     public void launchDriveTaskExecutionTask() {
-        DriveTasksGenerator generator = new DriveTasksGenerator(this,
-                mGoogleDriveHelper.getApiClient());
-        AsyncTask<Void, Void, Void> driveTask = generator.getDriveTask(mCurrentDriveTask);
-        driveTask.execute();
-    }
-
-    public boolean verifyStoragePermissions(Activity activity) {
-        int permission = ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            DriveTasksGenerator generator = new DriveTasksGenerator(this,
+                    mGoogleDriveHelper.getApiClient());
+            AsyncTask<Void, Void, Void> driveTask = generator.getDriveTask(mCurrentDriveTask);
+            driveTask.execute();
+            } else {
             ActivityCompat.requestPermissions(
-                    activity,
+                    this,
                     PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
+                    REQUEST_PERMISSION_WRITE_STORAGE
             );
-        } else return true;
-        return false;
+//            EasyPermissions.requestPermissions(this,getString(R.string.storage_permission),
+//                    REQUEST_PERMISSION_WRITE_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
     }
 
     //region PermissionCallbacks
@@ -159,6 +158,12 @@ public class DriveOperationsActivity extends AppCompatActivity
         switch (requestCode){
             case REQUEST_PERMISSION_GET_ACCOUNTS:
                 mGoogleDriveHelper.aquireApi();
+                break;
+            case REQUEST_PERMISSION_WRITE_STORAGE:
+            DriveTasksGenerator generator = new DriveTasksGenerator(this,
+                    mGoogleDriveHelper.getApiClient());
+            AsyncTask<Void, Void, Void> driveTask = generator.getDriveTask(mCurrentDriveTask);
+            driveTask.execute();
                 break;
         }
     }

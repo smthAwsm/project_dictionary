@@ -36,6 +36,7 @@
     <string name="no">NO THANKS</string>
 
     <string name="account_permission">This app needs to access your Google account (via Contacts)</string>
+    <string name="storage_permission">This app needs access to files</string>
     <string name="no_play_services">"This app requires Google Play Services. Please install Google
         Play Services on your device and relaunch this app."</string>
     <string name="no_inet">Please check your internet connection</string>

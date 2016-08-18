@@ -51,9 +51,7 @@ public class SplashActivity extends DriveOperationsActivity {
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            prepareTaskExecution(DriveTasksGenerator.DriveTask.LIST_FILES_TASK);
 
-/*
             if(mDictionaryId == -1){
                 startActivity(new Intent(getApplicationContext(),IntroActivity.class));
             } else {
@@ -63,7 +61,6 @@ public class SplashActivity extends DriveOperationsActivity {
                 startActivity(dictionaryTopicsIntent);
             }
             finish();
-*/
         }
     }
 }

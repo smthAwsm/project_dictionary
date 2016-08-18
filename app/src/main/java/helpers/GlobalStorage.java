@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 import models.Dictionary;
@@ -141,10 +142,10 @@ public class GlobalStorage {
                 Locale[] locales = Locale.getAvailableLocales();
                 Set<String> localeSet = new HashSet<>();
                 for (Locale locale : locales) {
-                    int res = mTextToSpeech.isLanguageAvailable(locale);
-                    if (res == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                    //int res = mTextToSpeech.isLanguageAvailable(locale);
+                    //if (res == TextToSpeech.LANG_COUNTRY_AVAILABLE) { //TODO undo
                         localeSet.add(locale.getLanguage());
-                    }
+                    //}
                 }
                 mTextToSpeech.shutdown();
                 int i = 0;
