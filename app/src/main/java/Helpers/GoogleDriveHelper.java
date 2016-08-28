@@ -43,7 +43,7 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
                 .setBackOff(new ExponentialBackOff());
     }
 
-    public boolean aquireApi(){
+    public boolean aquireDriveApi(){
         if(!isGooglePlayServicesAvailable()){
             acquireGooglePlayServices();
         } else if(mAccountCredential.getSelectedAccountName() == null){
@@ -56,17 +56,6 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
         }
         return false;
     }
-
-    /*public void callApi(){
-        if(!isGooglePlayAvailable()){
-            acquireGooglePlayServices();
-        } else if(mAccountCredential.getSelectedAccountName() == null){
-            mContext.chooseAccout();
-        } else if (!Utils.isDeviceOnline(mContext)) {
-            Toast.makeText(mContext, mContext.getString(R.string.no_inet),
-                    Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(mContext,"TASK START",Toast.LENGTH_LONG).show();
-    }*/
 
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
@@ -118,7 +107,7 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(CALLBACK_TAG, "GoogleApiClient connected");
-        mContext.launchDriveTaskExecutionTask();
+        mContext.launchDriveTaskExecution();
     }
 
     @Override

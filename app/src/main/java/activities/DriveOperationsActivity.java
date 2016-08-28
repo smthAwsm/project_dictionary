@@ -2,14 +2,10 @@ package activities;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -18,6 +14,7 @@ import com.study.xps.projectdictionary.R;
 import java.util.List;
 
 import helpers.DriveTasksGenerator;
+import helpers.DriveTasksGenerator.DriveTaskRunnuble;
 import helpers.DriveTasksGenerator.DriveTask;
 import helpers.GoogleDriveHelper;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -29,6 +26,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class DriveOperationsActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks  {
 
+    public static final int ACCOUNT_PICKER_REQUEST = 1;
     public static final int REQUEST_ACCOUNT_PICKER = 1000;
     public static final int REQUEST_AUTHORIZATION = 1001;
     public static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -79,6 +77,13 @@ public class DriveOperationsActivity extends AppCompatActivity
                     executeDriveTask(mCurrentDriveTask);
                 }
                 break;
+            case ACCOUNT_PICKER_REQUEST:
+                if (resultCode != RESULT_OK) {
+                    Toast.makeText( this,"Logging error",Toast.LENGTH_SHORT).show();
+                } else {
+                    executeDriveTask(mCurrentDriveTask);
+                }
+                break;
         }
     }
 
@@ -89,7 +94,7 @@ public class DriveOperationsActivity extends AppCompatActivity
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mGoogleDriveHelper.setAccountName(accountName);
-                mGoogleDriveHelper.aquireApi();
+                mGoogleDriveHelper.aquireDriveApi();
                 return;
             } else {
                 // Start a dialog from which the user can choose an account
@@ -98,7 +103,6 @@ public class DriveOperationsActivity extends AppCompatActivity
                         REQUEST_ACCOUNT_PICKER);
             }
         } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
                     "This app needs to access your Google account (via Contacts).",
@@ -107,13 +111,13 @@ public class DriveOperationsActivity extends AppCompatActivity
         }
     }
 
-    protected void executeDriveTask(DriveTask task){
+    public void executeDriveTask(DriveTask task){
         mCurrentDriveTask = task;
-        acquireDriveHelper();
-        mGoogleDriveHelper.aquireApi();
+        initDriveHelper();
+        mGoogleDriveHelper.aquireDriveApi();
     }
 
-    private boolean acquireDriveHelper(){
+    private boolean initDriveHelper(){
         if(mGoogleDriveHelper == null){
             try {
                 mGoogleDriveHelper = new GoogleDriveHelper(this);
@@ -127,20 +131,15 @@ public class DriveOperationsActivity extends AppCompatActivity
     }
 
     @AfterPermissionGranted(REQUEST_PERMISSION_WRITE_STORAGE)
-    public void launchDriveTaskExecutionTask() {
+    public void launchDriveTaskExecution() {
         if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             DriveTasksGenerator generator = new DriveTasksGenerator(this,
                     mGoogleDriveHelper.getApiClient());
-            AsyncTask<Void, Void, Void> driveTask = generator.getDriveTask(mCurrentDriveTask);
-            driveTask.execute();
+            DriveTaskRunnuble driveTask = generator.getDriveTask(mCurrentDriveTask);
+            driveTask.run();
             } else {
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_PERMISSION_WRITE_STORAGE
-            );
-//            EasyPermissions.requestPermissions(this,getString(R.string.storage_permission),
-//                    REQUEST_PERMISSION_WRITE_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            EasyPermissions.requestPermissions(this,getString(R.string.storage_permission),
+                    REQUEST_PERMISSION_WRITE_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
     }
 
@@ -157,13 +156,13 @@ public class DriveOperationsActivity extends AppCompatActivity
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         switch (requestCode){
             case REQUEST_PERMISSION_GET_ACCOUNTS:
-                mGoogleDriveHelper.aquireApi();
+                mGoogleDriveHelper.aquireDriveApi();
                 break;
             case REQUEST_PERMISSION_WRITE_STORAGE:
             DriveTasksGenerator generator = new DriveTasksGenerator(this,
                     mGoogleDriveHelper.getApiClient());
-            AsyncTask<Void, Void, Void> driveTask = generator.getDriveTask(mCurrentDriveTask);
-            driveTask.execute();
+                DriveTaskRunnuble driveTask = generator.getDriveTask(mCurrentDriveTask);
+            driveTask.run();
                 break;
         }
     }

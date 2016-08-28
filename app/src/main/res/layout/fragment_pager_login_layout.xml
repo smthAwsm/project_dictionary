@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/activity_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/section_img"
+        android:layout_width="@dimen/intro_graphics_size"
+        android:layout_height="@dimen/intro_graphics_size"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:alpha="0.30"
+        android:scaleType="fitCenter"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/section_label"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_margin_half"
+        android:textColor="@android:color/white"
+        android:layout_above="@+id/selection_description"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.7"
+        android:textColor="@android:color/white"
+        android:id="@+id/selection_description"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/section_label"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

@@ -23,11 +23,10 @@ import com.study.xps.projectdictionary.R;
 import adapters.IntroPagerAdapter;
 import helpers.Utils;
 
-public class IntroActivity extends AppCompatActivity {
+public class IntroActivity extends DriveOperationsActivity {
 
     private ViewPager mViewPager;
     private IntroPagerAdapter mSectionsPagerAdapter;
-    private CoordinatorLayout mCoordinator;
     private ImageButton mNextBtn;
     private Button mSkipBtn, mFinishBtn;
     private ImageView[] mIndicators;
@@ -101,8 +100,6 @@ public class IntroActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
             }
         });
-
-        mCoordinator = (CoordinatorLayout) findViewById(R.id.main_content);
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener =

@@ -69,7 +69,8 @@ public class TopicsActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),DictionariesActivity.class));
                 return true;
             case R.id.action_settings:
-                Toast.makeText(this,"SETTING",Toast.LENGTH_SHORT).show();
+                Intent settingsIntent = new Intent(getApplicationContext(),SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

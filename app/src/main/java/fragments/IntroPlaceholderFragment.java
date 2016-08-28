@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.SignInButton;
 import com.study.xps.projectdictionary.R;
+
+import activities.DriveOperationsActivity;
+import helpers.DriveTasksGenerator;
 
 /**
  * Created by XPS on 07/18/2016.
@@ -47,7 +51,40 @@ public class IntroPlaceholderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_pager, container, false);
+
+        int fragmentIndex = getArguments().getInt(ARG_SECTION_NUMBER);
+        if(fragmentIndex < 3){
+            return setupIntroFeatureFragment(inflater,container,null);
+        }
+        if (fragmentIndex == 3){
+            return setupIntroFeatureFragment(inflater,container,true);
+        }
+        return null;
+    }
+
+    private View setupIntroFeatureFragment(LayoutInflater inflater,ViewGroup container,
+                                           Boolean login){
+        View rootView;
+        if(login != null && login){
+            rootView = inflater.inflate(R.layout.fragment_pager_login_layout, container, false);
+            final DriveOperationsActivity contextActivity;
+            try {
+                contextActivity = (DriveOperationsActivity) getActivity();
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+                return setupIntroFeatureFragment(inflater,container,null);
+            }
+
+            SignInButton signInAccount = (SignInButton) rootView.findViewById(R.id.sign_in_button);
+            signInAccount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    contextActivity.executeDriveTask(DriveTasksGenerator.DriveTask.LIST_FILES_TASK);
+                    }
+                });
+        } else {
+            rootView = inflater.inflate(R.layout.fragment_pager_text_layout, container, false);
+        }
 
         TextView featureLabelTextView = (TextView) rootView.findViewById(R.id.section_label);
         int labelResId = mLabel[getArguments().getInt(ARG_SECTION_NUMBER) - 1];

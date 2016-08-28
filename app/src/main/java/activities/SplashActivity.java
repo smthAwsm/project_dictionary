@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.study.xps.projectdictionary.R;
 
-import helpers.DriveTasksGenerator;
 import models.Tags;
 
 /**
  * Created by XPS on 4/9/2016.
  */
-public class SplashActivity extends DriveOperationsActivity {
+public class SplashActivity extends AppCompatActivity {
 
     private static final int SPLASH_TIME = 1000;
 

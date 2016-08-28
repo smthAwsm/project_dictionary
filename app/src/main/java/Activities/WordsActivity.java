@@ -1,5 +1,6 @@
 package activities;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -25,7 +26,6 @@ import adapters.WordsRecyclingViewAdapter;
 import dialogs.TestStartDialog;
 import fragments.EmptyFragment;
 import fragments.WordsRecyclerListFragment;
-import helpers.ActivityDataInterface;
 import helpers.GlobalStorage;
 import models.Tags;
 import models.Word;
@@ -87,10 +87,11 @@ public class WordsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //TODO Add settings
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-               Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+                Intent settingsIntent = new Intent(getApplicationContext(),SettingsActivity.class);
+                startActivity(settingsIntent);
                     return true;
 
             default:
