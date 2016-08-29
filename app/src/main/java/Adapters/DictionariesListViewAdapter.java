@@ -17,7 +17,6 @@ import models.Dictionary;
 
 import java.util.List;
 
-
 /**
  * Created by XPS on 4/9/2016.
  */

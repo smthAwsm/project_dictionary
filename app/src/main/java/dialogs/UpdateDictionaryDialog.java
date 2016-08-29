@@ -151,12 +151,12 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
 
     private void checkSavedDictionary(Context context,Dictionary dictionaryToDelete){
         SharedPreferences sharedPref =
-                context.getSharedPreferences(Tags.APP_SETTINGS,context.MODE_PRIVATE);
-        long currentDictionary = sharedPref.getLong(Tags.APP_SETTINGS, -1);
+                context.getSharedPreferences(Tags.APP_DATA,context.MODE_PRIVATE);
+        long currentDictionary = sharedPref.getLong(Tags.APP_DATA, -1);
 
         if(dictionaryToDelete.getId() == currentDictionary){
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.remove(Tags.APP_SETTINGS);
+            editor.remove(Tags.APP_DATA);
             editor.apply();
         }
     }

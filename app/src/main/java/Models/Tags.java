@@ -4,6 +4,7 @@ package models;
  * Created by XPS on 4/26/2016.
  */
 public abstract class Tags {
+    public static final String PREF_ACCOUNT_NAME = "CURRENT_ACCOUNT";
     public static final String DICTIONARY_TAG = "DICTIONARY";
     public static final String TOPIC_TAG = "TOPIC";
     public static final String WORD_TAG = "WORD";
@@ -29,7 +30,8 @@ public abstract class Tags {
     public static final String TOPIC_NAME_TAG = "TOPIC_NAME";
     public static final String TOPIC_IMAGE_RESOURCE = "GET_IMAGE_RESOURCE";
 
-    public static final String APP_SETTINGS = "GET_SHARED_VOC";
+    public static final String APP_DATA = "APP_SYSTEM_DATA";
+    public static final String LAST_BACKUP_DATE = "LAST_BACKUP_DATE";
     public static final String MATERIAL_COLORS = "GET_COLORS";
     public static final String TESTING_TYPE_TAG= "TESTING_TYPE";
 

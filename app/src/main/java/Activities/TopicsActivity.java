@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.study.xps.projectdictionary.R;
 import fragments.EmptyFragment;
@@ -52,7 +51,6 @@ public class TopicsActivity extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

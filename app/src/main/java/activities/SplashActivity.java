@@ -21,8 +21,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_layout);
-        SharedPreferences sharedPref = getSharedPreferences(Tags.APP_SETTINGS,MODE_PRIVATE);
-        long currentDictionary = sharedPref.getLong(Tags.APP_SETTINGS, -1);
+        SharedPreferences sharedPref = getSharedPreferences(Tags.APP_DATA,MODE_PRIVATE);
+        long currentDictionary = sharedPref.getLong(Tags.APP_DATA, -1);
         new BackgroundStartTask(currentDictionary).execute();
     }
 

@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -31,9 +29,7 @@ public class IntroActivity extends DriveOperationsActivity {
     private Button mSkipBtn, mFinishBtn;
     private ImageView[] mIndicators;
     private int page = 0;   //  to track page position
-
     int[] colorList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,39 +99,39 @@ public class IntroActivity extends DriveOperationsActivity {
     }
 
     private ViewPager.OnPageChangeListener mOnPageChangeListener =
-            new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position,
-                                           float positionOffset, int positionOffsetPixels) {
-                    final ArgbEvaluator evaluator = new ArgbEvaluator();
-                    int colorUpdate = (Integer) evaluator.evaluate(positionOffset,
-                            colorList[position], colorList[position == 2 ? position : position + 1]);
-                    mViewPager.setBackgroundColor(colorUpdate);
+        new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position,
+                                       float positionOffset, int positionOffsetPixels) {
+                final ArgbEvaluator evaluator = new ArgbEvaluator();
+                int colorUpdate = (Integer) evaluator.evaluate(positionOffset,
+                        colorList[position], colorList[position == 2 ? position : position + 1]);
+                mViewPager.setBackgroundColor(colorUpdate);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                page = position;
+                updateIndicators(page);
+
+                switch (position) {
+                    case 0:
+                        mViewPager.setBackgroundColor(colorList[0]);
+                        break;
+                    case 1:
+                        mViewPager.setBackgroundColor(colorList[1]);
+                        break;
+                    case 2:
+                        mViewPager.setBackgroundColor(colorList[2]);
+                        break;
                 }
 
-                @Override
-                public void onPageSelected(int position) {
-                    page = position;
-                    updateIndicators(page);
-
-                    switch (position) {
-                        case 0:
-                            mViewPager.setBackgroundColor(colorList[0]);
-                            break;
-                        case 1:
-                            mViewPager.setBackgroundColor(colorList[1]);
-                            break;
-                        case 2:
-                            mViewPager.setBackgroundColor(colorList[2]);
-                            break;
-                    }
-
-                    mNextBtn.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
-                    mFinishBtn.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
-                }
-                @Override
-                public void onPageScrollStateChanged(int state) {}
-            };
+                mNextBtn.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
+                mFinishBtn.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        };
 
     void updateIndicators(int position) {
         for (int i = 0; i < mIndicators.length; i++) {

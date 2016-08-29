@@ -1,8 +1,10 @@
 package helpers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -32,10 +34,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import activities.DictionariesActivity;
 import activities.DriveOperationsActivity;
 import activities.IntroActivity;
+import models.Tags;
 
 /**
  * Created by XPS on 08/10/2016.
@@ -61,8 +67,6 @@ public class DriveTasksGenerator {
         switch (operation){
             case LIST_FILES_TASK:
                 return new CheckDriveBackup();
-                //return new ListFilesTask();
-                //return new CreateFolderTask();
             case APP_FOLDER_BACKUP_TASK:
                 String mimeType = "application/x-sqlite3";
                 java.io.File fileContent = new java.io.File(Environment.getDataDirectory().getPath()
@@ -300,6 +304,13 @@ public class DriveTasksGenerator {
                     if(driveFile != null){
                         if (mDbOldFile != null) {
                             mDbOldFile.delete(mApiClient);
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date date = new Date();
+                            SharedPreferences.Editor prefEditor = mContext.getSharedPreferences(
+                                    Tags.APP_DATA, Context.MODE_PRIVATE).edit();
+                            prefEditor.putString(Tags.LAST_BACKUP_DATE,dateFormat.format(date));
+                            prefEditor.apply();
+
                             Log.i("OLD FILE DELETING","OK");
                         }
                         driveFile.getMetadata(mApiClient).setResultCallback(mMetadataResultCallback);

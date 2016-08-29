@@ -80,9 +80,9 @@ public class DictionariesListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         SharedPreferences.Editor prefEditor = getActivity().
-                getSharedPreferences(Tags.APP_SETTINGS,Context.MODE_PRIVATE).edit();
+                getSharedPreferences(Tags.APP_DATA,Context.MODE_PRIVATE).edit();
         Long dictionaryId = mDictionariesList.get(position).getId();
-        prefEditor.putLong(Tags.APP_SETTINGS, dictionaryId);
+        prefEditor.putLong(Tags.APP_DATA, dictionaryId);
         prefEditor.commit();
 
         Intent dictionaryTopicsIntent = new Intent(mContextActivity, TopicsActivity.class);

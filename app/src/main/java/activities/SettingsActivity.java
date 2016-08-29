@@ -2,7 +2,6 @@ package activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -19,16 +18,14 @@ import helpers.ItemDecorator;
 /**
  * Created by XPS on 08/28/2016.
  */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends DriveOperationsActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.settings_layout);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.settings_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         List<SectionedSettingsAdapter.Section> sections =  new ArrayList<>();
         sections.add(new SectionedSettingsAdapter.Section(0,getString(R.string.backup)));
@@ -42,8 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
                 new SectionedSettingsAdapter.Section[sections.size()];
         SectionedSettingsAdapter.Section[] sectionsArray = sections.toArray(dummy);
         mSectionedAdapter.setSections(sectionsArray);
-        int orientation = getResources().getConfiguration().orientation;
-        recyclerView.addItemDecoration(new ItemDecorator(this,orientation,sectionsArray));
+        recyclerView.addItemDecoration(new ItemDecorator(this,sectionsArray));
 
         recyclerView.setAdapter(mSectionedAdapter);
     }

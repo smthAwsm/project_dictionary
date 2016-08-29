@@ -61,7 +61,6 @@ public class SectionedSettingsAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public static class SectionViewHolder extends RecyclerView.ViewHolder {
-
         public TextView title;
 
         public SectionViewHolder(View view,int mTextResourceid) {
@@ -75,7 +74,7 @@ public class SectionedSettingsAdapter extends RecyclerView.Adapter<RecyclerView.
         if (typeView == SECTION_TYPE) {
             final View view = LayoutInflater.from(mContext).inflate(mSectionResourceId, parent, false);
             return new SectionViewHolder(view,mTextResourceId);
-        }else{
+        } else {
             return mBaseAdapter.onCreateViewHolder(parent, typeView -1);
         }
     }

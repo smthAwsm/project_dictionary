@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,20 +16,16 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.orm.SugarDb;
 import com.study.xps.projectdictionary.R;
 
 import adapters.WordsRecyclingViewAdapter;
-import dialogs.TestStartDialog;
 import fragments.EmptyFragment;
 import fragments.WordsRecyclerListFragment;
 import helpers.GlobalStorage;
 import models.Tags;
 import models.Word;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
