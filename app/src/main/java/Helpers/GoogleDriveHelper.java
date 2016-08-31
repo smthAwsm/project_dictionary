@@ -51,7 +51,10 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
         } else if(!Utils.isDeviceOnline(mContext)){
             Toast.makeText(mContext,"No inet connection",Toast.LENGTH_SHORT).show();
         } else {
-            getApiClient();
+            GoogleApiClient apiClient = getApiClient();
+            if(apiClient != null && apiClient.isConnected()){
+                mContext.launchDriveTaskExecution(mGoogleApiClient);
+            }
             return true;
         }
         return false;
@@ -86,13 +89,15 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
             mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
-                    .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
+                    .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();
         }
-        mGoogleApiClient.connect();
-        return mGoogleApiClient;
+        if(mGoogleApiClient.isConnected()) {
+            return mGoogleApiClient;
+        } else mGoogleApiClient.connect();
+        return null;
     }
 
     public void setAccountName(String accountName) {
@@ -107,7 +112,7 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onConnected(Bundle connectionHint) {
         Log.i(CALLBACK_TAG, "GoogleApiClient connected");
-        mContext.launchDriveTaskExecution();
+        mContext.launchDriveTaskExecution(mGoogleApiClient);
     }
 
     @Override
@@ -130,7 +135,6 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
         }
     }
 //endregion
-
 }
 
 

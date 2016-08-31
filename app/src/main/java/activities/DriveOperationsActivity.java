@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.study.xps.projectdictionary.R;
 
 import java.util.List;
@@ -154,10 +155,10 @@ public class DriveOperationsActivity extends AppCompatActivity
     }
 
     @AfterPermissionGranted(REQUEST_PERMISSION_WRITE_STORAGE)
-    public void launchDriveTaskExecution() {
+    public void launchDriveTaskExecution(GoogleApiClient googleApiClient) {
         if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            DriveTasksGenerator generator = new DriveTasksGenerator(this,
-                    mGoogleDriveHelper.getApiClient());
+            DriveTasksGenerator generator = new DriveTasksGenerator(this,googleApiClient);
+                    //mGoogleDriveHelper.getApiClient());
             DriveTaskRunnuble driveTask = generator.getDriveTask(mCurrentDriveTask);
             driveTask.run();
             } else {

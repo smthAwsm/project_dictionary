@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +114,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
                         break;
                     case 2:
                         mContextActivity.executeDriveTask(
-                                DriveTasksGenerator.DriveTask.APP_FOLDER_RESTORE_TASK);
+                               DriveTasksGenerator.DriveTask.APP_FOLDER_RESTORE_TASK);
                         break;
                 }
             }

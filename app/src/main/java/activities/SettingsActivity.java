@@ -31,16 +31,16 @@ public class SettingsActivity extends DriveOperationsActivity {
         sections.add(new SectionedSettingsAdapter.Section(0,getString(R.string.backup)));
 
         SettingsAdapter settingsAdapter = new SettingsAdapter(this);
-        SectionedSettingsAdapter mSectionedAdapter =
+        SectionedSettingsAdapter sectionedSettingsAdapter =
                 new SectionedSettingsAdapter(this,R.layout.section_layout,
                 R.id.sectionTittle,settingsAdapter);
 
         SectionedSettingsAdapter.Section[] dummy =
                 new SectionedSettingsAdapter.Section[sections.size()];
         SectionedSettingsAdapter.Section[] sectionsArray = sections.toArray(dummy);
-        mSectionedAdapter.setSections(sectionsArray);
+        sectionedSettingsAdapter.setSections(sectionsArray);
         recyclerView.addItemDecoration(new ItemDecorator(this,sectionsArray));
 
-        recyclerView.setAdapter(mSectionedAdapter);
+        recyclerView.setAdapter(sectionedSettingsAdapter);
     }
 }

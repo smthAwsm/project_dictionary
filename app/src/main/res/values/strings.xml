@@ -1,17 +1,26 @@
 <resources>
     <string name="app_name">Just learn IT</string>
+
+    <!--Settings categories-->
     <string name="backup">Backup</string>
+
     <string name="current_account">Current backup account</string>
+
     <string name="backup_data">Backup local data</string>
-    <string name="restore_data">Restore local data</string>
-    <string name="backup_found">Restore data from drive</string>
-    <string name="sync_date">Latest upload: </string>
     <string name="local_date">Last changes: </string>
+    <string name="backup_local">Backup local data to cloud?</string>
+    <string name="backup_success">Dictionaries data backed up successfully!</string>
+    <string name="backup_error">Dictionaries data restoring error!</string>
+
+    <string name="restore_data">Restore local data</string>
+    <string name="sync_date">Latest upload: </string>
+    <string name="backup_found">Restore data from cloud</string>
     <string name="backup_restore">Found data backup</string>
-    <string name="backup_restored">Dictionaries data restored successfully!</string>
-    <string name="no_backup_info"> no uploud info</string>
-    <string name="backup_restoring_error">Dictionaries data restoring error!</string>
     <string name="restore">Restore?</string>
+    <string name="restore_success">Dictionaries data restored successfully!</string>
+    <string name="restore_error">Dictionaries data restoring error!</string>
+
+    <string name="no_backup_info"> no uploud info</string>
     <string name="size">Size</string>
 
     <string name="dictionaries_title">Dictionaries</string>
