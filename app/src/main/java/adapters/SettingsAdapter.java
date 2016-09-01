@@ -56,7 +56,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
         lastModifSummaries.append(mContextActivity.getString(R.string.local_date)).append(" ");
         java.io.File file = new java.io.File(Environment.getDataDirectory().getPath()
                 + "/data/com.study.xps.projectdictionary/databases/Dictionaries.db");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         Date d = new Date(file.lastModified());
         lastModifSummaries.append(dateFormat.format(d));
 

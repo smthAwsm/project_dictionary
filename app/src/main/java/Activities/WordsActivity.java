@@ -53,6 +53,7 @@ public class WordsActivity extends AppCompatActivity {
         supportActionBar.setTitle(mCurrentTopicName);
 
         mGlobalStorage = GlobalStorage.getStorage();
+
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }

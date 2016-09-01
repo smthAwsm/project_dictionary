@@ -15,6 +15,7 @@ import com.google.android.gms.drive.Drive;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
+import com.study.xps.projectdictionary.R;
 
 import java.util.Arrays;
 
@@ -49,7 +50,8 @@ public class GoogleDriveHelper implements GoogleApiClient.ConnectionCallbacks,
         } else if(mAccountCredential.getSelectedAccountName() == null){
             mContext.chooseAccount();
         } else if(!Utils.isDeviceOnline(mContext)){
-            Toast.makeText(mContext,"No inet connection",Toast.LENGTH_SHORT).show();
+            String offlineString = mContext.getString(R.string.offline);
+            Toast.makeText(mContext,offlineString,Toast.LENGTH_SHORT).show();
         } else {
             GoogleApiClient apiClient = getApiClient();
             if(apiClient != null && apiClient.isConnected()){

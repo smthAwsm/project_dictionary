@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,6 +56,7 @@ public class DriveTasksGenerator {
     private final String RESPONSE_TAG = "RESPONSE";
     private final String SUCCESS = "SUCCESS";
     private final String DB_PATH = "/data/com.study.xps.projectdictionary/databases/Dictionaries.db";
+    private AlertDialog mProgressDialog = null;
 
     public DriveTasksGenerator(DriveOperationsActivity context, GoogleApiClient client) {
         this.mContext = context;
@@ -107,6 +110,44 @@ public class DriveTasksGenerator {
                 .setPositiveButton(R.string.ok,dialogClickListener)
                 .setNegativeButton(R.string.cancel,dialogClickListener);
         builder.create().show();
+    }
+    private void showProgressDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        LayoutInflater inflater = mContext.getLayoutInflater();
+        View progressView = inflater.inflate(R.layout.dialog_progress_bar,null);
+        TextView dialogTextView = (TextView) progressView.
+                findViewById(R.id.progresDialogText);
+        dialogTextView.setText(message);
+        mProgressDialog = builder.setView(progressView).create();
+        mProgressDialog.show();
+    }
+
+    private String getPercentDiff(long driveDbSize){
+        java.io.File f = new java.io.File(Environment.getDataDirectory().getPath() + DB_PATH);
+        if(f.exists()){
+            long localDbSize = f.length();
+            if(localDbSize == driveDbSize){
+                return mContext.getString(R.string.equal_files);
+            }
+            int percentDiff;
+            if(localDbSize > driveDbSize){
+                percentDiff = (int)(100 - (driveDbSize * 100) / localDbSize);
+                StringBuilder builder = new StringBuilder();
+                String localDbLarger = mContext.getString(R.string.local_file);
+                String larger = mContext.getString(R.string.larger);
+                builder.append(localDbLarger).append(" " + percentDiff + "% ").append(larger);
+                return builder.toString();
+            } else {
+                percentDiff = (int)(100 - (localDbSize * 100) / driveDbSize);
+                StringBuilder builder = new StringBuilder();
+                String localDbLarger = mContext.getString(R.string.cloud_file);
+                String larger = mContext.getString(R.string.larger);
+                builder.append(localDbLarger).append(" " + percentDiff + "% ").append(larger);
+
+                return builder.toString();
+            }
+        }
+        return "";
     }
 
     private class CheckDriveBackup implements DriveTaskRunnuble {
@@ -222,28 +263,30 @@ public class DriveTasksGenerator {
                         for (Metadata data : buffer){
                             if(data.getTitle().equals("Dictionaries.db")){
                                mDbOldFile = data.getDriveId().asDriveFile();
-                               prepareAndShowDialog();
+                               prepareAndShowDialog(data);
                             }
                         }
                         buffer.release();
                     }
         };
 
-        private void prepareAndShowDialog(){
-            String start = mContext.getString(R.string.backup_local);
+        private void prepareAndShowDialog(Metadata data){
             String title = mContext.getString(R.string.backup_data);
+            String percentDiff = getPercentDiff(data.getFileSize());
+            StringBuilder builder = new StringBuilder(title);
+            builder.append(percentDiff);
             DialogInterface.OnClickListener dialogClickListener =
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(which == -1){
-                                Toast.makeText(mContext,"OK",Toast.LENGTH_SHORT).show();
-                                //Drive.DriveApi.newDriveContents(mApiClient)
-                                //        .setResultCallback(driveContentsCallback); //TODO uncomment
+                                Drive.DriveApi.newDriveContents(mApiClient)
+                                        .setResultCallback(driveContentsCallback);
+                                showProgressDialog(mContext.getString(R.string.restore_progress));
                             }
                         }
                     };
-            showDialog(start,title,dialogClickListener);
+            showDialog(builder.toString(),title,dialogClickListener);
         }
 
         private final ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback =
@@ -302,12 +345,15 @@ public class DriveTasksGenerator {
                     }
                     if (mDbOldFile != null) {
                         mDbOldFile.delete(mApiClient);
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
                         Date date = new Date();
                         SharedPreferences.Editor prefEditor = mContext.getSharedPreferences(
                                 Tags.APP_DATA, Context.MODE_PRIVATE).edit();
                         prefEditor.putString(Tags.LAST_BACKUP_DATE,dateFormat.format(date));
                         prefEditor.apply();
+                        if(mProgressDialog != null && mProgressDialog.isShowing()){
+                        mProgressDialog.cancel();
+                        }
                         Toast.makeText(mContext,R.string.backup_success,
                                 Toast.LENGTH_SHORT).show();
                     } else {
@@ -390,12 +436,13 @@ public class DriveTasksGenerator {
         private void prepareAndShowDialog(Metadata data){
             String dataFound = mContext.getString(R.string.backup_restore);
             String created = mContext.getString(R.string.created);
-            String size = mContext.getString(R.string.size);
             String restoreQuestion = mContext.getString(R.string.restore);
             StringBuilder messageBuiler = new StringBuilder();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            String backupDate = dateFormat.format(data.getCreatedDate()).toString();
             String message = messageBuiler.append(dataFound).append(" (").
-                    append(created + " ").append(data.getCreatedDate() + ", ").
-                    append(size + " ").append(data.getFileSize()+"). ").
+                    append(created + " ").append(backupDate).
+                    append(getPercentDiff(data.getFileSize())).append("). ").
                     append(restoreQuestion).toString();
             String title = mContext.getString(R.string.backup_found);
             final DriveFile driveFile = data.getDriveId().asDriveFile();
@@ -404,9 +451,9 @@ public class DriveTasksGenerator {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(which == -1){
-                                Toast.makeText(mContext,"OK",Toast.LENGTH_SHORT).show();
-                                //driveFile.open(mApiClient,DriveFile.MODE_READ_ONLY,null). //TODO uncomment
-                                //        setResultCallback(mDriveContentsCallback);
+                                driveFile.open(mApiClient,DriveFile.MODE_READ_ONLY,null).
+                                        setResultCallback(mDriveContentsCallback);
+                                showProgressDialog(mContext.getString(R.string.backup_progress));
                             }
                         }
                     };
@@ -425,6 +472,9 @@ public class DriveTasksGenerator {
                             + DB_PATH);
                     try {
                         writeToFile(stream, file);
+                        if(mProgressDialog != null && mProgressDialog.isShowing()){
+                            mProgressDialog.cancel();
+                        }
                         Toast.makeText(mContext,R.string.restore_success,
                                 Toast.LENGTH_SHORT).show();
                         if(mContext instanceof IntroActivity) {
