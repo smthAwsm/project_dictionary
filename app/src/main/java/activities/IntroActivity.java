@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -42,6 +43,8 @@ public class IntroActivity extends DriveOperationsActivity {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black_trans80));
         }
 
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         colorList = new int[]{
                 ContextCompat.getColor(this, R.color.cyan),
                 ContextCompat.getColor(this, R.color.orange),
@@ -55,7 +58,8 @@ public class IntroActivity extends DriveOperationsActivity {
         mNextBtn = (ImageButton) findViewById(R.id.intro_btn_next);
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
             mNextBtn.setImageDrawable(
-                    Utils.tintMyDrawable(ContextCompat.getDrawable(this, R.drawable.ic_chevron_right_24dp), Color.WHITE)
+                    Utils.tintMyDrawable(ContextCompat.getDrawable(this,
+                            R.drawable.ic_chevron_right), Color.WHITE)
             );
         }
         mNextBtn.setOnClickListener(new View.OnClickListener() {

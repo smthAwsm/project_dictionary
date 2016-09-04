@@ -2,6 +2,7 @@
     <string name="app_name">Just learn IT</string>
 
     <!--Settings categories-->
+    <string name="setting_title">Settings</string>
     <string name="backup">Backup</string>
 
     <string name="current_account">Current backup account</string>

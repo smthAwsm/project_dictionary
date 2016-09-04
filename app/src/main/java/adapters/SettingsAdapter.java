@@ -39,6 +39,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
         mSettingSummaries = getSettingsSummaries();
     }
 
+    public void updateSummariesContent(){
+        mSettingSummaries = getSettingsSummaries();
+    }
+
     private String[] getSettingsSummaries(){
         SharedPreferences pref = mContextActivity.getSharedPreferences(
                 Tags.APP_DATA, Context.MODE_PRIVATE);

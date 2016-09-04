@@ -47,6 +47,7 @@ public class GlobalStorage {
     public void updateDictionariesData(){
         mDictionariesList = Dictionary.listAll(Dictionary.class);
     }
+
     public List<Dictionary> getDictionariesData() {
         if(mDictionariesList == null) updateDictionariesData();
         return mDictionariesList;
@@ -57,6 +58,7 @@ public class GlobalStorage {
     public void setCurrentDictionaryID(long currentDictionaryID) {
         mCurrentDictionaryID = currentDictionaryID;
     }
+
     public Dictionary getCurrentDictionary(){
         List<Dictionary> currentDictionary = Dictionary.find(Dictionary.class,"ID = " + mCurrentDictionaryID);
                 //Topic.find(Topic.class,

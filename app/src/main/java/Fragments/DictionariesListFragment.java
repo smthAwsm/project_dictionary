@@ -30,7 +30,7 @@ import java.util.List;
 public class DictionariesListFragment extends ListFragment {
     private ListView mDictionariesListView;
     private DictionariesActivity mContextActivity;
-    private List<Dictionary> mDictionariesList;
+    private GlobalStorage mGlobalStorage;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -42,10 +42,8 @@ public class DictionariesListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_vocabulary_list, container, false);
-
+        mGlobalStorage = GlobalStorage.getStorage();
         mContextActivity = (DictionariesActivity)getActivity();
-        GlobalStorage globalStorage = GlobalStorage.getStorage();
-        mDictionariesList = globalStorage.getDictionariesData();
         addDictionaryListListeners(view);
 
         return view;
@@ -59,7 +57,8 @@ public class DictionariesListFragment extends ListFragment {
                                            int pos, long id) {
                 UpdateDictionaryDialog rudDialog = new UpdateDictionaryDialog();
                 Bundle bundle = new Bundle();
-                bundle.putLong(Tags.DICTIONARY_TAG, mDictionariesList.get(pos).getId());
+                Long dictionaryId = mGlobalStorage.getDictionariesData().get(pos).getId();
+                bundle.putLong(Tags.DICTIONARY_TAG, dictionaryId);
                 rudDialog.setArguments(bundle);
                 rudDialog.show(mContextActivity.getActivityFragmentManager(),
                         Tags.UPDATE_DICTIONARY_DIALOG);
@@ -81,13 +80,12 @@ public class DictionariesListFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         SharedPreferences.Editor prefEditor = getActivity().
                 getSharedPreferences(Tags.APP_DATA,Context.MODE_PRIVATE).edit();
-        Long dictionaryId = mDictionariesList.get(position).getId();
+        Long dictionaryId = mGlobalStorage.getDictionariesData().get(position).getId();
         prefEditor.putLong(Tags.APP_DATA, dictionaryId);
         prefEditor.commit();
 
         Intent dictionaryTopicsIntent = new Intent(mContextActivity, TopicsActivity.class);
-        dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,
-                mDictionariesList.get(position).getId());
+        dictionaryTopicsIntent.putExtra(Tags.DICTIONARY_TAG,dictionaryId);
         mContextActivity.finish();
         startActivity(dictionaryTopicsIntent);
     }

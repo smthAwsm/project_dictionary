@@ -124,7 +124,6 @@ public class UpdateDictionaryDialog extends AppCompatDialogFragment {
         SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
             @Override
             public void manipulateInTransaction() {
-
                 List<Topic> topics = Select.from(Topic.class)
                         .where(Condition.prop("dictionary_ID").eq(editDictionary.getId()))
                         .list();

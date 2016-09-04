@@ -192,6 +192,7 @@ public class WordsRecyclingViewAdapter extends
 
             this.mItemView = itemView;
             mPronounceButton = (ImageView) itemView.findViewById(R.id.pronounceButton);
+            mPronounceButton.setImageResource(R.drawable.ic_hearing);
             mWordTextView = (TextView) itemView.findViewById(R.id.wordTextView);
             mTranslationTextView = (TextView) itemView.findViewById(R.id.translationTextView);
             mSideShape = (FrameLayout) itemView.findViewById(R.id.sideShape);

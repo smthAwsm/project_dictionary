@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,7 +42,6 @@ public class TopicsRecyclerGridFragment extends Fragment {
         mContexActivity = (TopicsActivity) getActivity();
         addTopicListListeners(view);
 
-        GlobalStorage globalStorage = GlobalStorage.getStorage();
         mTopicsGridRecycler = new TopicsRecyclingGridViewAdapter(mContexActivity);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
         mRecyclerView.setAdapter(mTopicsGridRecycler);

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ public class DictionariesActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_container_layout);
         android.support.v7.app.ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setTitle(R.string.dictionaries_title);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         GlobalStorage globalStorage = GlobalStorage.getStorage();
         if(globalStorage.getLanguagesData().size() == 0){
@@ -112,7 +114,15 @@ public class DictionariesActivity extends AppCompatActivity {
             mGlobalStorage.updateDictionariesData();
             mListViewAdapter.addAll(mGlobalStorage.getDictionariesData());
             mListViewAdapter.notifyDataSetChanged();
-        }
+        } else try {
+            Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
+            if(f != null && f instanceof DictionariesListFragment){
+                mListViewAdapter = new DictionariesListViewAdapter(this,
+                        mGlobalStorage.getDictionariesData());
+                ((DictionariesListFragment)f).setListAdapter(mListViewAdapter);
+                updateViewData();
+            }
+        } catch (NullPointerException e) {e.printStackTrace();}
     }
 
     public FragmentManager getActivityFragmentManager() {

@@ -90,8 +90,11 @@ public class DriveOperationsActivity extends AppCompatActivity
             SharedPreferences.Editor prefEditor = getSharedPreferences(
                     Tags.APP_DATA,Context.MODE_PRIVATE).edit();
             prefEditor.putString(Tags.PREF_ACCOUNT_NAME, accountName);
-            prefEditor.apply();
+            prefEditor.commit();
             mGoogleDriveHelper.setAccountName(accountName);
+            if(this instanceof SettingsActivity){
+                ((SettingsActivity) this).updateSummaries();
+            }
         }
     }
 
@@ -185,9 +188,11 @@ public class DriveOperationsActivity extends AppCompatActivity
             case REQUEST_PERMISSION_WRITE_STORAGE:
             DriveTasksGenerator generator = new DriveTasksGenerator(this,
                     mGoogleDriveHelper.getApiClient());
+            if (mCurrentDriveTask != null) {
                 DriveTaskRunnuble driveTask = generator.getDriveTask(mCurrentDriveTask);
-            driveTask.run();
-                break;
+                driveTask.run();
+            }
+            break;
         }
     }
 

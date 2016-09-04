@@ -28,15 +28,15 @@
         </activity>
 
         <activity
-            android:name="activities.DictionariesActivity" android:configChanges="orientation|screenSize">
+            android:name="activities.DictionariesActivity">
         </activity>
 
         <activity
-            android:name="activities.TopicsActivity" android:configChanges="orientation|screenSize">
+            android:name="activities.TopicsActivity">
         </activity>
 
         <activity
-            android:name="activities.WordsActivity" android:configChanges="orientation|screenSize">
+            android:name="activities.WordsActivity">
         </activity>
 
         <activity

@@ -1,7 +1,10 @@
 package fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ public class IntroPlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "SELECTION_NUMBER";
     private ImageView mFragmentDrawable;
+
     private int[] mIcons = new int[]{
             R.drawable.ic_accessibility,
             R.drawable.ic_cloud_done,
@@ -79,7 +83,8 @@ public class IntroPlaceholderFragment extends Fragment {
             signInAccount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    contextActivity.executeDriveTask(DriveTasksGenerator.DriveTask.LIST_FILES_TASK);
+                    contextActivity.executeDriveTask(
+                            DriveTasksGenerator.DriveTask.APP_FOLDER_RESTORE_TASK);
                     }
                 });
         } else {
@@ -96,7 +101,14 @@ public class IntroPlaceholderFragment extends Fragment {
 
         mFragmentDrawable = (ImageView) rootView.findViewById(R.id.section_img);
         int iconResId = mIcons[getArguments().getInt(ARG_SECTION_NUMBER) - 1];
-        mFragmentDrawable.setBackgroundResource(iconResId);
+        //mFragmentDrawable.setBackgroundResource(iconResId);
+
+        Drawable d = VectorDrawableCompat.create(getResources(), iconResId, null);
+        //d = DrawableCompat.wrap(d);
+        //DrawableCompat.setTint(d, );
+        mFragmentDrawable.setImageDrawable(d);
+
+
 
         return rootView;
     }

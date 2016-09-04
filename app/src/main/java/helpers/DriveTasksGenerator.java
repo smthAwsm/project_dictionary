@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +42,7 @@ import java.util.Date;
 import activities.DictionariesActivity;
 import activities.DriveOperationsActivity;
 import activities.IntroActivity;
+import activities.SettingsActivity;
 import models.Tags;
 
 /**
@@ -69,13 +69,11 @@ public class DriveTasksGenerator {
 
     public DriveTaskRunnuble getDriveTask(DriveTask operation){
         switch (operation){
-            case LIST_FILES_TASK:
-                return new CheckDriveBackup();
             case APP_FOLDER_BACKUP_TASK:
-                String mimeType = "application/x-sqlite3";
-                java.io.File fileContent = new java.io.File(Environment.getDataDirectory().getPath()
-                                + DB_PATH);
+                java.io.File fileContent = new java.io.File(Environment.
+                        getDataDirectory().getPath() + DB_PATH);
                 String name = fileContent.getName();
+                String mimeType = "application/x-sqlite3";
                 return new BackupDbOnDrive(name,mimeType,fileContent);
             case APP_FOLDER_RESTORE_TASK:
                 return new RestoreDbFromDrive();
@@ -150,61 +148,6 @@ public class DriveTasksGenerator {
         return "";
     }
 
-    private class CheckDriveBackup implements DriveTaskRunnuble {
-        private DriveFolder mFolder;
-
-        @Override
-        public void run() {
-            if(mApiClient.isConnected()){
-                //try {
-                Query query = new Query.Builder().build();
-                Drive.DriveApi.query(mApiClient, query)
-                        .setResultCallback(metadataBufferCallback);
-                //} catch (Exception e) {e.printStackTrace();}
-            }
-        }
-
-        private final ResultCallback<DriveApi.MetadataBufferResult> metadataBufferCallback =
-                new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(DriveApi.MetadataBufferResult result) {
-                        if (!result.getStatus().isSuccess()) {
-                            Log.e("LIST FILES CALLBACK","Problem while retrieving files");
-                            return;
-                        }
-                        MetadataBuffer filesBuffer = result.getMetadataBuffer();
-                        for (Metadata res : filesBuffer ){
-                            if (res.getTitle().equals("DB BACKUP TEST FOLDER") && res.isFolder()) {
-                                mFolder = res.getDriveId().asDriveFolder();
-                            }
-                        }
-                        filesBuffer.release();
-
-                        mFolder.listChildren(mApiClient).
-                                setResultCallback(searchOldDbFilesCallback);
-                    }
-        };
-
-        private final ResultCallback<DriveApi.MetadataBufferResult> searchOldDbFilesCallback =
-                new ResultCallback<DriveApi.MetadataBufferResult>() {
-                    @Override
-                    public void onResult(
-                            @NonNull DriveApi.MetadataBufferResult metadataBufferResult) {
-                        if (!metadataBufferResult.getStatus().isSuccess()) {
-                            Log.e("LIST OLD FILES CALLBACK","Problem while retrieving files");
-                            return;
-                        }
-
-                        MetadataBuffer buffer = metadataBufferResult.getMetadataBuffer();
-                        for (Metadata data : buffer){
-                            if(data.getTitle().equals("Dictionaries.db")){
-                                new RestoreDbFromDrive().run();
-                                return;
-                            }
-                        }
-                    }
-        };
-    }
     private class BackupDbOnDrive implements DriveTaskRunnuble {
         private final String title;
         private final String mimeType;
@@ -282,7 +225,7 @@ public class DriveTasksGenerator {
                             if(which == -1){
                                 Drive.DriveApi.newDriveContents(mApiClient)
                                         .setResultCallback(driveContentsCallback);
-                                showProgressDialog(mContext.getString(R.string.restore_progress));
+                                showProgressDialog(mContext.getString(R.string.backup_progress));
                             }
                         }
                     };
@@ -350,9 +293,12 @@ public class DriveTasksGenerator {
                         SharedPreferences.Editor prefEditor = mContext.getSharedPreferences(
                                 Tags.APP_DATA, Context.MODE_PRIVATE).edit();
                         prefEditor.putString(Tags.LAST_BACKUP_DATE,dateFormat.format(date));
-                        prefEditor.apply();
+                        prefEditor.commit();
                         if(mProgressDialog != null && mProgressDialog.isShowing()){
                         mProgressDialog.cancel();
+                        }
+                        if(mContext instanceof SettingsActivity){
+                            ((SettingsActivity) mContext).updateSummaries();
                         }
                         Toast.makeText(mContext,R.string.backup_success,
                                 Toast.LENGTH_SHORT).show();
@@ -453,7 +399,7 @@ public class DriveTasksGenerator {
                             if(which == -1){
                                 driveFile.open(mApiClient,DriveFile.MODE_READ_ONLY,null).
                                         setResultCallback(mDriveContentsCallback);
-                                showProgressDialog(mContext.getString(R.string.backup_progress));
+                                showProgressDialog(mContext.getString(R.string.restore_progress));
                             }
                         }
                     };

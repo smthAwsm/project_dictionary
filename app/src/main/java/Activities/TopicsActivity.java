@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +41,7 @@ public class TopicsActivity extends AppCompatActivity {
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setTitle(getString(R.string.topics_title));
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         mGlobalStorage = GlobalStorage.getStorage();
         if(mGlobalStorage.getLanguagesData().size() == 0){

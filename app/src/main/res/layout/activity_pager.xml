@@ -69,7 +69,6 @@
                 android:layout_width="@dimen/activity_margin_half"
                 android:layout_height="@dimen/activity_margin_half"
                 android:background="@drawable/indicator_unselected" />
-
         </LinearLayout>
 
 
@@ -90,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:padding="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_chevron_right_24dp"
+            app:srcCompat="@drawable/ic_chevron_right"
             android:tint="@android:color/white" />
     </FrameLayout>
 

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
     <TextView
         android:layout_width="match_parent"
@@ -57,7 +58,7 @@
         android:id="@+id/imageView3"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/languageToImageView"
-        android:src="@drawable/ic_trending_flat_black_24dp"/>
+        app:srcCompat="@drawable/ic_trending_flat"/>
 
     <ImageView
         android:layout_width="40dp"

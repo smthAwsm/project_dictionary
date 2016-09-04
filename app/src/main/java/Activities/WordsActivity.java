@@ -19,7 +19,9 @@ import android.view.MenuItem;
 
 import com.study.xps.projectdictionary.R;
 
+import adapters.DictionariesListViewAdapter;
 import adapters.WordsRecyclingViewAdapter;
+import fragments.DictionariesListFragment;
 import fragments.EmptyFragment;
 import fragments.WordsRecyclerListFragment;
 import helpers.GlobalStorage;
@@ -28,7 +30,6 @@ import models.Word;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Created by XPS on 4/25/2016.
@@ -50,20 +51,21 @@ public class WordsActivity extends AppCompatActivity {
 
         mCurrentTopicName = getIntent().getStringExtra(Tags.TOPIC_NAME_TAG);
         ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar.setDisplayHomeAsUpEnabled(true);
         supportActionBar.setTitle(mCurrentTopicName);
 
         mGlobalStorage = GlobalStorage.getStorage();
-
         mFragmentManager = getSupportFragmentManager();
         updateData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.words_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_word_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -85,6 +87,9 @@ public class WordsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_settings:
                 Intent settingsIntent = new Intent(getApplicationContext(),SettingsActivity.class);
                 startActivity(settingsIntent);
@@ -140,6 +145,7 @@ public class WordsActivity extends AppCompatActivity {
             if(f != null && f instanceof EmptyFragment){
                 if (mWordsFragment == null)
                     mWordsFragment = new WordsRecyclerListFragment();
+                    mWordsFragment.setRetainInstance(true);
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.replace(R.id.mainFragmentContainer,
                         mWordsFragment, Tags.SUCCESS_QUERY_TAG);
@@ -148,6 +154,7 @@ public class WordsActivity extends AppCompatActivity {
             }
             if(f == null ){
                 mWordsFragment = new WordsRecyclerListFragment();
+                mWordsFragment.setRetainInstance(true);
                 mFragmentTransaction = mFragmentManager.beginTransaction();
                 mFragmentTransaction.add(R.id.mainFragmentContainer,
                         mWordsFragment, Tags.SUCCESS_QUERY_TAG);
@@ -163,12 +170,21 @@ public class WordsActivity extends AppCompatActivity {
     }
 
     public void updateViewData() {
-        if(mWordsRecyclerViewView != null){
-            WordsRecyclingViewAdapter adapter = mWordsFragment.getAdapter();
-            adapter.updateWordAdapterData();
-            adapter.notifyDataSetChanged();
+        Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
+        if( f != null && f instanceof WordsRecyclerListFragment){
+            WordsRecyclingViewAdapter adapter = ((WordsRecyclerListFragment)f).getAdapter();
+            if(adapter != null){
+                adapter.updateWordAdapterData();
+                adapter.notifyDataSetChanged();
+            } else try {
+                if(f != null && f instanceof WordsRecyclerListFragment){
+                    ((WordsRecyclerListFragment)f).setupWordsRecycler(f.getView());
+                    updateViewData();
+                }
+            } catch (NullPointerException e) {e.printStackTrace();}
         }
     }
+
 
     public FragmentManager getActivityFragmentManager() { return mFragmentManager; }
 

@@ -1,8 +1,10 @@
 package adapters;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +29,13 @@ import activities.WordsActivity;
 public class TopicsRecyclingGridViewAdapter extends
         RecyclerView.Adapter<TopicsRecyclingGridViewAdapter.ViewHolder> {
 
-    final GlobalStorage mGlobalStorage;
+    private final GlobalStorage mGlobalStorage;
     private TopicsActivity mContextActivity;
 
     public TopicsRecyclingGridViewAdapter(TopicsActivity parent){
         this.mContextActivity = parent;
-        mGlobalStorage = GlobalStorage.getStorage();
+        this.mGlobalStorage = GlobalStorage.getStorage();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
@@ -73,6 +76,7 @@ public class TopicsRecyclingGridViewAdapter extends
             }
         });
 
+        holder.testingButton.setImageResource(R.drawable.ic_assignment);
         holder.testingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +112,7 @@ public class TopicsRecyclingGridViewAdapter extends
             this.itemView = itemView;
             topicImage = (ImageView) itemView.findViewById(R.id.topicImage);
             topicName = (TextView) itemView.findViewById(R.id.topicText);
-            testingButton = (ImageView) itemView.findViewById(R.id.beginTestingImageView);
+            testingButton = (ImageView) itemView.findViewById(R.id.startTestingButton);
         }
     }
 }
