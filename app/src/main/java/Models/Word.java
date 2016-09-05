@@ -10,7 +10,6 @@ public class Word extends SugarRecord{
     private long topicID;
     private String value;
     private String translation;
-    //private String assocValue;
 
     public Word(){
 
@@ -20,7 +19,6 @@ public class Word extends SugarRecord{
         this.topicID = topicId;
         this.value = value;
         this.translation = translation;
-        //this.assocValue = assocValue;
     }
 
     public String getValue(){

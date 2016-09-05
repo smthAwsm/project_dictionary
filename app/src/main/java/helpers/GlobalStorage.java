@@ -60,9 +60,8 @@ public class GlobalStorage {
     }
 
     public Dictionary getCurrentDictionary(){
-        List<Dictionary> currentDictionary = Dictionary.find(Dictionary.class,"ID = " + mCurrentDictionaryID);
-                //Topic.find(Topic.class,
-                //"dictionary_ID = " + currentDictionaryID + "");
+        List<Dictionary> currentDictionary = Dictionary.find(
+                Dictionary.class,"ID = " + mCurrentDictionaryID);
         return currentDictionary.get(0);
     }
 

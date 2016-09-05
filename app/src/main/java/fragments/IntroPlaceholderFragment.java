@@ -101,14 +101,9 @@ public class IntroPlaceholderFragment extends Fragment {
 
         mFragmentDrawable = (ImageView) rootView.findViewById(R.id.section_img);
         int iconResId = mIcons[getArguments().getInt(ARG_SECTION_NUMBER) - 1];
-        //mFragmentDrawable.setBackgroundResource(iconResId);
 
         Drawable d = VectorDrawableCompat.create(getResources(), iconResId, null);
-        //d = DrawableCompat.wrap(d);
-        //DrawableCompat.setTint(d, );
         mFragmentDrawable.setImageDrawable(d);
-
-
 
         return rootView;
     }

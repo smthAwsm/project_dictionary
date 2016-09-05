@@ -204,8 +204,8 @@ public class NewWordDialog extends AppCompatDialogFragment {
             }
             fetchJsonResponse(restURL);
         } else {
-            //Toast.makeText(getActivity(),
-            // getString(R.string.device_offline), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),
+                    getString(R.string.device_offline), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -161,7 +161,6 @@ public class DriveOperationsActivity extends AppCompatActivity
     public void launchDriveTaskExecution(GoogleApiClient googleApiClient) {
         if (EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             DriveTasksGenerator generator = new DriveTasksGenerator(this,googleApiClient);
-                    //mGoogleDriveHelper.getApiClient());
             DriveTaskRunnuble driveTask = generator.getDriveTask(mCurrentDriveTask);
             driveTask.run();
             } else {
