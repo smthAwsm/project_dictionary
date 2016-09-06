@@ -39,7 +39,6 @@ public class WordsActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private WordsRecyclerListFragment mWordsFragment;
-    private RecyclerView mWordsRecyclerViewView;
     private List<Integer> mShapeColors;
     private String mCurrentTopicName;
     private GlobalStorage mGlobalStorage;
@@ -57,6 +56,12 @@ public class WordsActivity extends AppCompatActivity {
         mGlobalStorage = GlobalStorage.getStorage();
         mFragmentManager = getSupportFragmentManager();
         updateData();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mWordsFragment.updateWordsFragment();
     }
 
     @Override
@@ -121,8 +126,8 @@ public class WordsActivity extends AppCompatActivity {
         }
     }*/
 
-    public void loadAppropriateFragment(List<Word> dbWords){
-        if(dbWords.isEmpty()) {
+    public void loadAppropriateFragment(){
+        if(mGlobalStorage.getWordsData().isEmpty()) {
             Fragment f = mFragmentManager.findFragmentById(R.id.mainFragmentContainer);
             if(f != null && f instanceof WordsRecyclerListFragment){
                 EmptyFragment emptyFragment = new EmptyFragment();
@@ -161,7 +166,6 @@ public class WordsActivity extends AppCompatActivity {
                 mFragmentTransaction.commit();
                 getSupportFragmentManager().executePendingTransactions();
             }
-            mWordsRecyclerViewView = (RecyclerView)findViewById(R.id.wordsRecyclerView);
         }
     }
 
@@ -174,7 +178,6 @@ public class WordsActivity extends AppCompatActivity {
         if( f != null && f instanceof WordsRecyclerListFragment){
             WordsRecyclingViewAdapter adapter = ((WordsRecyclerListFragment)f).getAdapter();
             if(adapter != null){
-                adapter.updateWordAdapterData();
                 adapter.notifyDataSetChanged();
             } else try {
                 if(f != null && f instanceof WordsRecyclerListFragment){
@@ -248,7 +251,11 @@ public class WordsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Word> wordList) {
             super.onPostExecute(wordList);
-            loadAppropriateFragment(wordList);
+            loadAppropriateFragment();
+            WordsRecyclingViewAdapter adapter = mWordsFragment.getAdapter();
+            if (adapter != null) {
+                adapter.updateWordAdapterData();
+            }
             updateViewData();
         }
     }

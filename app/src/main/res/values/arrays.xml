@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="rud">
-    <item>RENAME</item>
-    <item>DELETE</item>
+    <item>@string/update</item>
+    <item>@string/delete</item>
    </array>
 
     <array name="languages">

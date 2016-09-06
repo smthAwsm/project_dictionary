@@ -52,7 +52,7 @@ public class GlobalStorage {
         if(mDictionariesList == null) updateDictionariesData();
         return mDictionariesList;
     }
-    public long getCurrentDictionaryID() {
+    public long getCurrentDictionaryId() {
         return mCurrentDictionaryID;
     }
     public void setCurrentDictionaryID(long currentDictionaryID) {
@@ -65,7 +65,8 @@ public class GlobalStorage {
         return currentDictionary.get(0);
     }
 
-    public void updateTopicsData(long currentDictionaryID ) {
+    public void updateTopicsData() {
+        if(mCurrentDictionaryID < 0 ) return;
         if(mTopicList != null){
             mTopicList.clear();
         } else {
@@ -73,14 +74,14 @@ public class GlobalStorage {
         }
         try {
             List<Topic> topicsFound = Topic.find(Topic.class,
-                    "dictionary_ID = " + currentDictionaryID + "");
+                    "dictionary_ID = " + mCurrentDictionaryID + "");
             mTopicList.addAll(topicsFound);
         } catch (Exception e) {
             mTopicList = new ArrayList<>();
         }
     }
     public List<Topic> getTopicsData() {
-        if(mTopicList == null) updateTopicsData(mCurrentDictionaryID);
+        if(mTopicList == null) updateTopicsData();
         return mTopicList;
     }
     public long getCurrentTopicId() {
@@ -91,6 +92,7 @@ public class GlobalStorage {
     }
 
     public void updateWordsData() {
+        if(mCurrentTopicId < 0 ) return;
         if(mWordsList != null){
             mWordsList.clear();
         } else {

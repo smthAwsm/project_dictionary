@@ -113,7 +113,8 @@ public class WordsRecyclingViewAdapter extends
         if(wordQuery != "") {
             List<Word> filteringResult = new ArrayList<>();
             for (Word word : wordsList) {
-                if (word.getValue().contains(wordQuery)) {
+                if (word.getValue().toLowerCase().contains(wordQuery.toLowerCase()) ||
+                        word.getTranslation().toLowerCase().contains(wordQuery)) {
                     filteringResult.add(word);
                 }
             }

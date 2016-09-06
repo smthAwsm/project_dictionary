@@ -48,6 +48,14 @@ public class WordsRecyclerListFragment extends Fragment {
         return view;
     }
 
+    public void updateWordsFragment() {
+        if (mRecyclingViewAdapter != null) {
+            mRecyclingViewAdapter.updateWordAdapterData();
+            mContexActivity.loadAppropriateFragment();
+            mRecyclingViewAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void setupWordsRecycler(View view){
         mWordsRecyclerView = (RecyclerView) view.findViewById(R.id.wordsRecyclerView);
         mRecyclingViewAdapter = new WordsRecyclingViewAdapter(mContexActivity);

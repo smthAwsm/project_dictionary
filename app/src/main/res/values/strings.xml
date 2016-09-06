@@ -4,6 +4,8 @@
     <!--Settings categories-->
     <string name="setting_title">Settings</string>
     <string name="backup">Backup</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
 
     <string name="current_account">Current backup account</string>
 
@@ -18,6 +20,7 @@
     <string name="sync_date">Latest upload: </string>
     <string name="backup_found">Restore data from cloud</string>
     <string name="backup_restore">Found data backup</string>
+    <string name="backup_not_found">Backup not found</string>
     <string name="restore">Restore?</string>
     <string name="restore_progress">Restore in progress</string>
     <string name="restore_success">Dictionaries data restored successfully!</string>

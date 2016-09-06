@@ -120,7 +120,7 @@ public class TopicsActivity extends AppCompatActivity {
     }
 
     public void updateData(){
-        new LoadTopics().execute(mGlobalStorage.getCurrentDictionaryID());
+        new LoadTopics().execute(mGlobalStorage.getCurrentDictionaryId());
     }
 
     public void updateViewData(){
@@ -136,7 +136,7 @@ public class TopicsActivity extends AppCompatActivity {
     class LoadTopics extends AsyncTask<Long,Void,List<Topic>> {
         @Override
         protected List<Topic> doInBackground(Long... params) {
-            mGlobalStorage.updateTopicsData(mGlobalStorage.getCurrentDictionaryID());
+            mGlobalStorage.updateTopicsData();
             return mGlobalStorage.getTopicsData();
         }
 

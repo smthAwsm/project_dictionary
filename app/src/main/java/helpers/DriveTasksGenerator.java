@@ -33,9 +33,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 import activities.DictionariesActivity;
 import activities.DriveOperationsActivity;
@@ -180,21 +183,26 @@ public class DriveTasksGenerator {
                         }
 
                         MetadataBuffer buffer = metadataBufferResult.getMetadataBuffer();
+                        boolean found = false;
                         for (Metadata data : buffer){
-                            if(data.getTitle().equals("Dictionaries.db")){
-                               mDbOldFile = data.getDriveId().asDriveFile();
-                               prepareAndShowDialog(data);
+                            if (data.getTitle().equals("Dictionaries.db")){
+                                mDbOldFile = data.getDriveId().asDriveFile();
+                                found = true;
+                                prepareAndShowDialog(data);
                             }
                         }
+                        if(!found) prepareAndShowDialog(null);
                         buffer.release();
                     }
-        };
+                };
 
         private void prepareAndShowDialog(Metadata data){
             String title = mContext.getString(R.string.backup_data);
-            String percentDiff = getPercentDiff(data.getFileSize());
             StringBuilder builder = new StringBuilder(title);
-            builder.append(percentDiff);
+            if(data != null){
+                String percentDiff = getPercentDiff(data.getFileSize());
+                builder.append(percentDiff);
+            }
             DialogInterface.OnClickListener dialogClickListener =
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -211,25 +219,25 @@ public class DriveTasksGenerator {
 
         private final ResultCallback<DriveApi.DriveContentsResult> driveContentsCallback =
                 new ResultCallback<DriveApi.DriveContentsResult>() {
-            @Override
-            public void onResult(@NonNull DriveApi.DriveContentsResult driveContentsResult) {
-                DriveContents contents = driveContentsResult != null &&
-                        driveContentsResult.getStatus().isSuccess() ?
-                        driveContentsResult.getDriveContents() : null;
-                if(contents != null ) {
-                    fileToStream(contents);
+                    @Override
+                    public void onResult(@NonNull DriveApi.DriveContentsResult driveContentsResult) {
+                        DriveContents contents = driveContentsResult != null &&
+                                driveContentsResult.getStatus().isSuccess() ?
+                                driveContentsResult.getDriveContents() : null;
+                        if(contents != null ) {
+                            fileToStream(contents);
 
-                    MetadataChangeSet metaSet = new MetadataChangeSet.Builder().
-                            setTitle(title).
-                            setMimeType(mimeType).
-                            build();
+                            MetadataChangeSet metaSet = new MetadataChangeSet.Builder().
+                                    setTitle(title).
+                                    setMimeType(mimeType).
+                                    build();
 
-                    DriveFolder driveFolder = Drive.DriveApi.getAppFolder(mApiClient);
-                    driveFolder.createFile(mApiClient,metaSet,contents).
-                            setResultCallback(mFileResultCallback);
-                }
-            }
-        };
+                            DriveFolder driveFolder = Drive.DriveApi.getAppFolder(mApiClient);
+                            driveFolder.createFile(mApiClient,metaSet,contents).
+                                    setResultCallback(mFileResultCallback);
+                        }
+                    }
+                };
 
         private void fileToStream(DriveContents contents){
             try {
@@ -250,40 +258,39 @@ public class DriveTasksGenerator {
 
         private final ResultCallback<DriveFolder.DriveFileResult> mFileResultCallback =
                 new ResultCallback<DriveFolder.DriveFileResult>() {
-            @Override
-            public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
-                if(driveFileResult != null && driveFileResult.getStatus().isSuccess()){
-                    DriveFile driveFile = driveFileResult != null &&
-                            driveFileResult.getStatus().isSuccess() ?
-                            driveFileResult.getDriveFile() : null;
-                    if(driveFile == null){
-                        return;
-                    }
-                    if (mDbOldFile != null) {
-                        mDbOldFile.delete(mApiClient);
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-                        Date date = new Date();
-                        SharedPreferences.Editor prefEditor = mContext.getSharedPreferences(
-                                Tags.APP_DATA, Context.MODE_PRIVATE).edit();
-                        prefEditor.putString(Tags.LAST_BACKUP_DATE,dateFormat.format(date));
-                        prefEditor.commit();
-                        if(mProgressDialog != null && mProgressDialog.isShowing()){
-                        mProgressDialog.cancel();
+                    @Override
+                    public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
+                        if(driveFileResult != null && driveFileResult.getStatus().isSuccess()){
+                            DriveFile driveFile = driveFileResult != null &&
+                                    driveFileResult.getStatus().isSuccess() ?
+                                    driveFileResult.getDriveFile() : null;
+                            if(driveFile == null){
+                                return;
+                            }
+                            if (mDbOldFile != null) {
+                                mDbOldFile.delete(mApiClient);
+                            }
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                            Date date = new Date();
+                            SharedPreferences.Editor prefEditor = mContext.getSharedPreferences(
+                                    Tags.APP_DATA, Context.MODE_PRIVATE).edit();
+                            prefEditor.putString(Tags.LAST_BACKUP_DATE,dateFormat.format(date));
+                            prefEditor.commit();
+                            if(mProgressDialog != null && mProgressDialog.isShowing()){
+                                mProgressDialog.cancel();
+                            }
+                            if(mContext instanceof SettingsActivity){
+                                ((SettingsActivity) mContext).updateSummaries();
+                            }
+                            Toast.makeText(mContext,R.string.backup_success,
+                                    Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext,R.string.backup_error,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        if(mContext instanceof SettingsActivity){
-                            ((SettingsActivity) mContext).updateSummaries();
-                        }
-                        Toast.makeText(mContext,R.string.backup_success,
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(mContext,R.string.backup_error,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        };
+                };
     }
-
     private class RestoreDbFromDrive implements DriveTaskRunnuble {
 
         @Override
@@ -305,15 +312,24 @@ public class DriveTasksGenerator {
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        boolean found = false;
                         MetadataBuffer resultBuffer = result.getMetadataBuffer();
                         for (Metadata data : resultBuffer){
                             if(data.getTitle().equals("Dictionaries.db")) {
+                                found = true;
                                 prepareAndShowDialog(data);
+                            }
+                        }
+                        if (!found) {
+                            Toast.makeText(mContext,mContext.getString(R.string.backup_not_found),
+                                    Toast.LENGTH_SHORT).show();
+                            if(mContext instanceof IntroActivity) {
+                                startDictionariesActivity((IntroActivity) mContext);
                             }
                         }
                         resultBuffer.release();
                     }
-        };
+                };
 
         private void prepareAndShowDialog(Metadata data){
             String dataFound = mContext.getString(R.string.backup_restore);
@@ -344,38 +360,42 @@ public class DriveTasksGenerator {
 
         ResultCallback<DriveApi.DriveContentsResult> mDriveContentsCallback =
                 new ResultCallback<DriveApi.DriveContentsResult>() {
-            @Override
-            public void onResult(@NonNull DriveApi.DriveContentsResult driveContentsResult) {
-                if ((driveContentsResult != null) &&
-                        (driveContentsResult.getStatus().isSuccess())) {
-                    DriveContents contents = driveContentsResult.getDriveContents();
-                    InputStream stream = contents.getInputStream();
-                    java.io.File file = new java.io.File(Environment.getDataDirectory().getPath()
-                            + DB_PATH);
-                    try {
-                        writeToFile(stream, file);
-                        if(mProgressDialog != null && mProgressDialog.isShowing()){
-                            mProgressDialog.cancel();
+                    @Override
+                    public void onResult(@NonNull DriveApi.DriveContentsResult driveContentsResult) {
+                        if ((driveContentsResult != null) &&
+                                (driveContentsResult.getStatus().isSuccess())) {
+                            DriveContents contents = driveContentsResult.getDriveContents();
+                            InputStream stream = contents.getInputStream();
+                            java.io.File file = new java.io.File(Environment.
+                                    getDataDirectory().getPath() + DB_PATH);
+                            try {
+                                writeToFile(stream, file);
+                                if(mProgressDialog != null && mProgressDialog.isShowing()){
+                                    mProgressDialog.cancel();
+                                }
+                                Toast.makeText(mContext,R.string.restore_success,
+                                        Toast.LENGTH_SHORT).show();
+                                if(mContext instanceof IntroActivity) {
+                                    startDictionariesActivity((IntroActivity) mContext);
+                                } else {
+                                    GlobalStorage storage = GlobalStorage.getStorage();
+                                        storage.updateTopicsData();
+                                        storage.updateWordsData();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Log.e("RESTORE TASK","ERROR");
+                                Toast.makeText(mContext,R.string.restore_error,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            contents.discard(mApiClient);
                         }
-                        Toast.makeText(mContext,R.string.restore_success,
-                                Toast.LENGTH_SHORT).show();
-                        if(mContext instanceof IntroActivity) {
-                            startDictionariesActivity((IntroActivity) mContext);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.e("RESTORE TASK","ERROR");
-                        Toast.makeText(mContext,R.string.restore_error,
-                                Toast.LENGTH_SHORT).show();
                     }
-                    contents.discard(mApiClient);
-                }
-            }
-        };
+                };
 
         public void writeToFile(InputStream stream, java.io.File file) throws IOException {
             java.io.File f = new java.io.File(Environment.getDataDirectory().getPath() +
-                 "/data/com.study.xps.projectdictionary/databases");
+                    "/data/com.study.xps.projectdictionary/databases");
             if (!f.isDirectory()) {
                 if(!f.mkdir()) throw new IOException("Failed to create DB folder");
             }

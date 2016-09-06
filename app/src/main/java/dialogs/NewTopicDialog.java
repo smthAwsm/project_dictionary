@@ -1,7 +1,6 @@
 package dialogs;
 
 import android.app.Dialog;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -111,7 +110,7 @@ public class NewTopicDialog extends AppCompatDialogFragment {
                 GlobalStorage globalStorage = GlobalStorage.getStorage();
                 if (mTopicIconView.getTag() != null){
                     if (!mIsUpdate)
-                        new Topic(globalStorage.getCurrentDictionaryID(),
+                        new Topic(globalStorage.getCurrentDictionaryId(),
                                 mTopicNameEdit.getText().toString(),
                                 (Integer) mTopicIconView.getTag()).save();
                     else {
@@ -121,7 +120,7 @@ public class NewTopicDialog extends AppCompatDialogFragment {
                         mEditTopic.save();
                     }
                 } else if (!mIsUpdate) {
-                    new Topic(globalStorage.getCurrentDictionaryID(),
+                    new Topic(globalStorage.getCurrentDictionaryId(),
                             mTopicNameEdit.getText().toString(),
                             (Integer) mTopicIconView.getTag()).save();
                 } else {

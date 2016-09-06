@@ -28,10 +28,13 @@ public class TopicsRecyclerGridFragment extends Fragment {
 
     private TopicsActivity mContexActivity;
     private TopicsRecyclingGridViewAdapter mTopicsGridRecycler;
-    private RecyclerView mRecyclerView;
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onStart() {
+        super.onStart();
+        if (mTopicsGridRecycler != null) {
+            mTopicsGridRecycler.notifyDataSetChanged();
+        }
     }
 
     @Nullable
@@ -43,18 +46,18 @@ public class TopicsRecyclerGridFragment extends Fragment {
         addTopicListListeners(view);
 
         mTopicsGridRecycler = new TopicsRecyclingGridViewAdapter(mContexActivity);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
-        mRecyclerView.setAdapter(mTopicsGridRecycler);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.topicsRecyclerView);
+        recyclerView.setAdapter(mTopicsGridRecycler);
 
         final GridLayoutManager layoutManager = new GridLayoutManager(mContexActivity,5);
-        mRecyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
-        mRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        mRecyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        int viewWidth = mRecyclerView.getMeasuredWidth();
+                        recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        int viewWidth = recyclerView.getMeasuredWidth();
                         float cardViewWidth = getActivity().getResources().getDimension(R.dimen.card_width);
                         int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
